@@ -10,5 +10,6 @@
 - [koutto Github](https://github.com/koutto/pi-pwnbox-rogueap/wiki)
 
 - [Wacker Tool](https://github.com/blunderbuss-wctf/wacker)
+- [Report Builder Tool](https://github.com/noraj/OSCP-Exam-Report-Template-Markdown)
 
 
