@@ -1,4 +1,4 @@
-# Chapter 10 - Links
+# Chapter 10 - Helpful Links
 
 - [WiFi Challenge](https://wifichallengelab.com/)
 - [iPhantasmic Github](https://github.com/iPhantasmic/OSWP)
