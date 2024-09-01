@@ -11,4 +11,6 @@
 - [Chapter 7 - WPA Enterprise](WPAEnterprise.md)
 - [Chapter 8 - Rogue AP](RogueAP.md)
 - [Chapter 9 - Wireshark](Wireshark.md)
-- [Chapter 10 - Links](Links.md)
+- [Chapter 10 - bettercap](bettercap.md)
+- [Chapter 11 - Kismet](kismet.md)
+- [Chapter 12 - Links](Links.md)
