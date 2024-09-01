@@ -1,0 +1,6 @@
+[book]
+authors = ["Brandon Russell"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Brandon's OSWP Notes"
