@@ -1,0 +1,389 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 4 - Cracking - Brandon&#x27;s OSWP Notes</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html" class="active"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">12.</strong> Chapter 10 - Links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Brandon&#x27;s OSWP Notes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="chapter-4---cracking"><a class="header" href="#chapter-4---cracking">Chapter 4 - Cracking</a></h1>
+<h2 id="default-credentials"><a class="header" href="#default-credentials">Default credentials</a></h2>
+<p>First of all, if we know the AP model, check for default credentials. The first half of the BSSID can help:
+https://www.wireshark.org/tools/oui-lookup.html</p>
+<h2 id="online-cracking"><a class="header" href="#online-cracking">Online cracking</a></h2>
+<pre><code class="language-bash"># hydra ssh
+hydra -t 4 -l root -P /root/wordlists/100-common-passwords.txt ssh://192.105.16.4
+
+# hydra ftp
+hydra -t 3 -l root -P /root/wordlists/100-common-passwords.txt ftp://192.105.16.4
+
+# POP3
+hydra -L login.txt -P passwords.txt -V 192.168.50.128 -s 110 -t 2 pop3
+</code></pre>
+<h2 id="offline-cracking"><a class="header" href="#offline-cracking">Offline Cracking</a></h2>
+<h3 id="hashcat"><a class="header" href="#hashcat">Hashcat</a></h3>
+<ul>
+<li><font color="red">The hashcat module to crack WPA/WPA2 is 2500</font></li>
+<li><font color="red">We can pause (<code>p</code>) and resume (<code>r</code>) the hashcat execution</font></li>
+</ul>
+<pre><code class="language-bash"># info about cracking hardware
+hashcat -I 
+
+# benchmark of all hash types (very slow)
+hashcat -b
+
+# benchmark a single hash type
+hashcat -b -m 2500
+
+# extract hashes from a cap file
+cap2hccapx.bin file.cap output.hccapx
+
+# crack
+hashcat -m 2500 out.hccapx &gt;wordlist&gt;
+
+# with -d we can choose the cracking device of the listed ones
+hashcat64 -m 2500 -d 1 &lt;pcap file&gt; &lt;wordlist&gt;
+
+# with --pot-file we can indicate another path to save the pot file
+
+# install hashcat utilities (found in /usr/lib/hashcat-utils)
+sudo apt install hashcat-utils
+
+# convert PCAP file to HCCAPx file with a hashcat util
+/usr/lib/hashcat-utils/cap2hccapx.bin wifu-01.cap output.hccapx
+
+</code></pre>
+<h4 id="hashcat-modules"><a class="header" href="#hashcat-modules">Hashcat modules</a></h4>
+<div class="table-wrapper"><table><thead><tr><th>type</th><th>module</th><th>example</th></tr></thead><tbody>
+<tr><td>WPA-EAPOL-PBKDF2</td><td>-m 2500</td><td></td></tr>
+<tr><td>WPA-EAPOL-PMK</td><td>-m 2501</td><td></td></tr>
+<tr><td>WPA-PMKID-PBKDF2</td><td>-m 16800</td><td></td></tr>
+<tr><td>WPA-PMKID-PMK </td><td>-m 16801</td><td>2582a8281bf9d4308d6f5731d0e61c61<em>4604ba734d4e</em>89acf0e761f4</td></tr>
+<tr><td>TTLS-CHAP</td><td>-m 4800</td><td>ce8d3c0b4c5c9369ce426ba7d36d164e:38ddb29b0fea9243afb6fb9d6bb95bfb:2a</td></tr>
+<tr><td>TTLS-MSCHAPv2</td><td>-m 5500</td><td>user1::::f4ed9fe147deaed3bfb1a1744ce1908788c66d281b134a11:d98dd4b772ee831c</td></tr>
+</tbody></table>
+</div>
+<h3 id="password-mutation"><a class="header" href="#password-mutation">Password mutation</a></h3>
+<h4 id="john"><a class="header" href="#john">John</a></h4>
+<p>The rules to mutate passwords are in /etc/john/john.conf</p>
+<ul>
+<li>Rule to add 2 and 3 numbers at the end of the password:</li>
+</ul>
+<pre><code>$[0-9]$[0-9]
+$[0-9]$[0-9]$[0-9]
+</code></pre>
+<p>Use --rules with john to apply rules</p>
+<pre><code class="language-bash"># See the wordlist in screen
+john --wordlist=&lt;wordlist file&gt; --stdout
+
+# We can see the variations that will be applied and see if password123 is generated
+sudo john --wordlist=&lt;path to wordlist&gt; --rules --stdout |grep -i password123
+
+# With --session the session is saved and can be restored the next time it is resumed from the last password tried 
+john --wordlist=&lt;wordlist file&gt; --stdout --session=&lt;session name&gt; | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+
+# We can stop it with "q" or "ctrl-c", and continue later from that point
+john --restore=&lt;session name&gt; | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+
+# We can pipe mutations to aircrack without saving to disk with "-w -" :
+sudo john --wordlist=&lt;wordlist&gt; --rules --stdout | aircrack-ng -e wifu -w - &lt;file.pcap&gt;
+
+# We can save and restore sessions also with wordlists generated on the fly with crunch 
+crunch 8 8 | john --stdin --session=&lt;session name&gt; --stdout | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+
+# and later restore with
+crunch 8 8 | john --restore=&lt;session name&gt; | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+</code></pre>
+<h4 id="crunch"><a class="header" href="#crunch">Crunch</a></h4>
+<p>Generate new passwords, we need to say the minimum and maximum length (WPA requires passphrases between 8 and 63 chars). Crunch also allows us to specify a pattern with the <em>-t</em> option with or without a character set. Different symbols in the pattern define the type of character to use.</p>
+<ul>
+<li><em>@</em> represents lowercase characters or characters from a defined set</li>
+<li><em>,</em> represents uppercase characters</li>
+<li><em>%</em> represent numbers</li>
+<li><em>^</em> represents symbols</li>
+</ul>
+<pre><code class="language-bash"># Create all combinations of words from 8 to 9 characters (a lot of output, not practical)
+crunch 8 9
+
+# Crate all combinations of words from 8 to 9 characters using only the characters: a,b,c,1,2 and 3:
+crunch 8 9 abc123
+
+# Create combinations of 11 chars formed by the word "Password" and 3 numbers
+crunch 11 11 Password%%%
+
+# equivalent:
+crunch 11 11 0123456789 -t password@@@
+
+# generate unique combinations from a set (in this case the min and max lengths are ignored but we need to provide them so that the program doesn't fail)
+crunch 1 1 -p abcdefg1234
+
+# Generate unique words from some words (it combines them)
+crunch 1 1 -p january february march
+
+# Generate patterns with the words we say (they are replaced in the "d")
+crunch 5 5 -t ddd%% -p january february march
+
+# If instead of the % we use @ crunch adds lowercase letters instead of numbers
+
+# it replaces the letters "aADE" in the @@ and the words in the "d" letters
+crunch 5 5 aADE -t ddd@@ -p january february march
+
+# pipe output from crunch to aircrack:
+crunch 5 5 aADE -t ddd@@ -p january february march | aircrack-ng -e wifu file.pcap -w -
+
+</code></pre>
+<h4 id="mangler"><a class="header" href="#mangler">Mangler</a></h4>
+<p>Ruby script to mutate passwords
+--allow-duplicates is usually worth it because of the time we save in not checking if there are duplicates</p>
+<pre><code class="language-bash"># Mutate words of a file
+rsmangler --file file.txt
+cat file.txt | rsmangler --file -
+
+# Limit the size of the generated words
+rsmangler --file wordlist.txt --min 12 --max 13
+
+# Pipe to aircrack (don't use --output, that is only to save to disk)
+rsmangler --file wordlist.txt --min 12 --max 13 | aircrack-ng -e wifu file.pcap -w -
+</code></pre>
+<p>A set of three words generates about 6,000 passwords, four words generates about 23,000 passwords, and five words generates about 125,000 passwords. We need to take care to ensure the wordlist we begin with is a reasonable size.</p>
+<h3 id="cowpatty"><a class="header" href="#cowpatty">coWPAtty</a></h3>
+<p>Tool that recovers WPA pre-shared keys using both dictionary and rainbow table attacks. Although coWPAtty is not being developed anymore, it is still useful, especially when using its rainbow table attack method. Install it with <code>sudo apt install cowpatty</code></p>
+<pre><code class="language-bash">#Generate rainbow tables
+genpmk -f &lt;password file&gt; -d hashes -s test
+
+cowpatty -r wpa-01.pcap -d hashes -s test 
+</code></pre>
+<h3 id="extra-wep"><a class="header" href="#extra-wep">extra WEP</a></h3>
+<p>Automatic tool. It sends packets to the WEP network that we are trying to attack. It may be necessary to run this command several times, sometimes it fails.</p>
+<pre><code class="language-bash">besside-ng wlan0 -c 6 -b &lt;BSSID&gt;  
+</code></pre>
+<h3 id="wordlists"><a class="header" href="#wordlists">wordlists</a></h3>
+<p>ftp://ftp.openwall.com/pub/wordlists/
+http://www.openwall.com/mirrors/
+https://github.com/danielmiessler/SecLists
+http://www.outpost9.com/files/WordLists.html
+http://www.vulnerabilityassessment.co.uk/passwords.htm
+http://packetstormsecurity.org/Crackers/wordlists/
+http://www.ai.uga.edu/ftplib/natural-language/moby/
+http://www.cotse.com/tools/wordlists1.htm
+http://www.cotse.com/tools/wordlists2.htm
+http://wordlist.sourceforge.net/</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Protocol.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="WEP.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Protocol.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="WEP.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

