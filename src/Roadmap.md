@@ -1,5 +1,12 @@
 # Chapter 0 - Roadmap
 
+## Quick Notes
+
+```
+sudo lsusb -vv
+lsusb
+sudo airmon-ng
+```
 ## Exam Roadmap
 ```
 ssh <username>@<target_ip> -p<port>                        ## connecting to the target system with SSH information provided by @offsec

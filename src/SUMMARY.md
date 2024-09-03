@@ -8,6 +8,7 @@
 - [Chapter 4 - Cracking](Cracking.md)
 - [Chapter 5 - WEP](WEP.md)
 - [Chapter 6 - WPA](WPA.md)
+	- [Captive Portals](CaptivePortal.md)
 - [Chapter 7 - WPA Enterprise](WPAEnterprise.md)
 - [Chapter 8 - Rogue AP](RogueAP.md)
 - [Chapter 9 - Wireshark](Wireshark.md)

