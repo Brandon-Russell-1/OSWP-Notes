@@ -1,8 +1,8 @@
-# Welcome to my OSCP mdBook
+# Welcome to my OSWP mdBook
 
 
 
-Currently, I'm preparing for the OSCP exam. While I utilize Obsidian for note-taking, I've discovered the advantage of having a well-formatted notebook for reference over a conventional note-taking application. This document is dynamic, undergoing multiple updates throughout the day.
+Currently, I'm preparing for the OSWP exam. While I utilize Obsidian for note-taking, I've discovered the advantage of having a well-formatted notebook for reference over a conventional note-taking application. This document is dynamic, undergoing multiple updates throughout the day.
 
 Checkout my LinkedIn and Website:
 

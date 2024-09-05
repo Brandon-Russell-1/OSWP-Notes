@@ -6,6 +6,11 @@
 sudo lsusb -vv
 lsusb
 sudo airmon-ng
+
+Bring normal network back up
+------
+service networking start
+service network-manager start
 ```
 ## Exam Roadmap
 ```
