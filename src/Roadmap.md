@@ -26,6 +26,18 @@ Update a local git repo:
 either:    git pull origin master
 
     or:    git pull origin main
+
+-----
+
+For report building:
+https://github.com/noraj/OSCP-Exam-Report-Template-Markdown
+
+Creates the markdown file:
+ruby osert.rb init
+
+Build the pdf:
+ruby osert.rb generate
+
 ```
 ## Exam Roadmap
 ```
