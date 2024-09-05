@@ -11,6 +11,21 @@ Bring normal network back up
 ------
 service networking start
 service network-manager start
+
+
+-----
+Update Kali:
+
+sudo apt update 
+sudo apt full-upgrade -y
+
+------
+
+Update a local git repo:
+
+either:    git pull origin master
+
+    or:    git pull origin main
 ```
 ## Exam Roadmap
 ```
