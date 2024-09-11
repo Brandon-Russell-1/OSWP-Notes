@@ -174,7 +174,24 @@ network={
   group=CCMP
 }
 ```
-  
+
+#### WPA3 Config
+https://stackoverflow.com/questions/74717282/using-psk-instead-of-sae-password-in-wpa-supplicant-conf-does-not-work
+
+```
+  GNU nano 4.8                                                                                                          wifimgtsae.conf                                                                                                                     
+network={
+    ssid="wifi-management"
+    psk="chocolate1"
+    key_mgmt=SAE WPA-PSK WPA-PSK-SHA256
+    pairwise=CCMP
+    group=CCMP
+    proto=RSN
+    ieee80211w=1
+
+}
+
+```
 #### WPA-Enterprise
 ##### PEAP-MSCHAPv2 authentication
 ```
