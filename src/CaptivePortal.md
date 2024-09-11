@@ -51,6 +51,23 @@ sudo systemctl restart apache2
 
 ## Attack Run
 ```
+
+mco-hostapd.conf
+----
+interface=wlan0
+ssid=MegaCorp One Lab
+channel=11
+
+# 802.11n
+hw_mode=g
+ieee80211n=1
+
+# Uncomment the following lines to use OWE instead of an open network
+#wpa=2
+#ieee80211w=2
+#wpa_key_mgmt=OWE
+#rsn_pairwise=CCMP
+----
 sudo hostapd -B mco-hostapd.conf
 
 sudo tail -f /var/log/syslog | grep -E '(dnsmasq|hostapd)'
