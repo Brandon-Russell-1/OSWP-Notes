@@ -1,5 +1,7 @@
 # Chapter 12 - Helpful Links
 
+- Exam Guide
+	- [Guide](https://help.offsec.com/hc/en-us/articles/360046904731-OSWP-Exam-Guide)
 - Practice
 	- [WiFi Challenge](https://wifichallengelab.com/)
 
