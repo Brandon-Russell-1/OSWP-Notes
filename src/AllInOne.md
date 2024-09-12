@@ -15,6 +15,8 @@ In the event that fake authentication persistently fails, it is plausible that M
 ### Packet capture
 ```bash
 airodump-ng -w <CAPTURE_NAME> -c <CHANNEL> --bssid <BSSID> <INTERFACE>
+
+airodump-ng --band abg wlan0mon # This checks 2.4 & 5GHz 
 ```
 ### Get your MAC address
 ```bash
