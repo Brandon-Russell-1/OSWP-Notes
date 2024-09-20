@@ -9,6 +9,11 @@ sudo airmon-ng
 
 Bring normal network back up
 ------
+sudo service networking restart
+sudo service NetworkManager restart
+
+or
+
 service networking start
 service network-manager start
 

@@ -68,6 +68,15 @@ commonName              = "Playtronics"
 rm dh
 make
 
+--------
+*Might need this to create dh*
+
+# Create the Diffie-Hellman nonce file
+
+openssl dhparam -check -text -5 -out /etc/raddb/certs/dh 1024
+--------
+
+
 sudo hostapd-mana /etc/hostapd-mana/mana.conf
 
 ...
