@@ -1,0 +1,496 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 0.6 - Another Quick Cheat Sheet - Brandon&#x27;s OSWP Notes</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="Introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="Roadmap.html"><strong aria-hidden="true">2.</strong> Chapter 0 - Roadmap</a></li><li class="chapter-item expanded "><a href="AllInOne.html"><strong aria-hidden="true">3.</strong> Chapter 0.5 - Quick Cheat Sheet</a></li><li class="chapter-item expanded "><a href="AllInOneTwo.html" class="active"><strong aria-hidden="true">4.</strong> Chapter 0.6 - Another Quick Cheat Sheet</a></li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">5.</strong> Chapter 1 - Connect</a></li><li class="chapter-item expanded "><a href="Aircrack.html"><strong aria-hidden="true">6.</strong> Chapter 2 - Aircrack</a></li><li class="chapter-item expanded "><a href="Protocol.html"><strong aria-hidden="true">7.</strong> Chapter 3 - Protocol</a></li><li class="chapter-item expanded "><a href="Cracking.html"><strong aria-hidden="true">8.</strong> Chapter 4 - Cracking</a></li><li class="chapter-item expanded "><a href="WEP.html"><strong aria-hidden="true">9.</strong> Chapter 5 - WEP</a></li><li class="chapter-item expanded "><a href="WPA.html"><strong aria-hidden="true">10.</strong> Chapter 6 - WPA</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="CaptivePortal.html"><strong aria-hidden="true">10.1.</strong> Captive Portals</a></li></ol></li><li class="chapter-item expanded "><a href="WPAEnterprise.html"><strong aria-hidden="true">11.</strong> Chapter 7 - WPA Enterprise</a></li><li class="chapter-item expanded "><a href="RogueAP.html"><strong aria-hidden="true">12.</strong> Chapter 8 - Rogue AP</a></li><li class="chapter-item expanded "><a href="Wireshark.html"><strong aria-hidden="true">13.</strong> Chapter 9 - Wireshark</a></li><li class="chapter-item expanded "><a href="bettercap.html"><strong aria-hidden="true">14.</strong> Chapter 10 - bettercap</a></li><li class="chapter-item expanded "><a href="kismet.html"><strong aria-hidden="true">15.</strong> Chapter 11 - Kismet</a></li><li class="chapter-item expanded "><a href="Links.html"><strong aria-hidden="true">16.</strong> Chapter 12 - Links</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Brandon&#x27;s OSWP Notes</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="chapter-06---another-quick-cheat-sheet"><a class="header" href="#chapter-06---another-quick-cheat-sheet">Chapter 0.6 - Another Quick Cheat Sheet</a></h1>
+<p>Here's the revised cheat sheet for Wi-Fi hacking, including <strong>WPA2/WPA3 Enterprise attacks using manual methods</strong> like <strong><code>hostapd-mana</code></strong> instead of automated tools.</p>
+<hr />
+<h3 id="wi-fi-hacking-cheat-sheet-manual-approach"><a class="header" href="#wi-fi-hacking-cheat-sheet-manual-approach"><strong>Wi-Fi Hacking Cheat Sheet (Manual Approach)</strong></a></h3>
+<hr />
+<h4 id="1-wireless-standards-and-frequencies"><a class="header" href="#1-wireless-standards-and-frequencies"><strong>1. Wireless Standards and Frequencies</strong></a></h4>
+<ul>
+<li><strong>802.11a</strong>: 5 GHz, 54 Mbps</li>
+<li><strong>802.11b</strong>: 2.4 GHz, 11 Mbps</li>
+<li><strong>802.11g</strong>: 2.4 GHz, 54 Mbps</li>
+<li><strong>802.11n</strong>: 2.4/5 GHz, up to 600 Mbps</li>
+<li><strong>802.11ac</strong>: 5 GHz, up to 1.3 Gbps</li>
+<li><strong>802.11ax (Wi-Fi 6)</strong>: 2.4/5 GHz, 10+ Gbps</li>
+</ul>
+<h4 id="2-wi-fi-encryption-types"><a class="header" href="#2-wi-fi-encryption-types"><strong>2. Wi-Fi Encryption Types</strong></a></h4>
+<ul>
+<li><strong>WEP</strong>: Vulnerable, uses RC4, 24-bit IV (easily cracked using tools like <code>aircrack-ng</code>)</li>
+<li><strong>WPA</strong>: TKIP (Temporal Key Integrity Protocol), RC4 (deprecated)</li>
+<li><strong>WPA2</strong>: CCMP/AES encryption, commonly used but vulnerable to KRACK</li>
+<li><strong>WPA3</strong>: Uses SAE (Simultaneous Authentication of Equals), more secure but requires advanced attacks</li>
+<li><strong>WPA2/WPA3 Enterprise</strong>: EAP (Extensible Authentication Protocol) with a RADIUS server for user authentication</li>
+</ul>
+<hr />
+<h4 id="3-tools-for-wireless-hacking"><a class="header" href="#3-tools-for-wireless-hacking"><strong>3. Tools for Wireless Hacking</strong></a></h4>
+<ul>
+<li>
+<p><strong><code>airmon-ng</code></strong>: Enable/disable monitor mode</p>
+<ul>
+<li>Start: <code>airmon-ng start wlan0</code></li>
+<li>Stop: <code>airmon-ng stop wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>airodump-ng</code></strong>: Capture and monitor packets</p>
+<ul>
+<li>Basic command: <code>airodump-ng wlan0mon</code></li>
+<li>Channel specific: <code>airodump-ng -c &lt;channel&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>aireplay-ng</code></strong>: Deauthenticate or inject packets</p>
+<ul>
+<li>Deauth: <code>aireplay-ng -0 10 -a &lt;AP MAC&gt; wlan0mon</code></li>
+<li>Fake auth: <code>aireplay-ng -1 0 -a &lt;AP MAC&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>aircrack-ng</code></strong>: Crack captured packets</p>
+<ul>
+<li>Crack WEP: <code>aircrack-ng &lt;capture file&gt;.cap</code></li>
+<li>Crack WPA/WPA2: <code>aircrack-ng -w &lt;wordlist&gt; &lt;capture file&gt;.cap</code></li>
+</ul>
+</li>
+<li>
+<p><strong><code>hostapd-mana</code></strong>: A specialized version of <code>hostapd</code> for man-in-the-middle attacks on WPA2/WPA3 Enterprise.</p>
+</li>
+</ul>
+<hr />
+<h4 id="4-attacking-wep"><a class="header" href="#4-attacking-wep"><strong>4. Attacking WEP</strong></a></h4>
+<ul>
+<li>
+<p><strong>Capture the handshake:</strong></p>
+<ul>
+<li><code>airodump-ng --bssid &lt;BSSID&gt; -c &lt;channel&gt; -w &lt;output file&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Fake Authentication:</strong></p>
+<ul>
+<li><code>aireplay-ng -1 0 -a &lt;BSSID&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>ARP Request Replay (inject packets to speed up cracking):</strong></p>
+<ul>
+<li><code>aireplay-ng -3 -b &lt;BSSID&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Crack WEP Key:</strong></p>
+<ul>
+<li><code>aircrack-ng &lt;output file&gt;.cap</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="5-attacking-wpawpa2-psk"><a class="header" href="#5-attacking-wpawpa2-psk"><strong>5. Attacking WPA/WPA2 (PSK)</strong></a></h4>
+<ul>
+<li>
+<p><strong>Capture WPA Handshake:</strong></p>
+<ul>
+<li><code>airodump-ng --bssid &lt;BSSID&gt; -c &lt;channel&gt; -w &lt;output file&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Deauthenticate a client to force reauthentication:</strong></p>
+<ul>
+<li><code>aireplay-ng -0 5 -a &lt;AP MAC&gt; -c &lt;Client MAC&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Crack WPA/WPA2 using a wordlist:</strong></p>
+<ul>
+<li><code>aircrack-ng -w &lt;wordlist&gt; &lt;output file&gt;.cap</code></li>
+<li>Recommended wordlist: <code>rockyou.txt</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="6-wps-attack-manual-approach"><a class="header" href="#6-wps-attack-manual-approach"><strong>6. WPS Attack (Manual Approach)</strong></a></h4>
+<ul>
+<li>
+<p><strong>Find WPS-enabled APs</strong> using <code>wash</code>:</p>
+<ul>
+<li><code>wash -i wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Attempt to brute force the WPS PIN manually with <code>reaver</code> or manually crafted scripts</strong>.</p>
+</li>
+</ul>
+<hr />
+<h4 id="7-hidden-ssid-discovery"><a class="header" href="#7-hidden-ssid-discovery"><strong>7. Hidden SSID Discovery</strong></a></h4>
+<ul>
+<li>
+<p><strong>Capture Hidden SSID:</strong></p>
+<ul>
+<li><code>airodump-ng -c &lt;channel&gt; --bssid &lt;BSSID&gt; -w &lt;output file&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Deauth Clients to reveal SSID:</strong></p>
+<ul>
+<li><code>aireplay-ng -0 10 -a &lt;BSSID&gt; wlan0mon</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="8-evil-twin-attack-manual-setup"><a class="header" href="#8-evil-twin-attack-manual-setup"><strong>8. Evil Twin Attack (Manual Setup)</strong></a></h4>
+<ul>
+<li>
+<p><strong>Set up Rogue AP with <code>hostapd</code>:</strong></p>
+<ul>
+<li>Create a configuration file for <code>hostapd</code> to mimic the target AP's SSID and encryption settings.</li>
+<li>Start <code>hostapd</code>:
+<pre><code class="language-bash">hostapd /path/to/hostapd.conf
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Capture client traffic and credentials manually using a packet capture tool</strong> like <code>tcpdump</code> or <code>wireshark</code>.</p>
+</li>
+</ul>
+<hr />
+<h4 id="9-wpa2wpa3-enterprise-attacks-manual"><a class="header" href="#9-wpa2wpa3-enterprise-attacks-manual"><strong>9. WPA2/WPA3 Enterprise Attacks (Manual)</strong></a></h4>
+<ul>
+<li>
+<p><strong>Rogue AP Attack using <code>hostapd-mana</code></strong> (WPA2 Enterprise):</p>
+<ul>
+<li><strong>Install <code>hostapd-mana</code>:</strong>
+<pre><code class="language-bash">apt-get install hostapd-mana
+</code></pre>
+</li>
+<li><strong>Configure <code>hostapd-mana</code>:</strong>
+Edit the configuration file (<code>hostapd-mana.conf</code>) to match the SSID of the target network and set up the rogue AP to capture enterprise credentials.</li>
+<li><strong>Run <code>hostapd-mana</code>:</strong>
+<pre><code class="language-bash">hostapd-mana /path/to/hostapd-mana.conf
+</code></pre>
+</li>
+<li><strong>Monitor captured credentials</strong> by logging the attempts made by clients to authenticate.</li>
+</ul>
+</li>
+<li>
+<p><strong>Manual EAP Phishing Attack using <code>hostapd-mana</code>:</strong></p>
+<ul>
+<li><strong>Modify <code>hostapd-mana.conf</code></strong> to enable credential phishing.</li>
+<li>Set <code>eap_user_file</code> and <code>eap_server_cert</code> to intercept and capture PEAP/MSCHAPv2 credentials.</li>
+<li>Launch the rogue AP and capture credentials:
+<pre><code class="language-bash">hostapd-mana /path/to/hostapd-mana.conf
+</code></pre>
+</li>
+<li><strong>Captured PEAP/MSCHAPv2 credentials</strong> can be brute-forced using tools like <code>john</code>:
+<pre><code class="language-bash">john --wordlist=&lt;wordlist&gt; captured_hashes.txt
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="10-manual-eap-credential-cracking-peapmschapv2"><a class="header" href="#10-manual-eap-credential-cracking-peapmschapv2"><strong>10. Manual EAP Credential Cracking (PEAP/MSCHAPv2)</strong></a></h4>
+<ul>
+<li>
+<p><strong>Crack LEAP Credentials with <code>asleap</code>:</strong></p>
+<ul>
+<li>After capturing the challenge and response from the LEAP authentication, use:
+<pre><code class="language-bash">asleap -C &lt;challenge&gt; -R &lt;response&gt; -W &lt;wordlist&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Crack PEAP/MSCHAPv2 Credentials with <code>john</code></strong>:</p>
+<ul>
+<li>Once you capture the EAP-MSCHAPv2 handshake:
+<pre><code class="language-bash">john --wordlist=&lt;wordlist&gt; eap-hashes.txt
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="11-miscellaneous-commands"><a class="header" href="#11-miscellaneous-commands"><strong>11. Miscellaneous Commands</strong></a></h4>
+<ul>
+<li>
+<p><strong>Change MAC Address (if needed):</strong></p>
+<ul>
+<li><code>ifconfig wlan0 down</code></li>
+<li><code>macchanger -r wlan0</code></li>
+<li><code>ifconfig wlan0 up</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Check for Network Interfaces:</strong></p>
+<ul>
+<li><code>ifconfig</code> or <code>iwconfig</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Switch to Monitor Mode:</strong></p>
+<ul>
+<li><code>airmon-ng start wlan0</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="12-practice"><a class="header" href="#12-practice"><strong>12. Practice</strong></a></h4>
+<ul>
+<li>
+<p><strong>Set up your own test environment using a router</strong>: Configure WPA2 Enterprise with a RADIUS server to simulate realistic attacks and practice safely.</p>
+</li>
+<li>
+<p><strong>Use <code>Wireshark</code> to analyze captured traffic</strong>: Understanding the structure of EAP handshakes and PEAP/MSCHAPv2 exchanges will help during credential interception.</p>
+</li>
+</ul>
+<hr />
+<h3 id="tips-for-the-oswp-exam"><a class="header" href="#tips-for-the-oswp-exam"><strong>Tips for the OSWP Exam</strong></a></h3>
+<ul>
+<li><strong>Understand each step of manual attacks</strong>: From setting up a rogue AP to intercepting and cracking credentials, focus on the underlying protocols.</li>
+<li><strong>Capture WPA2 Enterprise credentials</strong>: Practice using <code>hostapd-mana</code> to set up rogue APs and capture PEAP/MSCHAPv2 handshakes.</li>
+<li><strong>Crack captured hashes manually</strong> using tools like <code>john</code> or <code>asleap</code>.</li>
+</ul>
+<p>Good luck with your OSWP exam preparation! Let me know if you need further clarifications or details.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="AllInOne.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter_1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="AllInOne.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter_1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
